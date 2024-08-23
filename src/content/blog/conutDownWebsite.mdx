@@ -1,0 +1,177 @@
+---
+heroImage: ../../assets/images/count_down.png
+category: CPE101
+description: >-
+  This countdown website is built using HTML5, CSS, and JavaScript. It provides
+  a dynamic countdown timer, perfect for events, product launches, or any
+  time-sensitive activities. The site is designed to be responsive and visually
+  appealing, ensuring a seamless user experience across different devices. The
+  use of JavaScript allows for real-time updates, while HTML5 and CSS ensure a
+  clean and modern interface.
+pubDate: 2023-11-10T17:00:00.000Z
+tags:
+  - JavaScript
+  - Css
+  - HTML5
+title: Count Down website
+---
+
+# HTML
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="style.css" />
+    <title>CountDown 2024</title>
+  </head>
+  <body>
+    <div class="contianer">      
+      <h1>Happy New Year : 2025</h1>
+      <div id="countdown" class="countdown">
+        <div class="time">
+          <h2 id="days"></h2>
+          <small>วัน</small>
+        </div>
+        <div class="time">
+          <h2 id="hours"></h2>
+          <small>ชั่วโมง</small>
+        </div>
+        <div class="time">
+          <h2 id="minutes"></h2>
+          <small>นาที</small>
+        </div>
+        <div class="time">
+          <h2 id="seconds"></h2>
+          <small>วินาที</small>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
+
+```
+
+# JavaScript
+
+```javascript
+// script.js
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Set the date we're counting down to
+  var countDownDate = new Date("Jan 1, 2025 00:00:00").getTime();
+
+  // Update the countdown every 1 second
+  var x = setInterval(function () {
+    // Get the current date and time
+    var now = new Date().getTime();
+
+    // Calculate the remaining time
+    var distance = countDownDate - now;
+
+    // Calculate days, hours, minutes, and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Display the countdown
+    document.getElementById("days").innerHTML = days;
+    document.getElementById("hours").innerHTML = hours;
+    document.getElementById("minutes").innerHTML = minutes;
+    document.getElementById("seconds").innerHTML = seconds;
+
+    // If the countdown is over, display a message
+    if (distance < 0) {
+      clearInterval(x);
+      document.getElementById("countdown").innerHTML = "<h2>Happy New Year 2024!</h2>";
+    }
+  }, 1000);
+});
+```
+
+# Css
+
+```css
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Slab&display=swap');
+
+*{
+    margin: 0;
+    font-family: 'Roboto Slab',serif;
+    box-sizing: border-box;
+}
+
+body{
+    background-image: url('https://images.pexels.com/photos/801863/pexels-photo-801863.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    height: 100vh;
+    display: flex;
+    margin: 0;
+    color: #fff;
+    overflow: hidden;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+
+body::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+}
+
+body *{
+    z-index: 1;
+}
+
+h1{
+    font-size: 40px;
+    margin: -80px 0 40px;
+}
+
+.countdown{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(2);
+}
+
+.time{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 15px;
+}
+
+.time h2{
+    margin: 0 0 5px;
+}
+
+@media(max-width:500px) {
+    h1{
+        font-size: 35px;
+    }
+    .time{
+        margin: 5px;
+    }
+    .time h2{
+        font-size: 12px;
+        margin: 0;
+    }
+    .time small{
+        font-size: 10px;
+    }
+}
+```

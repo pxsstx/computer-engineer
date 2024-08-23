@@ -1,0 +1,146 @@
+---
+heroImage: /src/assets/images/week12.png
+category: CPE161
+description: >-
+  In C, a pointer is a variable that stores the memory address of another
+  variable, allowing direct memory manipulation.
+pubDate: 2024-03-19T17:00:00.000Z
+tags:
+  - C
+title: Pointer
+---
+
+# Pointer
+
+***
+
+In C, a **pointer** is a variable that stores the memory address of another variable, allowing direct memory manipulation.
+
+* Project 1
+
+```c
+#include <stdio.h>
+
+int main()
+{
+    int i[3];
+    int *p;
+    p = i;
+    for (int j = 0; j < 3; j++)
+    {
+        printf("Enter Number %d : ", j + 1);
+        scanf("%d", &i[j]);
+    }
+    printf("Address i[0] : %p\n", p);
+    printf("Address i[1] : %p\n", (p + 1));
+    printf("Address i[2] : %p\n", (p + 2));
+    return 0;
+}
+
+```
+
+Output :
+
+```plaintext
+Enter Number 1 : 10
+Enter Number 2 : 20
+Enter Number 3 : 30
+Address i[0] : 0x16b7a70bc
+Address i[1] : 0x16b7a70c0
+Address i[2] : 0x16b7a70c4
+```
+
+***
+
+* Project 2
+
+```c
+#include <stdio.h>
+int main()
+{
+    int number[5] = {10, 20, 30, 40, 50};
+    int *myPointer = &number[0];
+    printf("first -> %d\n",
+           *myPointer);
+    myPointer++;
+    printf("go next -> %d\n",
+           *myPointer);
+    myPointer += 3;
+    printf("go next 3 -> %d\n",
+           *myPointer);
+    myPointer--;
+    printf("go back -> %d\n",
+           *myPointer);
+    return 0;
+}
+```
+
+Output :
+
+```plaintext
+first -> 10
+go next -> 20
+go next 3 -> 50
+go back -> 40
+```
+
+***
+
+* Project 3
+
+```c
+#include <stdio.h>
+void change(int *px, int *py)
+{
+    *px = 5;
+    px = py;
+}
+int main()
+{
+    int x = 0;
+    int y = 1;
+    int *px = &x;
+    int *py = &y;
+    change(px, py);
+    *px = 2;
+    printf("(x, y) = (%d, %d)\n", x, y);
+}
+
+```
+
+Output :
+
+```plaintext
+(x, y) = (2, 1)
+```
+
+***
+
+* Project 4
+
+```c
+#include <stdio.h>
+void change(int *px, int *py)
+{
+    px = py;
+    *px = 5;
+}
+int main()
+{
+    int x = 0;
+    int y = 1;
+    int *px = &x;
+    int *py = &y;
+    change(px, py);
+    *px = 2;
+    printf("(x, y) = (%d, %d)\n", x, y);
+}
+```
+
+Output :
+
+```plaintext
+(x, y) = (2, 5)
+```
+
+***

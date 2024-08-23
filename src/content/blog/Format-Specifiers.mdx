@@ -1,0 +1,126 @@
+---
+heroImage: /src/assets/images/week4.png
+category: CPE161
+description: Format Specifiers in C language
+pubDate: 2024-01-30T17:00:00.000Z
+tags:
+  - C
+title: Format Specifiers in C language
+---
+
+In C, format specifiers are used in functions like printf and scanf to define the type of data being processed. Here are some commonly used format specifiers:
+# Format Specifiers
+<h2>For scanf (input):</h2> 
+- %d: Read an integer
+- %i: Read an integer (with base determined by the input)
+- %u: Read an unsigned integer
+- %f: Read a floating-point number
+- %lf: Read a double-precision floating-point number
+- %c: Read a single character
+- %s: Read a string of characters (until whitespace is encountered)
+- %x or %X: Read an unsigned integer in hexadecimal
+- %o: Read an unsigned integer in octal
+
+<h2>For printf (output):</h2> 
+- %d or %i: Integer (decimal)
+- %u: Unsigned integer
+- %f: Floating-point number (decimal notation)
+- %lf: Double-precision floating-point number
+- %c: Single character
+- %s: String of characters
+- %x or %X: Unsigned integer in hexadecimal (lowercase/uppercase)
+- %o: Unsigned integer in octal
+- %p: Pointer address
+- %e or %E: Floating-point number in scientific notation
+
+Modifiers:
+- %hd: Short integer
+- %ld: Long integer
+- %lld: Long long integer
+- %hhd: Signed char (short)
+- %.2f: For 2 floating-point values (precision can be adjusted with .nf where n is the number of decimal places)
+
+# Week 3
+
+* Project 1
+
+```c
+#include <stdio.h>
+int main()
+{
+    int a;
+    a = 555;
+    printf("%d\n", a);
+    printf("%4d\n", a);
+    printf("%6d\n", a);
+    printf("%8d\n", a);
+}
+```
+
+Output :
+
+```plaintext
+555
+  555
+    555
+      555
+```
+
+---
+
+* Project 2
+
+```c
+#include <stdio.h>
+void main()
+{
+    int a = 200;
+    float b = 50.75;
+    char ch = 'W';
+    char word[] = "Love";
+
+    printf("\n%d\n%.2f\n%c\n%s",a,b,ch,word);
+}
+
+```
+
+Output :
+
+```plaintext
+200
+50.75
+W
+Love
+```
+
+---
+
+* Project 3
+
+```c
+#include <stdio.h>
+void main()
+{
+    int a, b, c, sum;
+    printf("Enter number 1:");
+    scanf("%d", &a);
+    printf("Enter number 2:");
+    scanf("%d", &b);
+    printf("Enter number 3:");
+    scanf("%d", &c);
+    sum = a + b + c;
+    printf("a + b + c = %d", sum);
+}
+
+```
+
+Output :
+
+```plaintext
+Enter number 1:1
+Enter number 2:2
+Enter number 3:3
+a + b + c = 6
+```
+
+---

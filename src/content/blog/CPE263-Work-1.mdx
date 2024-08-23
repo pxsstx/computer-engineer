@@ -1,0 +1,76 @@
+---
+heroImage: /src/assets/images/cpe263-work-1-c.png
+category: CPE263
+description: >-
+pubDate: 2024-08-22T17:00:00.000Z
+tags:
+  - C#
+title: CPE263 Work 1
+---
+
+# Work-1
+
+***
+
+![](/src/assets/images/cpe283-work-1-c.png)
+
+* Project 1
+
+```c#
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void lblText_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnName_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(txtName.Text);
+            lblText.Text = "ใส่คำทักทาย";
+        }
+
+        private void btnGreeting_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(txtName.Text);
+            lblText.Text = "พิมพ์ชื่อ";
+        }
+
+        private void btnEnd_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void txtName_TextChanged(object sender, EventArgs e)
+        {
+            if (txtName.Text == "")
+                btnGreeting.Enabled = false;
+            else
+                btnGreeting.Enabled = true;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            btnGreeting.Enabled = false;
+        }
+    }
+}
+
+```

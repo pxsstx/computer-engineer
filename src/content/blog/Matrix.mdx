@@ -1,0 +1,146 @@
+---
+heroImage: /src/assets/images/week10.png
+category: CPE161
+description: >-
+  In C, matrices are typically represented as 2D arrays. Here's an example of how you can define and initialize a 2D array for a matrix
+pubDate: 2024-03-05T17:00:00.000Z
+tags:
+  - C
+title: Matrix
+---
+
+# Matrix
+
+---
+
+In C, **matrices** are typically represented as 2D arrays. Here's an example of how you can define and initialize a 2D array for a matrix
+
+- Project 1
+
+```c
+#include <stdio.h>
+
+int main()
+{
+    int point[3][5] = {
+        {4, 14, 6, 11, -5},
+        {-12, 7, 5, 3, -9},
+        {10, -32, 1, 0, 15}};
+    printf("Point\n");
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 5; j++)
+        {
+            printf("%d\t", point[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+```
+
+Output :
+
+```plaintext
+Point
+4       14      6       11      -5
+-12     7       5       3       -9
+10      -32     1       0       15
+
+```
+
+---
+
+- Project 2
+
+```c
+#include <stdio.h>
+
+int main()
+{
+    int point[3][5] = {
+        {4, 14, 6, 11, -5},
+        {-12, 7, 5, 3, -9},
+        {10, -32, 1, 0, 15}};
+    int min = point[0][0];
+    int max = point[0][0];
+
+    printf("Point\n");
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 5; j++)
+        {
+            printf("%d\t", point[i][j]);
+            if (min > point[i][j])
+            {
+                min = point[i][j];
+            }
+            else if (max < point[i][j])
+            {
+                max = point[i][j];
+            }
+        }
+        printf("\n");
+    }
+    printf("Mininum number : %d\n",min);
+    printf("Maxinum number : %d\n",max);
+}
+
+```
+
+Output :
+
+```plaintext
+Point
+4       14      6       11      -5
+-12     7       5       3       -9
+10      -32     1       0       15
+Mininum number : -32
+Maxinum number : 15
+```
+
+---
+
+- Project 3
+
+```c
+#include <stdio.h>
+
+int main()
+{
+    int table[3][4] = {
+        {500, 420, 366, 207},
+        {611, 485, 382, 301},
+        {877, 745, 592, 473}
+    };
+    int row_sum[3] = {0};
+    printf("Table number of students in faculty\n");
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            printf("%d\t",table[i][j]);
+            row_sum[i] += table[i][j];
+        }
+        printf("\n");
+    }
+    printf("Total of Engineer: %d\n", row_sum[0]);
+    printf("Total of Business: %d\n", row_sum[1]);
+    printf("Total of Art : %d\n", row_sum[2]);
+}
+
+```
+
+Output :
+
+```plaintext
+Table number of students in faculty
+500     420     366     207
+611     485     382     301
+877     745     592     473
+Total of Engineer: 1493
+Total of Business: 1779
+Total of Art : 2687
+```
+
+---

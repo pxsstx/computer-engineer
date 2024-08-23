@@ -1,0 +1,152 @@
+---
+heroImage: /src/assets/images/week7.png
+category: CPE161
+description: >-
+  In C, a for loop is a control flow statement used to repeat a block of code a
+  specific number of times. It is commonly used when the number of iterations is
+  known beforehand. The syntax of a for loop in C
+pubDate: 2024-02-13T17:00:00.000Z
+tags:
+  - C
+title: Loop in c language
+---
+
+# Loop
+
+---
+
+## for Loop
+
+In C, a for loop is a control flow statement used to repeat a block of code a specific number of times. It is commonly used when the number of iterations is known beforehand. The syntax of a for loop in C
+
+* Project 1
+
+```c
+#include <stdio.h>
+void main()
+{
+    int i;
+    for ( i = 1; i <= 20; i++)
+    {
+        printf("%d \t",i*5);
+    }
+}
+```
+
+Output :
+
+```plaintext
+5       10      15      20      25      30      35      40      45      50
+55      60      65      70      75      80      85      90      95      100
+```
+
+---
+
+## while Loop
+
+* Project 2
+
+```c
+#include <stdio.h>
+int main()
+{
+    int i = 1;
+    while (i <= 20)
+    {
+        printf("%d \t",i*5);
+        i++;
+    }
+}
+
+```
+
+Output :
+
+```plaintext
+5       10      15      20      25      30      35      40      45      50
+55      60      65      70      75      80      85      90      95      100
+```
+
+---
+
+* Project 3
+
+```c
+#include <stdio.h>
+
+int main()
+{
+    int i, amount;
+    float number,avg,sum = 0;
+
+    printf("Input N : ");
+    scanf("%d", &amount);
+
+    for (i = 1; i <= amount; i++)
+    {
+        printf("Enter number : ");
+        scanf("%f", &number);   
+        sum += number;
+    }
+    avg = sum / amount;
+    printf("Sum : %.1f \t Avg : %.1f\n", sum, avg);
+}
+
+
+```
+
+Output :
+
+```plaintext
+Input N : 3
+Enter number : 10
+Enter number : 20
+Enter number : 30
+Sum : 60.0       Avg : 20.0
+```
+
+---
+
+* Project 4
+
+```c
+#include <stdio.h>
+
+int main()
+{
+    int i, amount, price;
+    float tax,sum;
+    printf("Enter amount of goods : ");
+    scanf("%d", &amount);
+    for (i = 1; i <= amount; i++)
+    {
+        printf("Enter price %d : ", i);
+        scanf("%d", &price);
+        sum += price;
+    }
+    if (sum > 5000)
+    {
+        tax = sum * 0.07;
+        printf("You must pay taxes : %.2f \n",tax);
+        printf("You pay :%.2f\n",sum + tax);
+    }else{
+        printf("You don't have to pay taxes.\n");
+        printf("You pay :%.2f\n",sum);
+    }
+}
+
+```
+
+Output :
+
+```plaintext
+Enter amount of goods : 4
+Enter price 1 : 20
+Enter price 2 : 100
+Enter price 3 : 49
+Enter price 4 : 59
+You don't have to pay taxes.
+You pay :228.00
+```
+
+---

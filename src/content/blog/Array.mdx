@@ -1,0 +1,157 @@
+---
+heroImage: /src/assets/images/week9.png
+category: CPE161
+description: In C, an array is a collection of elements of the same type stored in contiguous memory locations. Arrays in C are useful for storing multiple values of the same type, and you can access each value using an index.
+pubDate: 2024-02-27T17:00:00.000Z
+tags:
+  - C
+title: Array
+---
+
+
+# Array
+---
+
+In C, an **array** is a collection of elements of the same type stored in contiguous memory locations. Arrays in C are useful for storing multiple values of the same type, and you can access each value using an index.
+
+* Project 1
+
+```c
+#include <stdio.h>
+int main()
+{
+    int num[5], total = 0;
+    int i;
+    for (i = 0; i < 5; i++)
+    {
+        printf("Enter number : ");
+        scanf("%d", &num[i]);
+        total += num[i];
+    }
+    printf("\nAverage = % .2f\n", total / 5.0);
+}
+```
+
+Output :
+
+```plaintext
+Enter number : 10
+Enter number : 20
+Enter number : 30
+Enter number : 40
+Enter number : 50
+
+Average =  30.00
+```
+
+---
+
+* Project 2
+
+```c
+#include <stdio.h>
+
+int main()
+{
+    int num[5], min;
+    int i;
+    for (i = 0; i < 5; i++)
+    {
+        printf("Enter number : ");
+        scanf("%d", &num[i]);
+    }
+    min = num[0];
+    for (i = 0; i < 5; i++){
+        if (min > num[i])
+        {
+            min = num[i];
+        }
+    }
+        printf("\nMinimum Number : %d\n", min);
+}
+```
+
+Output :
+
+```plaintext
+Enter number : 1
+Enter number : 10
+Enter number : 100
+Enter number : 1000
+Enter number : 10000
+
+Minimum Number : 1
+```
+
+---
+
+* Project 3
+
+```c
+#include <stdio.h>
+
+int main()
+{
+    int num[10];
+    int i,j = 0;
+    for (i = 0; i < 10; i++)
+    {
+        printf("Enter number : ");
+        scanf("%d", &num[i]);
+    }
+    for (i = 0; i < 10; i++){
+        if (num[i] % 2 == 0)
+        {
+            printf("%d\t",num[i]);
+            j++;
+        }
+    }
+        printf("\nNumber of Even : %d\n", j);
+}
+
+```
+
+Output :
+
+```plaintext
+Enter number : 3
+Enter number : 4
+Enter number : 5
+Enter number : 6
+Enter number : 7
+Enter number : 8
+Enter number : 9
+Enter number : 10
+2       4       6       8       10
+Number of Even : 5
+```
+
+---
+
+* Project 4
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char input[10];
+    printf("Enter String : ");
+    scanf("%s", input);
+
+    int length = strlen(input);
+    printf("Length of the string: %d\n", length);
+    
+    return 0;
+}
+
+```
+
+Output :
+
+```plaintext
+Enter String : Hello
+Length of the string: 5
+```
+
+---

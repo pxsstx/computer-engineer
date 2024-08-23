@@ -1,0 +1,100 @@
+---
+heroImage: /src/assets/images/cpe263-work-2-c.png
+category: CPE263
+description: ''
+pubDate: 2024-08-22T17:00:00.000Z
+tags:
+  - C#
+title: CPE263 Work 2
+---
+
+# Work-2
+
+***
+
+![](/src/assets/images/cpe283-work-1-c.png)
+
+* Project 1
+
+```c#
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp2
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnRun_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("ชื่อ\t" + txtName.Text + "\nนามสกุล\t" + txtLastName.Text + "\nรหัสนักษา\t" + txtCode.Text + "\nเกรด\t" + txtGpa.Text);
+        }
+
+        private void btnEnd_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            btnRun.Enabled = false;
+        }
+
+        private void txtName_TextChanged(object sender, EventArgs e)
+        {
+            if (txtName.Text != "" && txtLastName.Text != "" && txtCode.Text != "" && txtGpa.Text != "")
+                btnRun.Enabled = true;
+            else
+                btnRun.Enabled = false;
+        }
+
+        private void txtLastName_TextChanged(object sender, EventArgs e)
+        {
+            if (txtName.Text != "" && txtLastName.Text != "" && txtCode.Text != "" && txtGpa.Text != "")
+                btnRun.Enabled = true;
+            else
+                btnRun.Enabled = false;
+        }
+
+        private void txtCode_TextChanged(object sender, EventArgs e)
+        {
+            if (txtName.Text != "" && txtLastName.Text != "" && txtCode.Text != "" && txtGpa.Text != "")
+                btnRun.Enabled = true;
+            else
+                btnRun.Enabled = false;
+        }
+
+        private void txtGpa_TextChanged(object sender, EventArgs e)
+        {
+            if (txtName.Text != "" && txtLastName.Text != "" && txtCode.Text != "" && txtGpa.Text != "")
+                btnRun.Enabled = true;
+            else
+                btnRun.Enabled = false;
+        }
+    }
+}
+
+
+
+```

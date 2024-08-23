@@ -1,0 +1,207 @@
+---
+heroImage: /src/assets/images/week8.png
+category: CPE161
+description: In C programming, continue and break are control flow statements used within loops (for, while, do-while) to control the flow of execution.
+pubDate: 2024-02-20T17:00:00.000Z
+tags:
+  - C
+title: Continue && Break
+---
+
+
+# Continue && Break
+---
+<p>In C programming, continue and break are control flow statements used within loops (for, while, do-while) to control the flow of execution.</p>
+
+## **Continue**
+
+The **continue** statement is used to skip the remaining code in the current iteration of a loop and move directly to the next iteration. This means that when continue is executed, the rest of the code within the loop body for that iteration is bypassed, and the loop proceeds with the next iteration.
+
+* Project 1
+
+```c
+#include <stdio.h>
+int main()
+{
+    int i = 1;
+    float num, sum = 0.0;
+    printf("Summary 5 positive number\n");
+    while (i <= 5)
+    {
+        printf("Input positive number %d : ", i);
+        scanf("%f", &num);
+        if (num <= 0)
+        {
+            printf("\aError , Input positive number %d again\n", i);
+            continue;
+        }
+        sum += num;
+        i++;
+    }
+    printf("\nSummary 5 positive number = %.2f\n", sum);
+    printf("\n");
+}
+```
+
+Output :
+
+```plaintext
+Input positive number 1 : 1
+Input positive number 2 : 2
+Input positive number 3 : 3
+Input positive number 4 : -4
+Error , Input positive number 4 again
+Input positive number 4 : 4
+Input positive number 5 : 5
+
+Summary 5 positive number = 15.00
+```
+
+---
+
+## **Break**
+
+The **break** statement is used to exit the current loop immediately, regardless of the loop's condition. When break is executed, it terminates the loop and control is transferred to the statement immediately following the loop.
+
+* Project 2
+
+```c
+#include <stdio.h>
+int main()
+{
+    int i = 1;
+    float num, sum = 0.0;
+    printf("Summary 5 positive number\n");
+    while (i <= 5)
+    {
+        printf("Input positive number %d : ", i);
+        scanf("%f", &num);
+        if (num <= 0)
+        {
+            printf("\aError , Input positive number %d again\n", i);
+            break;
+        }
+        sum += num;
+        i++;
+    }
+    printf("\nSummary 5 positive number = %.2f\n", sum);
+}
+```
+
+Output :
+
+```plaintext
+Summary 5 positive number
+Input positive number 1 : 1
+Input positive number 2 : 2
+Input positive number 3 : 3
+Input positive number 4 : -4
+Error , Input positive number 4 again
+
+Summary 5 positive number = 6.00
+```
+
+---
+
+* Project 3
+
+```c
+#include <stdio.h>
+
+int main() {
+    int i = 1, j;
+    printf("\n");
+    while (i <= 12) {
+        j = 1;
+        while (j <= 12) {
+            printf("%d\t", j * i);
+            j++;
+        }
+        printf("\n");
+        i++;
+    }
+    printf("Thank you .");
+    return 0;
+}
+```
+
+Output :
+
+```plaintext
+1       2       3       4       5       6       7       8       9       10      11      12
+2       4       6       8       10      12      14      16      18      20      22      24
+3       6       9       12      15      18      21      24      27      30      33      36
+4       8       12      16      20      24      28      32      36      40      44      48
+5       10      15      20      25      30      35      40      45      50      55      60
+6       12      18      24      30      36      42      48      54      60      66      72
+7       14      21      28      35      42      49      56      63      70      77      84
+8       16      24      32      40      48      56      64      72      80      88      96
+9       18      27      36      45      54      63      72      81      90      99      108
+10      20      30      40      50      60      70      80      90      100     110     120
+11      22      33      44      55      66      77      88      99      110     121     132
+12      24      36      48      60      72      84      96      108     120     132     144
+Thank you
+```
+
+---
+
+* Project 4
+
+```c
+#include <stdio.h>
+void main()
+{
+    int i, j;
+    for (i = 1; i <= 5; i++)
+    {
+        for (j = 1; j <= i; j++)
+        {
+            printf(" * ");
+        }
+        printf("\n");
+    }
+}
+
+```
+
+Output :
+
+```plaintext
+ * 
+ *  * 
+ *  *  * 
+ *  *  *  * 
+ *  *  *  *  *
+```
+
+---
+
+* Project 5
+
+```c
+#include <stdio.h>
+
+int main() {
+    int i, j;
+    for (i = 5; i >= 1; i--) {
+        for (j = 1; j <= i; j++) {
+            printf(" * ");
+        }
+        printf("\n");
+    }
+    return 0;
+}
+
+```
+
+Output :
+
+```plaintext
+ *  *  *  *  * 
+ *  *  *  * 
+ *  *  * 
+ *  * 
+ *
+```
+
+---

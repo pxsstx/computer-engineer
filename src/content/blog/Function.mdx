@@ -1,0 +1,250 @@
+---
+heroImage: /src/assets/images/week11.png
+category: CPE161
+description: >-
+  To create a function in C, define it with a return type, name, parameters, and
+  body.
+pubDate: 2024-03-12T17:00:00.000Z
+tags:
+  - C
+title: Create function
+---
+
+# Function
+
+---
+
+To create a **function** in C, define it with a return type, name, parameters, and body.
+
+* Project 1
+
+```c
+#include <stdio.h>
+void swap(int a, int b)
+{
+    int tmp;
+    tmp = a;
+    a = b;
+    b = tmp;
+    printf("In swap : A = %d, B = %d\n", a, b);
+}
+int main()
+{
+    int a = 5, b = 10;
+    printf("Before swap A = %d, B = %d\n", a, b);
+    swap(a, b);
+    printf("After swap A = %d, B = %d\n", a, b);
+}
+```
+
+Output :
+
+```plaintext
+Before swap A = 5, B = 10
+In swap : A = 10, B = 5
+After swap A = 5, B = 10
+
+```
+
+---
+
+* Project 2
+
+```c
+#include <stdio.h>
+int myFactorial(int);
+
+int main()
+{
+    int myNumber = 10;
+    printf("%d ! is %d\n", myNumber, myFactorial(myNumber));
+}
+int myFactorial(int n)
+{
+    int result = 1, i;
+    for (i = 1; i <= n; i++)
+    {
+        result *= i;
+    }
+    return result;
+}
+
+```
+
+Output :
+
+```plaintext
+10 ! is 3628800
+```
+
+---
+
+* Project 3
+
+```c
+#include <stdio.h>
+
+void myCal(int x){
+    if(x < 0){
+        printf("f(%d) = 0 \n",x);
+    }else{
+        printf("f(%d) = %d\n",x,(x*x+2*x+1));
+    }
+}
+int main(){
+    int number;
+    printf("Enter x : ");
+    scanf("%d",&number);
+    myCal(number);
+}
+
+```
+
+Output :
+
+```plaintext
+Enter x : 10
+f(10) = 121
+```
+
+---
+
+* Project 4
+
+```c
+#include <stdio.h>
+
+int maxinum(int arr[]){
+    int max = arr[0];
+    for (int i = 1; i < 8; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    return max;
+}
+int main(){
+    int arr[8] = {8,4,-3,3,17,-1,-5,10};
+    int max_value = maxinum(arr);
+    printf("Maximum value is %d\n", max_value);
+    return 0;
+}
+
+
+```
+
+Output :
+
+```plaintext
+Maximum value is 17
+```
+
+---
+
+* Project 5
+
+```c
+#include <stdio.h>
+
+float average(int a, float x[]) {
+    float avg, sum = 0;
+    for (int i = 0; i < a; i++) {
+        sum += x[i];
+    }
+    avg = sum / a;
+    return avg;
+}
+int main() {
+    int count;
+    printf("Number of students N = ");
+    scanf("%d", &count);
+    float arr[count], averageNum;
+    for (int i = 0; i < count; i++) {
+        printf("Enter score %d : ", i + 1);
+        scanf("%f", &arr[i]); 
+    }
+    averageNum = average(count, arr);
+    printf("Average score is %.2f\n", averageNum);
+    return 0;
+}
+```
+
+Output :
+
+```plaintext
+Number of students N = 3
+Enter score 1 : 10
+Enter score 2 : 20
+Enter score 3 : 30
+Average score is 20.00
+```
+
+---
+
+* Project 6
+
+```c
+#include <stdio.h>
+int i = 0;
+void disp(int i);
+void show();
+int main()
+{
+    int i = 9;
+    printf("i in main function = %d\n", i);
+    disp(3);
+    show();
+}
+void disp(int i)
+{
+    i = 5;
+    printf("i in function disp = %d\n", i);
+}
+void show()
+{
+    printf("i in function show = %d\n", i);
+}
+```
+
+Output :
+
+```plaintext
+i in main function = 9
+i in function disp = 5
+i in function show = 0
+```
+
+---
+
+* Project 7
+
+```c
+#include <stdio.h>
+
+int a = 20;
+int sum(int b);
+int main()
+{
+    int a = 10;
+    int b = 20;
+    int c = 0;
+    printf("value of a in main() = %d\n", a);
+    c = sum(b);
+    printf("value of c in main() = %d\n", c);
+}
+int sum(int b)
+{
+    printf("value of a in sum() = %d\n", a);
+    printf("value of b in sum() = %d\n", b);
+    return a + b;
+}
+```
+
+Output :
+
+```plaintext
+value of a in main() = 10
+value of a in sum() = 20
+value of b in sum() = 20
+value of c in main() = 40
+```

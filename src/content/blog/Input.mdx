@@ -1,0 +1,112 @@
+---
+heroImage: /src/assets/images/week3.png
+category: CPE161
+description: Input in c language
+pubDate: 2024-01-01T17:00:00.000Z
+tags:
+  - C
+title: Input in c language
+---
+
+In C programming, **input** typically refers to reading data from the user or another source. The most common way to get input from the user is using functions like **scanf** or **fgets**. Here’s a brief overview of how to use these functions:
+
+# Variables
+
+* int - stores integers (whole numbers), without decimals, such as 123 or -123
+* float - stores floating point numbers, with decimals, such as 19.99 or -19.99
+* char - stores single characters, such as 'a' or 'B'. Characters are surrounded by single quotes
+
+* Project 1
+
+```c
+#include <stdio.h>
+void main()
+{
+    char c1,c2;
+    c1 = 'a';
+    c2 = 'A';
+    printf("\n c1 = %c and ASCII value c1 = %d",c1,c1);
+    printf("\n c2 = %c and ASCII value c1 = %d",c2,c2);
+}
+```
+
+Output :
+
+```plaintext
+c1 = a and ASCII value c1 = 97
+c2 = A and ASCII value c1 = 65
+```
+
+---
+
+* Project 2
+
+```c
+#include <stdio.h>
+void main()
+{
+    int banana = 5;
+    int orange = 10;
+    int total = banana + orange;
+
+    printf("%d banana and %d orange\n",banana,orange);
+    printf("I have %d fruits in total",total);
+}
+```
+
+Output :
+
+```plaintext
+5 banana and 10 orange
+I have 15 fruits in total
+```
+
+---
+
+* Project 3
+
+```c
+#include <stdio.h>
+void main()
+{
+    float PI = 3.14;
+    float r = 2.2;
+    float result;
+    result = 2 * PI * r;
+
+    printf("cricmference is %f",result);
+}
+
+```
+
+Output :
+
+```plaintext
+cricmference is 13.816001
+```
+
+---
+
+* Project 4
+
+```c
+
+#include <stdio.h>
+void main()
+{
+    int length = 15;
+    float width = 3.3;
+    float total = length * width;
+
+    printf("Square has an area of %f",total);
+}
+
+```
+
+Output :
+
+```plaintext
+Square has an area of 49.500000
+```
+
+---
