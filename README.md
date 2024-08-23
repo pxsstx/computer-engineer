@@ -3,12 +3,12 @@
 <img src="public/project.png" alt="Screenshot" />
 
 <hr/>
-
-<h3 align="center">
+</div>
+<h3>
  Computer Engineering covers both fundamental and specialized courses such as programming, digital circuits, operating systems, and computer networks. The program emphasizes both theoretical and practical learning to prepare students for careers in the technology industry.
 </h3>
 
-</div>
+
 
 ## 📌 Table Of Contents
 
@@ -73,8 +73,6 @@ Contributing
 This project is licensed under the MIT License. See the LICENSE file for more details.
 
 ## Acknowledgements
-Daniel C. Gilibert for the original Blog Template.
+**Daniel C.** Gilibert for the original Blog Template.
 The React and Tailwind CSS communities for their awesome tools and resources.
 
-# computer-engineer
-# computer-engineer
