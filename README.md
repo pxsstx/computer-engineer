@@ -3,12 +3,12 @@
 <img src="public/project.png" alt="Screenshot" />
 
 <hr/>
-
+</div>
 <h3>
  Computer Engineering covers both fundamental and specialized courses such as programming, digital circuits, operating systems, and computer networks. The program emphasizes both theoretical and practical learning to prepare students for careers in the technology industry.
 </h3>
 
-</div>
+
 
 ## 📌 Table Of Contents
 
