@@ -73,8 +73,6 @@ Contributing
 This project is licensed under the MIT License. See the LICENSE file for more details.
 
 ## Acknowledgements
-Daniel C. Gilibert for the original Blog Template.
+**Daniel C.** Gilibert for the original Blog Template.
 The React and Tailwind CSS communities for their awesome tools and resources.
 
-# computer-engineer
-# computer-engineer
