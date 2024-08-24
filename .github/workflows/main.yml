@@ -1,0 +1,31 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - main  # or the branch you want to deploy
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build project
+      run: npm run build
+
+    - name: Deploy to Vercel
+      run: |
+        echo "Y" | vercel --prod --confirm --token ${{ secrets.VERCEL_TOKEN }}
+
+    - name: Send LINE notification
+      if: success()
+      run: |
+        curl -X POST https://notify-api.line.me/api/notify \
+        -H "Authorization: Bearer ${{ secrets.LINE_NOTIFY_TOKEN }}" \
+        -F "message=Deployment successful! 🚀\n View your project here: https://computer-engineer-umber.vercel.app/"
