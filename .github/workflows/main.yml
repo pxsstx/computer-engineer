@@ -29,5 +29,5 @@ jobs:
         curl -X POST https://notify-api.line.me/api/notify \
         -H "Authorization: Bearer ${{ secrets.LINE_NOTIFY_TOKEN }}" \
         -F "message=Deployment successful! 🚀  
-          Computer Engineer Project
-          View your project here: https://computer-engineer-umber.vercel.app/"
+        Computer Engineer Project
+        View your project here: https://computer-engineer-umber.vercel.app/"
