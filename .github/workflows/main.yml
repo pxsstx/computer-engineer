@@ -28,4 +28,4 @@ jobs:
       run: |
         curl -X POST https://notify-api.line.me/api/notify \
         -H "Authorization: Bearer ${{ secrets.LINE_NOTIFY_TOKEN }}" \
-        -F "message=Deployment successful! 🚀\n View your project here: https://computer-engineer-umber.vercel.app/"
+        -F "message=Deployment successful! 🚀 " + "\n" + " View your project here: https://computer-engineer-umber.vercel.app/"
