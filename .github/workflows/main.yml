@@ -10,26 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: npm install
+    - name: Install dependencies
+      run: npm install
 
-      - name: Build project
-        run: npm run build
+    - name: Build project
+      run: npm run build
 
-      - name: Deploy to Vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          echo "Y" | vercel --prod --confirm
+    - name: Deploy to Vercel
+      run: |
+        echo "Y" | vercel --prod --confirm --token ${{ secrets.VERCEL_TOKEN }}
 
-      - name: Send LINE notification
-        if: success()
-        env:
-          LINE_NOTIFY_TOKEN: ${{ secrets.LINE_NOTIFY_TOKEN }}
-        run: |
-          curl -X POST https://notify-api.line.me/api/notify \
-          -H "Authorization: Bearer $LINE_NOTIFY_TOKEN" \
-          -F "message=Deployment successful! 🚀 \n View your project here: https://computer-engineer-umber.vercel.app/"
+    - name: Send LINE notification
+      if: success()
+      run: |
+        curl -X POST https://notify-api.line.me/api/notify \
+        -H "Authorization: Bearer ${{ secrets.LINE_NOTIFY_TOKEN }}" \
+        -F "message=Deployment successful! 🚀  
+            **Computer Engineer Project** 
+            View your project here: https://computer-engineer-umber.vercel.app/"
