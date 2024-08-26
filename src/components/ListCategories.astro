@@ -1,7 +1,10 @@
 ---
 import { getCategories } from '@/utils'
 import Category from '@/components/Category'
+
+// Fetch categories and sort them in descending order
 const categories = await getCategories()
+categories.sort((a: string, b: string) => b.localeCompare(a))
 
 const { activeCategory } = Astro.props
 ---
