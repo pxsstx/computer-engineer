@@ -1,0 +1,202 @@
+---
+heroImage: /src/assets/images/CPE241-Board.jpg
+category: CPE241
+description: >-
+  The ESP8266 is a popular microcontroller with built-in Wi-Fi capabilities. It
+  provides various functions for interacting with digital and analog signals.
+  Here are descriptions of the digitalWrite(), digitalRead(), analogRead(), and
+  analogWrite()
+pubDate: 2024-08-26T17:00:00.000Z
+tags:
+  - Arduino
+  - cpp
+  - C
+title: CPE241 Week 2
+---
+
+## **digitalWrite()**
+
+The **digitalWrite()** function in the Arduino IDE is used to set a digital pin on a microcontroller (such as an Arduino board) to either HIGH or LOW. This function is commonly used when working with digital outputs, such as turning an LED on or off or controlling other digital components.
+
+```cpp
+digitalWrite(pin, value);
+```
+
+**Parameters**
+
+* pin: The pin number on the microcontroller that you want to set. The pin must be configured as an output using the pinMode() function.
+* value: The desired state for the pin. This can be:
+* HIGH: Sets the pin to a high voltage level (usually 5V or 3.3V, depending on the board).
+* LOW: Sets the pin to a low voltage level (0V).
+
+**Key points about digitalWrite:**
+
+* Purpose: Sets the digital state of an output pin.
+* Arguments: Pin number and state.
+* Usage:
+* Include the necessary header: #include \<Arduino.h>
+* Configure the pin as an output: pinMode(pinNumber, OUTPUT);
+* Set the pin's state: digitalWrite(pinNumber, HIGH); or digitalWrite(pinNumber, LOW);
+
+### Project 1
+
+```c
+void setup() {
+    pinMode(LED_BUILTIN , OUTPUT);
+}
+
+void loop() {
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(500);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(500);
+}
+```
+
+***
+
+## digitalRead()
+
+The **digitalRead()** is a function used in programming, particularly with microcontrollers like Arduino, to read the digital state of a specific input pin. It returns either a "HIGH" (1) or "LOW" (0) value, indicating whether the pin is currently connected to a voltage source or grounded, respectively.
+
+**Key points about digitalRead:**
+
+* Purpose: Reads the digital state of an input pin.
+* Return value: "HIGH" (1) or "LOW" (0).
+* Usage:
+* Include the necessary header: #include \<Arduino.h>
+* Configure the pin as an input: pinMode(pinNumber, INPUT);
+* Read the pin's state: int value = digitalRead(pinNumber);
+
+### Project 2
+
+```cpp
+void setup() {
+    Serial.begin(115200);
+    pinMode(D5, INPUT);
+}
+
+void loop() {
+    int sw = digitalRead( D5 );
+    Serial.print("Switch value = ");
+    Serial.println(sw);
+}
+```
+
+***
+
+### Project 3
+
+```cpp
+#define LED D4
+#define SW D5
+
+void setup() {
+    Serial.begin(115200);
+    pinMode(LED , OUTPUT);
+    pinMode(SW, INPUT);
+}
+
+void loop() {
+    int sw = ( SW );
+    digitalWrite(LED, !sw);
+}
+
+```
+
+***
+
+## analogRead()
+
+The **analogRead()** is a function used in programming, particularly with microcontrollers like Arduino, to read the analog voltage level of a specific input pin. It returns an integer value between 0 and 1023, representing the measured voltage scaled to a 10-bit resolution.
+
+**Key points about analogRead:**
+
+* Purpose: Reads the analog voltage level of an input pin.
+* Return value: Integer value between 0 and 1023.
+* Usage:
+* Include the necessary header: #include \<Arduino.h>
+* Configure the pin as an analog input: pinMode(pinNumber, INPUT);
+* Read the analog value: int value = analogRead(pinNumber);
+
+### Project 4
+
+```cpp
+int value = 0;
+
+void setup() {
+    Serial.begin(115200);
+}
+
+void loop() {
+    value = analogRead(A0);
+    Serial.print("analog value = ");
+    Serial.println(value);
+    delay(500);
+}
+
+```
+
+***
+
+## analogWrite()
+
+The **analogWrite()** is a function used in programming with ESP8266 microcontrollers to control the output voltage of a specific pin. While the ESP8266 doesn't have dedicated PWM hardware, it can emulate PWM using software techniques.
+
+**Key points about analogWrite in ESP8266:**
+
+* Purpose: Controls the output voltage of a pin.
+* Usage:
+* Include the necessary header: #include \<Arduino.h>
+* Configure the pin as an output: pinMode(pinNumber, OUTPUT);
+* Set the PWM duty cycle: analogWrite(pinNumber, value);
+* Duty cycle: The value argument in analogWrite() represents the duty cycle, which is the ratio of the time the pin is "on" to the total period. A value of 0 corresponds to always "off," while a value of 255 corresponds to always "on." Intermediate values produce varying levels of output voltage.
+
+```cpp
+analogWrite( pin , DutyCycle );
+```
+
+> analogWrite( pin , DutyCycle ); is a function used in programming with microcontrollers like Arduino and ESP8266 to control the output voltage of a specific pin using Pulse Width Modulation (PWM).
+
+### Project 5
+
+```cpp
+#define LED D4
+
+void setup() {
+    pinMode(LED , OUTPUT);
+}
+
+void loop() {
+    analogWrite(LED , 1023);
+    delay(2000);
+    analogWrite(LED ,512);
+    delay(2000);
+    analogWrite(LED , 0);
+    delay(2000);
+}
+
+```
+
+***
+
+### Project 6
+
+```cpp
+#define LED D4
+int value = 0;
+
+void setup() {
+    pinMode(LED , OUTPUT);
+}
+
+void loop() {
+    value = analogRead(A0);
+    analogWrite(LED ,value);
+}
+
+
+
+```
+
+***

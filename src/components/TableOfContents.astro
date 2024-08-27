@@ -1,52 +1,49 @@
 ---
 import TableOfContentsHeading from '@/components/TabletOfContentsHeading'
 
-const { headings = [] } = Astro.props;
+const { headings = [] } = Astro.props
 
 type TableOfContent = {
-  depth: number;
-  text: string;
-  slug: string;
-  subheadings: TableOfContent[];
+	depth: number
+	text: string
+	slug: string
+	subheadings: TableOfContent[]
 }
 
 function buildToc(headings: TableOfContent[]): TableOfContent[] {
-  let toc: TableOfContent[] = [];
-  let parentHeadings = new Map<number, TableOfContent>();
+	let toc: TableOfContent[] = []
+	let parentHeadings = new Map<number, TableOfContent>()
 
-  headings.forEach((h) => {
-    let heading: TableOfContent = { ...h, subheadings: [] };
+	headings.forEach((h) => {
+		let heading: TableOfContent = { ...h, subheadings: [] }
 
-    // Ensure the heading depth is correctly handled
-    if (parentHeadings.has(heading.depth)) {
-      parentHeadings.get(heading.depth)?.subheadings.push(heading);
-    } else {
-      // Handle the case where the parent heading might not exist
-      if (heading.depth === 1 || heading.depth === 2) {
-        toc.push(heading);
-      } else {
-        const parent = parentHeadings.get(heading.depth - 1);
-        if (parent) {
-          parent.subheadings.push(heading);
-        } else {
-          console.error(`Parent heading not found for depth ${heading.depth}`);
-        }
-      }
-    }
+		// Ensure the heading depth is correctly handled
+		if (heading.depth === 1 || heading.depth === 2) {
+			toc.push(heading)
+			parentHeadings.set(heading.depth, heading)
+		} else {
+			// Handle the case where the parent heading might not exist
+			const parent = parentHeadings.get(heading.depth - 1)
+			if (parent) {
+				parent.subheadings.push(heading)
+				parentHeadings.set(heading.depth, heading)
+			} else {
+				console.error(`Parent heading not found for depth ${heading.depth}. Adding to TOC as top-level entry.`)
+				toc.push(heading)
+				parentHeadings.set(heading.depth, heading)
+			}
+		}
+	})
 
-    // Update the map of parent headings
-    parentHeadings.set(heading.depth, heading);
-  });
-
-  return toc;
+	return toc
 }
 
-const toc = buildToc(headings);
+const toc = buildToc(headings)
 ---
 
 <nav class='max-w-xs dark:text-black'>
-  <h1 class='font-bold mb-3 text-2xl dark:text-white'>Index</h1>
-  <ul class='[text-wrap:balance] flex flex-col gap-1'>
-    {toc.map((heading) => <TableOfContentsHeading heading={heading} />)}
-  </ul>
+	<h1 class='font-bold mb-3 text-2xl dark:text-white'>Index</h1>
+	<ul class='[text-wrap:balance] flex flex-col gap-1'>
+		{toc.map((heading) => <TableOfContentsHeading heading={heading} />)}
+	</ul>
 </nav>
