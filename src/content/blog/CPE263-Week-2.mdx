@@ -1,0 +1,169 @@
+---
+heroImage: /src/assets/images/cpe263-work-2-c.png
+category: CPE263
+description: ''
+pubDate: 2024-08-30T17:00:00.000Z
+tags:
+  - c
+title: CPE263 Week 2
+---
+
+## Week 2
+
+---
+
+### Project 1
+
+The **MessageBox.Show** method in C# is used to display a message box to the user.
+
+#### Key Points:
+- Basic Usage: MessageBox.Show("Message") displays a message with an OK button.
+- Title: You can add a title using an additional parameter, like MessageBox.Show("Message", "Title").
+- Buttons: You can specify buttons (e.g., YesNo, OKCancel) using MessageBoxButtons, and capture the result to handle different actions based on user input.
+
+```c#
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace week_2
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("ทดสอบ MessBox", "ทดสอบ MessBox"
+                , MessageBoxButtons.RetryCancel, MessageBoxIcon.Information);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("ทดสอบ MessBox", "ทดสอบ MessBox"
+                , MessageBoxButtons.AbortRetryIgnore
+                , MessageBoxIcon.Stop
+                , MessageBoxDefaultButton.Button3);
+        }
+
+        int count = 0;
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            int data = 0;
+            count++;
+            data++;
+            MessageBox.Show("Global, Count = " + count
+                +"\nLocal, Count = " + data);
+        }
+
+        int count2 = 0;
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            count2++;
+            if (count2 == 1)
+            {
+                button4.BackColor = Color.Red;
+            }else if (count2 == 2)
+            {
+                button4.BackColor = Color.Green;
+            }else if (count2 == 3)
+            {
+                button4.BackColor = Color.Blue;
+                count2 = 0;
+            }
+        }
+    }
+}
+
+```
+---
+
+### Project 2
+
+#### Triangular area
+
+```c#
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            double Base, High, ans;
+            Base = Convert.ToDouble(txtBase.Text);
+            High = Convert.ToDouble(txtHigh.Text);
+            ans = Base * High / 2;
+            lblAns.Text = ans.ToString();
+        }
+    }
+}
+
+```
+---
+### Project 3
+
+#### Trapezoid area
+```c#
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp2
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnRun_Click(object sender, EventArgs e)
+        {
+            double Side1, Side2, High, ans;
+            High = Convert.ToDouble(txtHigh.Text);
+            Side1 = Convert.ToDouble(txtSide1.Text);
+            Side2 = Convert.ToDouble(txtSide2.Text);
+            ans = (Side1 + Side2) * High / 2;
+            lblAns.Text = ans.ToString();
+        }
+    }
+}
+```

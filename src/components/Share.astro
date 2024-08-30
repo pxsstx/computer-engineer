@@ -2,14 +2,15 @@
 import { siteConfig } from '@/data/site.config'
 import TwitterColorIcon from './icons/TwitterColorIcon.astro'
 import LinkedinIcon from './icons/linkedinIcon.astro'
-const message = siteConfig.shareMessage
+import ShareIcon from './icons/ShareIcon.astro'
 
+const message = siteConfig.shareMessage
 const URL = Astro.url.href
 ---
 
 <div class='flex flex-col gap-2'>
 	<span class='mb-1 font-bold text-2xl'>Share</span>
-	<ul class='flex gap-3 text-black dark:text-white'>
+	<ul class='flex gap-3 items-center text-black dark:text-white'>
 		<li>
 			<a
 				href={`https://twitter.com/intent/tweet?text=${message + ' ' + URL}`}
@@ -24,5 +25,55 @@ const URL = Astro.url.href
 				<LinkedinIcon /></a
 			>
 		</li>
+		<li>
+			<button
+				id="copyButton"
+				data-url={URL}
+				aria-label='Copy URL to clipboard'
+				class='flex items-center'
+			>
+				<ShareIcon />
+			</button>
+		</li>
 	</ul>
+	<div id="notification" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 10px; border-radius: 5px;">
+		URL copied to clipboard!
+	</div>
 </div>
+
+<script>
+  function copyToClipboard(text :string) {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        showNotification(text);
+      })
+      .catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+  }
+
+  function showNotification(text :string) {
+    const notification = document.getElementById('notification');
+    if (notification) {
+      notification.textContent = `URL copied to clipboard: ${text}`;
+      notification.style.display = 'block';
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 5000);
+    }
+  }
+
+  const copyButton = document.getElementById('copyButton');
+  if (copyButton) {
+    const url = copyButton.getAttribute('data-url');
+    copyButton.addEventListener('click', () => {
+      if (url) {
+        copyToClipboard(url);
+      } else {
+        console.error('URL data attribute is missing.');
+      }
+    });
+  } else {
+    console.error('Button with ID "copyButton" not found.');
+  }
+</script>
