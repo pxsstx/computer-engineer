@@ -1,0 +1,76 @@
+---
+heroImage: /src/assets/images/CPE241-Week-3.jpg
+category: CPE241
+description: >-
+  Sensors and actuators are fundamental components in various systems, especially in automation, robotics, and electronics.
+pubDate: 2024-08-26T17:00:00.000Z
+tags:
+  - Arduino
+  - cpp
+  - C
+title: CPE241 Week 3
+---
+
+## Sensors and actuators are fundamental components in various systems, especially in automation, robotics, and electronics. Here’s a brief overview of each:
+
+###Sensors
+- Definition: Sensors are devices that detect and measure physical properties or environmental conditions and convert them into signals or data that can be read and interpreted by other systems.
+
+- Function: Sensors collect information about the surrounding environment or the status of a system. They can measure a wide range of variables such as temperature, pressure, light, motion, humidity, and more.
+
+#### Examples:
+
+- Temperature Sensor: Measures temperature and converts it into an electrical signal.
+- Proximity Sensor: Detects the presence or absence of an object within a certain range.
+- Light Sensor: Measures light intensity and provides data that can be used to adjust lighting systems.
+
+### Actuators
+- Definition: Actuators are devices that take signals or commands from a control system and convert them into physical action or movement.
+
+- Function: Actuators execute commands to change the state of a system based on the input received, such as moving a part, opening a valve, or adjusting a position.
+
+#### Examples:
+
+- Electric Motor: Converts electrical energy into rotational motion.
+- Solenoid: Uses an electromagnetic field to create linear motion.
+- Hydraulic Actuator: Uses hydraulic fluid to produce movement in a hydraulic system.
+
+### Relationship Between Sensors and Actuators
+- Sensors provide the data or feedback that informs the control system about the current state or conditions of a system.
+- Actuators perform actions based on the control signals or commands derived from sensor data.
+
+> In a typical automated system, sensors gather information about the environment or system state, and this data is processed by a controller. The controller then sends commands to actuators to perform specific actions, thereby adjusting or controlling the system as needed.
+
+## Porject 1
+```c
+#include "DHT.h"
+
+#define DHTPIN D4
+#define DHTTYPE DHT22
+
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+}
+
+void loop() {
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+  float f = dht.readTemperature(true);
+
+  Serial.print("Humidity: ");
+  Serial.print(h);
+  Serial.print("% Temperature: ");
+  Serial.print(t);
+  Serial.print("°C ");
+  Serial.print(f);
+  Serial.println("°F");
+
+  delay(2000);
+
+}
+```
+---
+## Porject 2
