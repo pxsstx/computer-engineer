@@ -11,9 +11,11 @@ tags:
 title: CPE241 Week 3
 ---
 
-## Sensors and actuators are fundamental components in various systems, especially in automation, robotics, and electronics. Here’s a brief overview of each:
+## Sensors and actuators
+**Sensors and actuators** are fundamental components in various systems, especially in automation, robotics, and electronics. Here’s a brief overview of each:
 
-###Sensors
+
+### Sensors
 - Definition: Sensors are devices that detect and measure physical properties or environmental conditions and convert them into signals or data that can be read and interpreted by other systems.
 
 - Function: Sensors collect information about the surrounding environment or the status of a system. They can measure a wide range of variables such as temperature, pressure, light, motion, humidity, and more.
@@ -41,7 +43,7 @@ title: CPE241 Week 3
 
 > In a typical automated system, sensors gather information about the environment or system state, and this data is processed by a controller. The controller then sends commands to actuators to perform specific actions, thereby adjusting or controlling the system as needed.
 
-## Porject 1
+## Project 1
 ```c
 #include "DHT.h"
 
@@ -72,5 +74,36 @@ void loop() {
 
 }
 ```
+
 ---
-## Porject 2
+
+## Project 2
+```c
+#define trigPin D4
+#define echoPin D3
+
+long duration;
+long distance;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  Serial.begin(115200);
+}
+
+
+void loop() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+
+  distance = duration / 58;
+  Serial.println(distance);
+  delay(2000);
+}
+
+```
