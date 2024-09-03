@@ -49,9 +49,9 @@ title: CPE241 Week 3
 
 #### Pinout of DHT22:
 
--   **VCC**: Connect to Arduino 5V
--   **GND**: Connect to Arduino GND
--   **DATA**: Connect to a digital pin on the Arduino (e.g., pin 2)
+-   **VCC**: Connect to 5V
+-   **GND**: Connect to GND
+-   **DATA**: Connect to a digital pin on the borad (e.g., pin 2)
 -   **NC**: No connection (this pin is not used)
 #### Install the DHT Sensor Library:
 -   Go to the Arduino IDE.
@@ -89,7 +89,6 @@ void loop() {
 
 }
 ```
-
 ---
 ## Project 2
 
@@ -97,8 +96,8 @@ void loop() {
 
 #### Pinout of HC-SR04
 
--   **VCC**: Connect to Arduino 5V
--   **GND**: Connect to Arduino GND
+-   **VCC**: Connect to 5V
+-   **GND**: Connect to GND
 -   **TRIG**: Trigger pin to send the pulse
 -   **ECHO**: Echo pin to receive the pulse
 
@@ -121,10 +120,11 @@ void loop() {
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
-
+  
   duration = pulseIn(echoPin, HIGH);
-
   distance = duration / 58;
+  
+  Serial.print("Distance : ");
   Serial.println(distance);
   delay(2000);
 }
@@ -133,6 +133,95 @@ void loop() {
 ---
 ## Project 3
 
-```c
+### LDR Light sensor analog
 
+#### Pin of LDR :
+
+-   **One side of the LDR** goes to **3.3V** (VCC) of the ESP8266.
+-   **One side of the fixed resistor** connects to the **GND** (Gnd) pin on the ESP8266.
+-   **The other side of the LDR** connects to one side of the fixed resistor and also to the **Analog input pin (A0)** of the ESP8266.
+
+```c
+#define LDR A0
+
+void setup() {
+  pinMode(LDR, INPUT);
+  Serial.begin(115200);
+}
+void loop() {
+  int dt;
+  dt = analogRead(LDR);
+  Serial.print("intensity = ");
+  Serial.println(dt);
+
+  delay(1000);
+}
+```
+---
+## Project 4
+### Light Sensor BH1750
+#### Pin of Connections for BH1750
+
+-   **VCC** to **3.3V** (or **5V** if your sensor supports it, but using 3.3V is safer for the ESP8266).
+-   **GND** to **GND** on the ESP8266.
+-   **SDA** to **D2** (GPIO4) on the ESP8266.
+-   **SCL** to **D1** (GPIO5) on the ESP8266.
+#### Install the DHT Sensor Library:
+-   Go to the Arduino IDE.
+-   Navigate to **Sketch** > **Include Library** > **Manage Libraries**.
+-   Search for **BH1750** by Christopher Laws and install it.
+
+```c
+#include <Wire.h> 
+#include <BH1750.h>
+
+BH1750 lightMeter;
+
+#define SDA D2
+#define SCL D1
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(SDA, SCL);
+  lightMeter.begin();
+}
+void loop() {
+  float lux = lightMeter.readLightLevel();
+  Serial.print("Light: ");
+  Serial.print(lux);
+  Serial.println(" lx");
+  delay(1000);
+}
+```
+---
+## Compare 
+### LDR Light sensor analog vs BH1750
+```c
+#include <Wire.h> 
+#include <BH1750.h>
+BH1750 lightMeter;
+
+#define SDA D2
+#define SCL D1
+#define LDR A0
+
+void setup() {
+  pinMode(LDR, INPUT);
+  Serial.begin(115200);
+  Wire.begin(SDA, SCL);
+  lightMeter.begin();
+}
+void loop() {
+  int dt;
+  dt = analogRead(LDR);
+  Serial.print("dt = ");
+  Serial.print(dt);
+  
+  float lux = lightMeter.readLightLevel();
+  Serial.print(" ,Lux: ");
+  Serial.println(lux);
+  
+
+  delay(1000);
+}
 ```
