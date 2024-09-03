@@ -44,6 +44,21 @@ title: CPE241 Week 3
 > In a typical automated system, sensors gather information about the environment or system state, and this data is processed by a controller. The controller then sends commands to actuators to perform specific actions, thereby adjusting or controlling the system as needed.
 
 ## Project 1
+
+### DHT22
+
+#### Pinout of DHT22:
+
+-   **VCC**: Connect to Arduino 5V
+-   **GND**: Connect to Arduino GND
+-   **DATA**: Connect to a digital pin on the Arduino (e.g., pin 2)
+-   **NC**: No connection (this pin is not used)
+#### Install the DHT Sensor Library:
+-   Go to the Arduino IDE.
+-   Navigate to **Sketch** > **Include Library** > **Manage Libraries**.
+-   Search for **DHT sensor library** by Adafruit and install it.
+-   Search for **Adafruit Unified Sensor** by Adafruit and install it.
+
 ```c
 #include "DHT.h"
 
@@ -76,8 +91,17 @@ void loop() {
 ```
 
 ---
-
 ## Project 2
+
+### HR-SR04 Ultrasonic Sensors
+
+#### Pinout of HC-SR04
+
+-   **VCC**: Connect to Arduino 5V
+-   **GND**: Connect to Arduino GND
+-   **TRIG**: Trigger pin to send the pulse
+-   **ECHO**: Echo pin to receive the pulse
+
 ```c
 #define trigPin D4
 #define echoPin D3
@@ -90,7 +114,6 @@ void setup() {
   pinMode(echoPin, INPUT);
   Serial.begin(115200);
 }
-
 
 void loop() {
   digitalWrite(trigPin, LOW);
@@ -105,5 +128,11 @@ void loop() {
   Serial.println(distance);
   delay(2000);
 }
+
+```
+---
+## Project 3
+
+```c
 
 ```
