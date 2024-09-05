@@ -20,7 +20,7 @@ title: CPE241 Week 3
 
 - Function: Sensors collect information about the surrounding environment or the status of a system. They can measure a wide range of variables such as temperature, pressure, light, motion, humidity, and more.
 
-#### Examples:
+**Examples:**
 
 - Temperature Sensor: Measures temperature and converts it into an electrical signal.
 - Proximity Sensor: Detects the presence or absence of an object within a certain range.
@@ -31,7 +31,7 @@ title: CPE241 Week 3
 
 - Function: Actuators execute commands to change the state of a system based on the input received, such as moving a part, opening a valve, or adjusting a position.
 
-#### Examples:
+**Examples:**
 
 - Electric Motor: Converts electrical energy into rotational motion.
 - Solenoid: Uses an electromagnetic field to create linear motion.
@@ -47,13 +47,14 @@ title: CPE241 Week 3
 
 ### DHT22
 
-#### Pinout of DHT22:
+**Pinout of DHT22:**
 
 -   **VCC**: Connect to 5V
 -   **GND**: Connect to GND
 -   **DATA**: Connect to a digital pin on the borad (e.g., pin 2)
 -   **NC**: No connection (this pin is not used)
-#### Install the DHT Sensor Library:
+
+**Install the DHT Sensor Library:**
 -   Go to the Arduino IDE.
 -   Navigate to **Sketch** > **Include Library** > **Manage Libraries**.
 -   Search for **DHT sensor library** by Adafruit and install it.
@@ -94,7 +95,7 @@ void loop() {
 
 ### HR-SR04 Ultrasonic Sensors
 
-#### Pinout of HC-SR04
+**Pinout of HC-SR04**
 
 -   **VCC**: Connect to 5V
 -   **GND**: Connect to GND
@@ -135,8 +136,7 @@ void loop() {
 
 ### LDR Light sensor analog
 
-#### Pin of LDR :
-
+**Pin of LDR :**
 -   **One side of the LDR** goes to **3.3V** (VCC) of the ESP8266.
 -   **One side of the fixed resistor** connects to the **GND** (Gnd) pin on the ESP8266.
 -   **The other side of the LDR** connects to one side of the fixed resistor and also to the **Analog input pin (A0)** of the ESP8266.
@@ -160,13 +160,13 @@ void loop() {
 ---
 ## Project 4
 ### Light Sensor BH1750
-#### Pin of Connections for BH1750
-
+**Pin of Connections for BH1750**
 -   **VCC** to **3.3V** (or **5V** if your sensor supports it, but using 3.3V is safer for the ESP8266).
 -   **GND** to **GND** on the ESP8266.
 -   **SDA** to **D2** (GPIO4) on the ESP8266.
 -   **SCL** to **D1** (GPIO5) on the ESP8266.
-#### Install the DHT Sensor Library:
+
+**Install the DHT Sensor Library:**
 -   Go to the Arduino IDE.
 -   Navigate to **Sketch** > **Include Library** > **Manage Libraries**.
 -   Search for **BH1750** by Christopher Laws and install it.
