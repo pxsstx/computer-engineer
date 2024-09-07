@@ -1,0 +1,282 @@
+---
+heroImage: /src/assets/images/CPE263-Week-3.png
+category: CPE263
+description: >-
+  In C#, const and Math are important concepts, and they work together
+  efficiently when dealing with constants and mathematical calculations.
+pubDate: 2024-09-05T17:00:00.000Z
+tags:
+  - csharp
+  - c
+title: CPE263 Week 3
+---
+
+## Week 3
+
+***
+
+## const (Constant)
+
+In C#, const is used to define a constant value that cannot be changed after it is initially set. When you use const, the value is evaluated at compile-time and cannot be modified during the runtime of the program.
+
+Properties of const:
+
+• The value assigned must be a constant (e.g., numbers, characters, or true/false).
+
+• It cannot be assigned a complex computation or a value derived at runtime.
+
+• The value of const must be assigned at the time of declaration.
+
+### Project 1
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        const double Pi = Math.PI;
+        private void btnCir1_Click(object sender, EventArgs e)
+        {
+            double radius, ans;
+            radius = Convert.ToDouble(txtRadius.Text);
+            ans = 2 * Pi * radius;
+            txtAns.Text = ans.ToString();
+        }
+
+        private void btnCir2_Click(object sender, EventArgs e)
+        {
+            double radius, ans;
+            radius = Convert.ToDouble(txtRadius.Text);
+            ans = Pi * radius * radius;
+            txtAns.Text = ans.ToString();
+        }
+
+        private void btnCir3_Click(object sender, EventArgs e)
+        {
+            double radius, ans;
+            radius = Convert.ToDouble(txtRadius.Text);
+            ans = 4 * Pi * radius * radius;
+            txtAns.Text = ans.ToString();
+        }
+
+        private void btnCir4_Click(object sender, EventArgs e)
+        {
+            double radius, ans;
+            radius = Convert.ToDouble(txtRadius.Text);
+            ans = ( 4.0 / 3.0 ) * Pi * radius * radius * radius;
+            txtAns.Text = ans.ToString();
+        }
+    }
+}
+
+```
+
+![](/src/assets/images/circle.png)
+
+***
+
+## Math Class
+
+The Math class is part of the System namespace in C#, which contains various mathematical functions and constants that are used for calculations, such as logarithms, sine, cosine, squaring, etc.
+
+Important functions in Math:
+
+• Math.Abs(): Finds the absolute value
+
+• Math.Pow(x, y): Raises x to the power of y
+
+• Math.Sqrt(x): Finds the square root of x
+
+• Math.Round(): Rounds a decimal number to the nearest integer
+
+• Math.PI: Constant value for Pi (3.14159265358979)
+
+• Math.Max(a, b): Finds the maximum between a and b
+
+• Math.Min(a, b): Finds the minimum between a and b
+
+• Math.Sin(), Math.Cos(), Math.Tan(): Trigonometric functions
+
+### Project 2
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp2
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+            private void button1_Click(object sender, EventArgs e)
+            {
+                double PI = Math.PI;
+                double y1, y2, y3, y4, y5, y6, y7;
+                y1 = Math.Sin(PI / 2);
+                y2 = Math.Cos(PI);
+                y3 = Math.Sin(3 * PI / 2); // sin(270)
+                y4 = Math.Tan(PI / 4); //tan(45)
+                y5 = Math.Log10(1000);
+                y6 = Math.Pow(2, 10); //2^10
+                y7 = Math.Sqrt(100); //√100
+
+                for (int i = 0; i < 7; i++) // Looping up to 7 because we have 7 variables
+                {
+                    double value = 0; // Default value
+                    switch (i)
+                    {
+                        case 0:
+                            value = y1;
+                            break;
+                        case 1:
+                            value = y2;
+                            break;
+                        case 2:
+                            value = y3;
+                            break;
+                        case 3:
+                            value = y4;
+                            break;
+                        case 4:
+                            value = y5;
+                            break;
+                        case 5:
+                            value = y6;
+                            break;
+                        case 6:
+                            value = y7;
+                            break;
+                    }
+                    MessageBox.Show($"y{i + 1} = {value}"); // Proper string interpolation
+                }
+            }
+        }
+}
+
+```
+
+***
+
+### Project 3
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp3
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnCal_Click(object sender, EventArgs e)
+        {
+            double deg, cal;
+            deg = Convert.ToDouble(txtDeg.Text);
+            cal = 5 * (deg - 32) / 9;
+            //txtDeg.Text =  cal.ToString();
+            MessageBox.Show(cal.ToString());
+        }
+
+        private void btnFar_Click(object sender, EventArgs e)
+        {
+            double deg, far;
+            deg = Convert.ToDouble(txtDeg.Text);
+            far = (9.0 / 5.0 )* deg + 32;
+            //txtDeg.Text = far.ToString();
+            MessageBox.Show(far.ToString());
+        }
+    }
+}
+
+```
+
+![](/src/assets/images/cal-far.png)
+
+***
+
+## P**ictureBox**
+
+C# statement that assigns the file path of an image to a PictureBox control in a Windows Forms application.
+
+• pictureBox1: This is the name of the PictureBox control. A PictureBox is a UI component in Windows Forms that is used to display images.
+
+• ImageLocation: This property of PictureBox specifies the path or URL to the image that will be displayed. By setting this property, the PictureBox will load the image from the given path.
+
+• Application.StartupPath: This is a property in C# that returns the directory path where the executable file of the application is located. It’s useful when referencing resources stored in the same directory as the application itself.
+
+• "\\\sunset.jpg": This is the relative path to the image file named sunset.jpg, located in the root folder of the application (since it is appended to Application.StartupPath).
+
+### Project 4
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace testPicture
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            pictureBox1.ImageLocation = Application.StartupPath + "\\waterfall.jpg";
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            pictureBox1.ImageLocation = Application.StartupPath + "\\sunset.jpg";
+
+        }
+    }
+}
+
+```
+
+![](/src/assets/images/pictureBox.png)

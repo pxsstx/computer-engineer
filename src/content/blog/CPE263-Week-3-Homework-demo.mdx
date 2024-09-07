@@ -1,0 +1,115 @@
+---
+heroImage: /src/assets/images/demo.png
+category: CPE263
+description: >-
+  Create a Windows Forms app in Visual Studio using TabControl to switch between
+  tabs, PictureBox to display images, and TextBox for input fields. Ideal for
+  organizing content in multiple sections.
+pubDate: 2024-09-05T17:00:00.000Z
+tags:
+  - csharp
+  - c
+title: CPE263 Week Homework Demo
+---
+
+## Week 3 Homework Demo
+
+***
+
+![](/src/assets/images/demo.gif)
+
+### Code
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Homework
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            pictureBox1.ImageLocation = Application.StartupPath + "\\asset\\image\\coin-home.gif";
+            imgBitcoin.ImageLocation = Application.StartupPath + "\\asset\\image\\Bitcoin.png";
+            imgEthereum.ImageLocation = Application.StartupPath + "\\asset\\image\\Ethereum.png";
+            imgTether.ImageLocation = Application.StartupPath + "\\asset\\image\\Tether.png";
+            imgBNB.ImageLocation = Application.StartupPath + "\\asset\\image\\BNB.png";
+            imgDogecoin.ImageLocation = Application.StartupPath + "\\asset\\image\\Dogecoin.png";
+        }
+        private void btnBitcoin_Click(object sender, EventArgs e)
+        {
+            picCoin.ImageLocation = Application.StartupPath + "\\asset\\image\\Bitcoin.png";
+        }
+
+        private void btnEthereum_Click(object sender, EventArgs e)
+        {
+            picCoin.ImageLocation = Application.StartupPath + "\\asset\\image\\Ethereum.png";
+        }
+
+        private void btnTether_Click(object sender, EventArgs e)
+        {
+            picCoin.ImageLocation = Application.StartupPath + "\\asset\\image\\Tether.png";
+        }
+
+        private void btnBNB_Click(object sender, EventArgs e)
+        {
+            picCoin.ImageLocation = Application.StartupPath + "\\asset\\image\\BNB.png";
+        }
+
+        private void btnSolana_Click(object sender, EventArgs e)
+        {
+            picCoin.ImageLocation = Application.StartupPath + "\\asset\\image\\Solana.png";
+        }
+
+        private void btnUSDC_Click(object sender, EventArgs e)
+        {
+            picCoin.ImageLocation = Application.StartupPath + "\\asset\\image\\USDC.png";
+        }
+
+        private void btnXRP_Click(object sender, EventArgs e)
+        {
+            picCoin.ImageLocation = Application.StartupPath + "\\asset\\image\\XRP.png";
+        }
+
+        private void btnDogecoin_Click(object sender, EventArgs e)
+        {
+            picCoin.ImageLocation = Application.StartupPath + "\\asset\\image\\Dogecoin.png";
+        }
+
+        private void btnSum_Click(object sender, EventArgs e)
+        {
+            double btc, eth, usdt, bnb, doge, sum, dis, vat, pay;
+            btc = Convert.ToDouble(txtBitcoin.Text);
+            eth = Convert.ToDouble(txtEthereum.Text);
+            usdt = Convert.ToDouble(txtTether.Text);
+            bnb = Convert.ToDouble(txtBNB.Text);
+            doge = Convert.ToDouble(txtDogecoin.Text);
+
+            sum = btc + eth + usdt + bnb + doge;
+            dis = sum * (15.0 / 100);
+            vat = (sum - dis) * (7.0 / 100);
+            pay = (sum - dis) + vat;
+
+            MessageBox.Show("SUM : \t\t\t" + sum.ToString() +
+                            "\nDiscount 15% : \t\t" + dis.ToString() +
+                            "\nVat 7% : \t\t\t" + vat.ToString()+
+                            "\nPay : \t\t\t" + pay.ToString()
+                );
+        }
+    }
+}
+```
+
+## [Dowload here!](https://drive.google.com/drive/folders/1S4tf8lkxttFlUF7rdfqTliTsOBEQRs4o?usp=sharing)
