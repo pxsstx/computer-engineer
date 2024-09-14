@@ -1,8 +1,8 @@
 ---
-heroImage: /src/assets/images/CPE241-Week-4[cover].jpg
+heroImage: /src/assets/images/CPE241-week-4[cover].jpg
 category: CPE241
 description: >-
-    Actuators are fundamental components in various systems, especially in automation, robotics, and electronics.
+  Actuators are fundamental components in various systems, especially in automation, robotics, and electronics.
 pubDate: 2024-09-10T17:00:00.000Z
 tags:
   - Arduino
@@ -10,7 +10,9 @@ tags:
   - C
 title: CPE241 Week 4
 ---
+
 ## Actuators
+
 - Definition: Actuators are devices that take signals or commands from a control system and convert them into physical action or movement.
 
 - Function: Actuators execute commands to change the state of a system based on the input received, such as moving a part, opening a valve, or adjusting a position.
@@ -41,8 +43,11 @@ void loop() {
 }
 
 ```
+
 ---
+
 ### Project 2
+
 ```c
 #define spkPin D8
 void setup() {
@@ -62,7 +67,9 @@ void loop() {
   delay(2000);
 }
 ```
+
 ---
+
 ### Side Project
 
 To play the **"Happy Birthday"** tune using a piezo speaker with an ESP8266, you can use the `tone()` function to generate the appropriate frequencies and durations.
@@ -98,11 +105,12 @@ void loop() {
     noTone(piezoPin); // Stop the note
     delay(50); // Short pause between notes
   }
-  
+
   // Loop the song every 10 seconds
   delay(10000);
 }
 ```
+
 ---
 
 ## Project 3
@@ -110,7 +118,7 @@ void loop() {
 ### OLED
 
 > **Adafruit GFX**
-> 
+>
 > **Adafruit SSD1306**
 
 ```c
@@ -136,17 +144,19 @@ void loop() {
   OLED.display(); //
 }
 ```
+
 ---
 
 ## Project 4
 
 ### RGB LED
 
->**Library : Adafruit NeoPixel**
+> **Library : Adafruit NeoPixel**
 
-Adafruit_NeoPixel(NUMSLEDs, PINSLEDs, NEO_GRB + NEO_KHZ800); 
-- NUMSLEDs: Number of LEDs 
-- PINSLEDs: Pin number to which the LED strip is connected on the NodeMCU 
+Adafruit_NeoPixel(NUMSLEDs, PINSLEDs, NEO_GRB + NEO_KHZ800);
+
+- NUMSLEDs: Number of LEDs
+- PINSLEDs: Pin number to which the LED strip is connected on the NodeMCU
 - NEO_GRB + NEO_KHZ800: Type of LED pixel (GRB color order and 800 KHz signal frequency)
 
 ```c
@@ -174,20 +184,20 @@ To set colors in NeoPixels using the RGB format, you use the `SLEDs.Color()` fun
 
 **RGB Color Format**
 
--   **Red ( R )**: Controls the intensity of red in the color (0 to 255).
--   **Green ( G )**: Controls the intensity of green in the color (0 to 255).
--   **Blue ( B )**: Controls the intensity of blue in the color (0 to 255).
+- **Red ( R )**: Controls the intensity of red in the color (0 to 255).
+- **Green ( G )**: Controls the intensity of green in the color (0 to 255).
+- **Blue ( B )**: Controls the intensity of blue in the color (0 to 255).
 
 **Color Setting with `SLEDs.Color()`**
 
--   **`SLEDs.Color(R, G, B)`**: Sets the color of an LED using RGB values.
-    -   `R` (Red) is the intensity of the red color.
-    -   `G` (Green) is the intensity of the green color.
-    -   `B` (Blue) is the intensity of the blue color.
+- **`SLEDs.Color(R, G, B)`**: Sets the color of an LED using RGB values.
+  - `R` (Red) is the intensity of the red color.
+  - `G` (Green) is the intensity of the green color.
+  - `B` (Blue) is the intensity of the blue color.
 
 The function `SLEDs.setBrightness(50);` sets the brightness of the LEDs to the specified value. Here’s a description in English:
 
--   **`SLEDs.setBrightness(50);`**: This function sets the brightness of the NeoPixels. The brightness value is specified between 0 and 255, where 0 is off (no light) and 255 is full brightness. In this case, `50` represents a dimmer brightness level.
+- **`SLEDs.setBrightness(50);`**: This function sets the brightness of the NeoPixels. The brightness value is specified between 0 and 255, where 0 is off (no light) and 255 is full brightness. In this case, `50` represents a dimmer brightness level.
 
 ---
 
@@ -215,16 +225,18 @@ void loop() {
 }
 
 ```
- You can change speed motor with `analogWrite(A1A, 1000);`
+
+You can change speed motor with `analogWrite(A1A, 1000);`
 
 ---
+
 ## Project 6
 
 ### Servo motor SG90
 
--   **Can rotate 90° - 180° (depending on the model)**
--   **Operating Voltage: 5V**
--   **Rotation control using PWM**
+- **Can rotate 90° - 180° (depending on the model)**
+- **Operating Voltage: 5V**
+- **Rotation control using PWM**
 
 ```c
 #include <Servo.h>
@@ -246,22 +258,25 @@ void loop() {
 ```
 
 ---
+
 ## Project 7
 
 ### Stepper Motor
 
 Rated voltage : 5VDC
+
 - **Number of Phase 4**
 - **Speed Variation Ratio 1/64**
 - **Stride Angle 5.625° /64**
 
 **Controlling a Stepper Motor**
 
--   **1 Phase - Full Step**: Efficient in terms of power consumption.
--   **2 Phase - Full Step**: Provides higher torque and speed compared to the 1 Phase method.
--   **Half Step**: Combines the functionality of both 1 Phase and 2 Phase stepping. It allows for finer resolution and smoother rotation.
+- **1 Phase - Full Step**: Efficient in terms of power consumption.
+- **2 Phase - Full Step**: Provides higher torque and speed compared to the 1 Phase method.
+- **Half Step**: Combines the functionality of both 1 Phase and 2 Phase stepping. It allows for finer resolution and smoother rotation.
 
 ### 1 Phase - Full Step
+
 ```c
 #define In1 D1 // Red wire - pin 4
 #define In2 D2 // Yellow wire - pin 3
@@ -307,9 +322,11 @@ void loop() {
   delay(motorSpeed);
 }
 ```
+
 ---
 
 ### 2 phase - Full Step
+
 ```c
 #define In1 D1 // Red wire - pin 4
 #define In2 D2 // Yellow wire - pin 3
@@ -359,6 +376,7 @@ void loop() {
 ---
 
 ### Half Step
+
 ```c
 #define In1 D1 // Red wire - pin 4
 #define In2 D2 // Yellow wire - pin 3
@@ -432,9 +450,11 @@ void loop() {
   delay(motorSpeed);
 }
 ```
+
 ---
 
-### Library stepper 
+### Library stepper
+
 To control a stepper motor in half-step mode using the Stepper library in Arduino, you'll need to use the `Stepper` library and set up the motor to step through half steps.
 
 ```c

@@ -1,5 +1,5 @@
 ---
-heroImage: /src/assets/images/CPE241-Week-3[cover].jpg
+heroImage: /src/assets/images/CPE241-week-3[cover].jpg
 category: CPE241
 description: >-
   Sensors and actuators are fundamental components in various systems, especially in automation, robotics, and electronics.
@@ -12,10 +12,11 @@ title: CPE241 Week 3
 ---
 
 ## Sensors and actuators
+
 **Sensors and actuators** are fundamental components in various systems, especially in automation, robotics, and electronics. Here’s a brief overview of each:
 
-
 ### Sensors
+
 - Definition: Sensors are devices that detect and measure physical properties or environmental conditions and convert them into signals or data that can be read and interpreted by other systems.
 
 - Function: Sensors collect information about the surrounding environment or the status of a system. They can measure a wide range of variables such as temperature, pressure, light, motion, humidity, and more.
@@ -27,6 +28,7 @@ title: CPE241 Week 3
 - Light Sensor: Measures light intensity and provides data that can be used to adjust lighting systems.
 
 ### Actuators
+
 - Definition: Actuators are devices that take signals or commands from a control system and convert them into physical action or movement.
 
 - Function: Actuators execute commands to change the state of a system based on the input received, such as moving a part, opening a valve, or adjusting a position.
@@ -38,6 +40,7 @@ title: CPE241 Week 3
 - Hydraulic Actuator: Uses hydraulic fluid to produce movement in a hydraulic system.
 
 ### Relationship Between Sensors and Actuators
+
 - Sensors provide the data or feedback that informs the control system about the current state or conditions of a system.
 - Actuators perform actions based on the control signals or commands derived from sensor data.
 
@@ -49,16 +52,17 @@ title: CPE241 Week 3
 
 **Pinout of DHT22:**
 
--   **VCC**: Connect to 5V
--   **GND**: Connect to GND
--   **DATA**: Connect to a digital pin on the borad (e.g., pin 2)
--   **NC**: No connection (this pin is not used)
+- **VCC**: Connect to 5V
+- **GND**: Connect to GND
+- **DATA**: Connect to a digital pin on the borad (e.g., pin 2)
+- **NC**: No connection (this pin is not used)
 
 **Install the DHT Sensor Library:**
--   Go to the Arduino IDE.
--   Navigate to **Sketch** > **Include Library** > **Manage Libraries**.
--   Search for **DHT sensor library** by Adafruit and install it.
--   Search for **Adafruit Unified Sensor** by Adafruit and install it.
+
+- Go to the Arduino IDE.
+- Navigate to **Sketch** > **Include Library** > **Manage Libraries**.
+- Search for **DHT sensor library** by Adafruit and install it.
+- Search for **Adafruit Unified Sensor** by Adafruit and install it.
 
 ```c
 #include "DHT.h"
@@ -90,17 +94,19 @@ void loop() {
 
 }
 ```
+
 ---
+
 ## Project 2
 
 ### HR-SR04 Ultrasonic Sensors
 
 **Pinout of HC-SR04**
 
--   **VCC**: Connect to 5V
--   **GND**: Connect to GND
--   **TRIG**: Trigger pin to send the pulse
--   **ECHO**: Echo pin to receive the pulse
+- **VCC**: Connect to 5V
+- **GND**: Connect to GND
+- **TRIG**: Trigger pin to send the pulse
+- **ECHO**: Echo pin to receive the pulse
 
 ```c
 #define trigPin D4
@@ -121,25 +127,28 @@ void loop() {
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
-  
+
   duration = pulseIn(echoPin, HIGH);
   distance = duration / 58;
-  
+
   Serial.print("Distance : ");
   Serial.println(distance);
   delay(2000);
 }
 
 ```
+
 ---
+
 ## Project 3
 
 ### LDR Light sensor analog
 
 **Pin of LDR :**
--   **One side of the LDR** goes to **3.3V** (VCC) of the ESP8266.
--   **One side of the fixed resistor** connects to the **GND** (Gnd) pin on the ESP8266.
--   **The other side of the LDR** connects to one side of the fixed resistor and also to the **Analog input pin (A0)** of the ESP8266.
+
+- **One side of the LDR** goes to **3.3V** (VCC) of the ESP8266.
+- **One side of the fixed resistor** connects to the **GND** (Gnd) pin on the ESP8266.
+- **The other side of the LDR** connects to one side of the fixed resistor and also to the **Analog input pin (A0)** of the ESP8266.
 
 ```c
 #define LDR A0
@@ -157,22 +166,28 @@ void loop() {
   delay(1000);
 }
 ```
+
 ---
+
 ## Project 4
+
 ### Light Sensor BH1750
+
 **Pin of Connections for BH1750**
--   **VCC** to **3.3V** (or **5V** if your sensor supports it, but using 3.3V is safer for the ESP8266).
--   **GND** to **GND** on the ESP8266.
--   **SDA** to **D2** (GPIO4) on the ESP8266.
--   **SCL** to **D1** (GPIO5) on the ESP8266.
+
+- **VCC** to **3.3V** (or **5V** if your sensor supports it, but using 3.3V is safer for the ESP8266).
+- **GND** to **GND** on the ESP8266.
+- **SDA** to **D2** (GPIO4) on the ESP8266.
+- **SCL** to **D1** (GPIO5) on the ESP8266.
 
 **Install the DHT Sensor Library:**
--   Go to the Arduino IDE.
--   Navigate to **Sketch** > **Include Library** > **Manage Libraries**.
--   Search for **BH1750** by Christopher Laws and install it.
+
+- Go to the Arduino IDE.
+- Navigate to **Sketch** > **Include Library** > **Manage Libraries**.
+- Search for **BH1750** by Christopher Laws and install it.
 
 ```c
-#include <Wire.h> 
+#include <Wire.h>
 #include <BH1750.h>
 
 BH1750 lightMeter;
@@ -193,11 +208,15 @@ void loop() {
   delay(1000);
 }
 ```
+
 ---
-## Compare 
+
+## Compare
+
 ### LDR Light sensor analog vs BH1750
+
 ```c
-#include <Wire.h> 
+#include <Wire.h>
 #include <BH1750.h>
 BH1750 lightMeter;
 
@@ -216,11 +235,11 @@ void loop() {
   dt = analogRead(LDR);
   Serial.print("dt = ");
   Serial.print(dt);
-  
+
   float lux = lightMeter.readLightLevel();
   Serial.print(" ,Lux: ");
   Serial.println(lux);
-  
+
 
   delay(1000);
 }

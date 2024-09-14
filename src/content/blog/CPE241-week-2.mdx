@@ -24,19 +24,19 @@ digitalWrite(pin, value);
 
 **Parameters**
 
-* pin: The pin number on the microcontroller that you want to set. The pin must be configured as an output using the pinMode() function.
-* value: The desired state for the pin. This can be:
-* HIGH: Sets the pin to a high voltage level (usually 5V or 3.3V, depending on the board).
-* LOW: Sets the pin to a low voltage level (0V).
+- pin: The pin number on the microcontroller that you want to set. The pin must be configured as an output using the pinMode() function.
+- value: The desired state for the pin. This can be:
+- HIGH: Sets the pin to a high voltage level (usually 5V or 3.3V, depending on the board).
+- LOW: Sets the pin to a low voltage level (0V).
 
 **Key points about digitalWrite:**
 
-* Purpose: Sets the digital state of an output pin.
-* Arguments: Pin number and state.
-* Usage:
-* Include the necessary header: #include \<Arduino.h>
-* Configure the pin as an output: pinMode(pinNumber, OUTPUT);
-* Set the pin's state: digitalWrite(pinNumber, HIGH); or digitalWrite(pinNumber, LOW);
+- Purpose: Sets the digital state of an output pin.
+- Arguments: Pin number and state.
+- Usage:
+- Include the necessary header: #include \<Arduino.h>
+- Configure the pin as an output: pinMode(pinNumber, OUTPUT);
+- Set the pin's state: digitalWrite(pinNumber, HIGH); or digitalWrite(pinNumber, LOW);
 
 ### Project 1
 
@@ -53,7 +53,7 @@ void loop() {
 }
 ```
 
-***
+---
 
 ## digitalRead()
 
@@ -61,12 +61,12 @@ The **digitalRead()** is a function used in programming, particularly with micro
 
 **Key points about digitalRead:**
 
-* Purpose: Reads the digital state of an input pin.
-* Return value: "HIGH" (1) or "LOW" (0).
-* Usage:
-* Include the necessary header: #include \<Arduino.h>
-* Configure the pin as an input: pinMode(pinNumber, INPUT);
-* Read the pin's state: int value = digitalRead(pinNumber);
+- Purpose: Reads the digital state of an input pin.
+- Return value: "HIGH" (1) or "LOW" (0).
+- Usage:
+- Include the necessary header: #include \<Arduino.h>
+- Configure the pin as an input: pinMode(pinNumber, INPUT);
+- Read the pin's state: int value = digitalRead(pinNumber);
 
 ### Project 2
 
@@ -83,7 +83,7 @@ void loop() {
 }
 ```
 
-***
+---
 
 ### Project 3
 
@@ -104,7 +104,7 @@ void loop() {
 
 ```
 
-***
+---
 
 ## analogRead()
 
@@ -112,12 +112,12 @@ The **analogRead()** is a function used in programming, particularly with microc
 
 **Key points about analogRead:**
 
-* Purpose: Reads the analog voltage level of an input pin.
-* Return value: Integer value between 0 and 1023.
-* Usage:
-* Include the necessary header: #include \<Arduino.h>
-* Configure the pin as an analog input: pinMode(pinNumber, INPUT);
-* Read the analog value: int value = analogRead(pinNumber);
+- Purpose: Reads the analog voltage level of an input pin.
+- Return value: Integer value between 0 and 1023.
+- Usage:
+- Include the necessary header: #include \<Arduino.h>
+- Configure the pin as an analog input: pinMode(pinNumber, INPUT);
+- Read the analog value: int value = analogRead(pinNumber);
 
 ### Project 4
 
@@ -137,7 +137,7 @@ void loop() {
 
 ```
 
-***
+---
 
 ## analogWrite()
 
@@ -145,12 +145,12 @@ The **analogWrite()** is a function used in programming with ESP8266 microcontro
 
 **Key points about analogWrite in ESP8266:**
 
-* Purpose: Controls the output voltage of a pin.
-* Usage:
-* Include the necessary header: #include \<Arduino.h>
-* Configure the pin as an output: pinMode(pinNumber, OUTPUT);
-* Set the PWM duty cycle: analogWrite(pinNumber, value);
-* Duty cycle: The value argument in analogWrite() represents the duty cycle, which is the ratio of the time the pin is "on" to the total period. A value of 0 corresponds to always "off," while a value of 255 corresponds to always "on." Intermediate values produce varying levels of output voltage.
+- Purpose: Controls the output voltage of a pin.
+- Usage:
+- Include the necessary header: #include \<Arduino.h>
+- Configure the pin as an output: pinMode(pinNumber, OUTPUT);
+- Set the PWM duty cycle: analogWrite(pinNumber, value);
+- Duty cycle: The value argument in analogWrite() represents the duty cycle, which is the ratio of the time the pin is "on" to the total period. A value of 0 corresponds to always "off," while a value of 255 corresponds to always "on." Intermediate values produce varying levels of output voltage.
 
 ```cpp
 analogWrite( pin , DutyCycle );
@@ -178,7 +178,7 @@ void loop() {
 
 ```
 
-***
+---
 
 ### Project 6
 
@@ -199,4 +199,4 @@ void loop() {
 
 ```
 
-***
+---
