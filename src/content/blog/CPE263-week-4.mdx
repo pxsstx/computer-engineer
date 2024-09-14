@@ -1,0 +1,171 @@
+---
+heroImage: /src/assets/images/CPE263-week-4[radioButton].png
+category: CPE263
+description: >-
+  This week also covers radio buttons and checkboxes in Windows Forms
+  applications.
+pubDate: 2024-09-13T01:00:00.000Z
+tags:
+  - csharp
+  - c
+title: CPE263 Week 4
+---
+
+## Week 4
+
+RadioButtons and CheckBoxes are common UI elements in Windows Forms applications:
+
+***
+
+## RadioButton
+
+* Allows users to select a single option from a group of choices.
+* Only one RadioButton in a group can be selected at a time.
+* Typically used for mutually exclusive options.
+
+### Project 1
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnRUN_Click(object sender, EventArgs e)
+        {
+            if (rad1.Checked == true)
+                MessageBox.Show(rad1.Text);
+            else if (rad2.Checked == true) 
+                MessageBox.Show(rad2.Text);
+            else
+                MessageBox.Show(rad3.Text);
+
+        }
+    }
+}
+
+
+```
+
+![](/src/assets/images/CPE263-week-4[if-else].png)
+
+***
+
+## CheckBox
+
+* Allows users to select multiple options independently.
+* Can be checked or unchecked individually.
+* Used for options that are not mutually exclusive.
+
+### Project 2
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp2
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnRUN_Click(object sender, EventArgs e)
+        {
+            string ans = "";
+            if (checkBox1.Checked == true)
+                ans += checkBox1.Text + "\r\n";
+            if (checkBox2.Checked == true)
+                ans += checkBox2.Text + "\r\n";
+            if (checkBox3.Checked == true)
+                ans += checkBox3.Text + "\r\n";
+            if (checkBox4.Checked == true)
+                ans += checkBox4.Text + "\r\n";
+            if (checkBox5.Checked == true)
+                ans += checkBox5.Text + "\r\n";
+
+            txtAns.Text = ans.ToString();
+        }
+    }
+}
+
+```
+
+![](/src/assets/images/CPE263-week-4[radioButton].png)
+
+***
+
+### Project 3
+
+```csharp
+using System.Windows.Forms;
+
+namespace WindowsFormsApp3
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnRUN_Click(object sender, EventArgs e)
+        {
+            int n1, n2, n3, min, max, med;
+            n1 = Convert.ToInt16(textBox1.Text);
+            n2 = Convert.ToInt16(textBox2.Text);
+            n3 = Convert.ToInt16(textBox3.Text);
+
+            max = n1;
+            if (n2 > max)
+                max = n2;
+            if (n3 > max)
+                max = n3;
+
+            min = n1;
+            if (n2 < min )
+                min = n2;
+            if(n3 < min)
+                min = n3;
+
+            if ((n1 > min && n1 < max) || (n1 < max && n1 > min))
+                med = n1;
+            else if ((n2 > min && n2 < max) || (n2 < max && n2 > min))
+                med = n2;
+            else
+                med = n3;
+
+
+            MessageBox.Show("min : \t" + min.ToString() +
+                            "\nmax : \t" + max.ToString() +
+                            "\nmed : \t" + med.ToString());
+        }
+    }
+}
+
+```
+
+![](/src/assets/images/CPE263-week-4[checkBox].png)

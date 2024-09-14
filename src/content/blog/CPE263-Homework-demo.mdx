@@ -1,5 +1,5 @@
 ---
-heroImage: /src/assets/images/demo.png
+heroImage: /src/assets/images/CPE263-week-3[hw-cover].png
 category: CPE263
 description: >-
   Create a Windows Forms app in Visual Studio using TabControl to switch between
@@ -48,6 +48,7 @@ namespace Homework
             imgBNB.ImageLocation = Application.StartupPath + "\\asset\\image\\BNB.png";
             imgDogecoin.ImageLocation = Application.StartupPath + "\\asset\\image\\Dogecoin.png";
         }
+
         private void btnBitcoin_Click(object sender, EventArgs e)
         {
             picCoin.ImageLocation = Application.StartupPath + "\\asset\\image\\Bitcoin.png";
@@ -108,8 +109,70 @@ namespace Homework
                             "\nPay : \t\t\t" + pay.ToString()
                 );
         }
+
+        private string password = ""; // Use a field or property instead of const
+        private void btnSignUp_Click(object sender, EventArgs e)
+        {
+            string suPass = txtPasswordSignUp.Text;
+            string cfPass = txtCfPasswordSignUp.Text;
+
+            if (suPass == cfPass)
+            {
+                MessageBox.Show("Sign In successfully");
+                password = suPass; // Update the password field
+            }
+            else
+            {
+                MessageBox.Show("Password does not match");
+                password = ""; // Clear the password field
+            }
+        }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            string pass;
+            pass = txtPasswordSignIn.Text;
+            if (pass == password)
+                MessageBox.Show("Login succeesfully");
+            else
+                MessageBox.Show("Password Incorrect");
+        }
+
+        private void btnSubmit_Click(object sender, EventArgs e)
+        {
+            string name, lname, sex, status, submit = "";
+            name = txtName.Text;
+            lname = txtLastName.Text;
+
+            // gender
+            if (radMale.Checked)
+                sex = radMale.Text;
+            else if (radFemale.Checked)
+                sex = radFemale.Text;
+            else
+                sex = radLgbt.Text;
+
+            // marital status
+
+            if (radSingle.Checked)
+                status = radSingle.Text;
+            else if (radMarried.Checked)
+                status = radMarried.Text;
+            else
+                status = "Not specified";
+
+            submit = $"Name: {name}\r\n" +
+                     $"Last Name: {lname}\r\n" +
+                     $"Gender: {sex}\r\n" +
+                     $"Status: {status}";
+
+            picProfile.ImageLocation = Application.StartupPath + "\\asset\\image\\profile.png";
+
+            txtSubmit.Text = submit.ToString();
+        }
     }
 }
+
 ```
 
 ## [Dowload here!](https://drive.google.com/drive/folders/1S4tf8lkxttFlUF7rdfqTliTsOBEQRs4o?usp=sharing)
