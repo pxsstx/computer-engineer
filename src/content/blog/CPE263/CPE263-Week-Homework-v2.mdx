@@ -1,0 +1,233 @@
+---
+heroImage: '/src/assets/images/CPE263/CPE263-week-5[homework-cover].png'
+category: CPE263
+description: >-
+  This homework assignment will cover the basic looping constructs in C#: for,
+  while, and do-while loops. 
+pubDate: 2024-09-20T17:00:00.000Z
+tags:
+  - csharp
+  - c
+title: CPE263 Week Homework v.2
+---
+
+## Week 3 Homework v.2
+
+***
+
+## Code
+
+### 3
+
+```csharp
+private void btnRun1_Click(object sender, EventArgs e)
+        {
+            int sum = 0;
+            int i = 1;
+            while (i <= 10)
+            {
+                sum += i;
+                i++;
+            } 
+            MessageBox.Show(sum.ToString());
+        }
+
+        private void btnRun2_Click(object sender, EventArgs e)
+        {
+            int sum = 0;
+            int i = 1;
+            do
+            {
+                sum += i;
+                i++;
+            } while (i <= 10);
+            MessageBox.Show(sum.ToString());
+        }
+
+```
+
+![](/src/assets/images/CPE263/CPE263-week-5\[homework-cover].png)
+
+***
+
+### 4
+
+```csharp
+private void btnRUN_Click(object sender, EventArgs e)
+        {
+            txtAns.Text = string.Empty;
+            double avg, max, sum = 0;
+            max = Convert.ToInt32(txtMax.Text);
+            for (int i = 1; i <= max; i++)
+            {
+                sum += i;
+                txtAns.Text += i.ToString()+"+";
+            }
+            avg = sum / max;
+            txtAns.Text += "=" + sum.ToString() + "\r\n avg = " + avg.ToString();
+        }
+
+```
+
+![](/src/assets/images/CPE263/CPE263-week-5\[homework-4].png)
+
+***
+
+### 5
+
+```csharp
+private void button1_Click(object sender, EventArgs e)
+        {
+            string results = "";
+            for (int i = 1; i < 45; i++)
+            {
+                int j = 45 - i;
+                int res = j + i;
+
+                if (j > 0)
+                {
+                    results += i.ToString() + " + " + j.ToString() + " = " + res.ToString() + "\t\t";
+                }
+                if (i % 4 == 0)
+                {
+                    results += "\r\n";
+                }
+            }
+            txtShow.Text = results;
+        }
+
+```
+
+![](/src/assets/images/CPE263/CPE263-week-5\[homework-5].png)
+
+***
+
+### 6
+
+```csharp
+private void button2_Click(object sender, EventArgs e)
+        {
+            int x = 2, num;
+            string strOut = "";
+            num = Convert.ToInt32(txtNum.Text);
+            while (x <= num) { 
+                strOut += x.ToString() + "\t";
+                x += 2;
+                if (x % 4 == 0)
+                { 
+                    strOut += "\r\n";
+                }
+            }
+            MessageBox.Show(strOut);
+        }
+    }
+}
+
+```
+
+![](/src/assets/images/CPE263/CPE263-week-5\[homework-6].png)
+
+***
+
+### All
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Homework_v._2
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnRun1_Click(object sender, EventArgs e)
+        {
+            int sum = 0;
+            int i = 1;
+            while (i <= 10)
+            {
+                sum += i;
+                i++;
+            } 
+            MessageBox.Show(sum.ToString());
+        }
+
+        private void btnRun2_Click(object sender, EventArgs e)
+        {
+            int sum = 0;
+            int i = 1;
+            do
+            {
+                sum += i;
+                i++;
+            } while (i <= 10);
+            MessageBox.Show(sum.ToString());
+        }
+
+        private void btnRUN_Click(object sender, EventArgs e)
+        {
+            txtAns.Text = string.Empty;
+            double avg, max, sum = 0;
+            max = Convert.ToInt32(txtMax.Text);
+            for (int i = 1; i <= max; i++)
+            {
+                sum += i;
+                txtAns.Text += i.ToString()+"+";
+            }
+            avg = sum / max;
+            txtAns.Text += "=" + sum.ToString() + "\r\n avg = " + avg.ToString();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string results = "";
+            for (int i = 1; i < 45; i++)
+            {
+                int j = 45 - i;
+                int res = j + i;
+
+                if (j > 0)
+                {
+                    results += i.ToString() + " + " + j.ToString() + " = " + res.ToString() + "\t\t";
+                }
+
+                if (i % 4 == 0)
+                {
+                    results += "\r\n";
+                }
+            }
+            txtShow.Text = results;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            int x = 2, num;
+            string strOut = "";
+            num = Convert.ToInt32(txtNum.Text);
+            while (x <= num) { 
+                strOut += x.ToString() + "\t";
+                x += 2;
+                if (x % 4 == 0)
+                { 
+                    strOut += "\r\n";
+                }
+            }
+            MessageBox.Show(strOut);
+        }
+    }
+}
+
+```
+
+## [Dowload here!](https://drive.google.com/file/d/1c114wU6OsMNfPKKT6o7tcis8EbyDz3iy/view?usp=sharing)
