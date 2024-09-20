@@ -1,0 +1,284 @@
+---
+heroImage: '/src/assets/images/CPE263/CPE263-week-5[cover].png'
+category: CPE263
+description: >-
+  In C#, loops allow you to repeat a block of code multiple times. One of the
+  common types of loops is the for loop. 
+pubDate: 2024-09-19T17:00:00.000Z
+tags:
+  - csharp
+  - c
+title: CPE263 Week 5
+---
+
+## Week 5
+
+In C#, loops allow you to repeat a block of code multiple times. One of the common types of loops is the for loop.
+
+***
+
+## For
+
+A for loop in C# is used when you know in advance how many times you want to execute a block of code.
+
+Components:
+
+1. Initialization: It sets a loop counter to its initial value (e.g., int i = 0).
+2. Condition: As long as the condition is true, the loop continues (e.g., i \< 10).
+3. Iteration: This updates the loop counter after every iteration (e.g., i++).
+
+### Project 1
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp2
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnUp_Click(object sender, EventArgs e)
+        {
+            int cnt = 14;
+            string strOut = "วนรอบทั้งหมด " + cnt.ToString() + " รอบ" + "\r\n";
+            for (int i = 1; i <= cnt; i++)
+            {
+                strOut += "วนรอบที่ " + i.ToString() + "\r\n";
+            }
+            txtOut.Text = strOut;
+        }
+
+        private void btbDown_Click(object sender, EventArgs e)
+        {
+            int cnt = 14;
+            string strOut = "วนรอบทั้งหมด " + cnt.ToString() + " รอบ" + "\r\n";
+            for (int i = cnt; i >= 1; i--)
+            {
+                strOut += "วนรอบที่ " + i.ToString() + "\r\n";
+            }
+            txtOut.Text = strOut;
+        }
+
+        private void btnStep_Click(object sender, EventArgs e)
+        {
+            int cnt = 27;
+            string strOut = "วนรอบทั้งหมด " + cnt.ToString() + " รอบ" + "\r\n";
+            for (int i = 0; i <= cnt; i += 3)
+            {
+                strOut += "วนรอบที่ " + i.ToString() + "\r\n";
+            }
+            txtOut.Text = strOut;
+        }
+    }
+}
+
+```
+
+![](/src/assets/images/CPE263/CPE263-week-5\[cover].png)
+
+***
+
+### Project 2
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp3
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnRun_Click(object sender, EventArgs e)
+        {
+            int cnt = 27;
+            int step = Convert.ToInt32(txtStep.Text);
+            string strOut;
+
+            if (radUp.Checked == true)
+            {
+                strOut = "วนรอบทั้งหมด " + cnt.ToString() + " รอบ" + "\r\n";
+                for (int i = 0; i < cnt; i += step)
+                {
+                    strOut += "วนรอบที่ " + i.ToString() + "\r\n";
+                }
+                txtOut.Text = strOut;
+            }
+            
+            if (radDown.Checked == true)
+            {
+                strOut = "วนรอบทั้งหมด " + cnt.ToString() + " รอบ" + "\r\n";
+                for (int i = cnt; i >= 1; i -= step)
+                {
+                    strOut += "วนรอบที่ " + i.ToString() + "\r\n";
+                }
+                txtOut.Text = strOut;
+            }
+        }
+    }
+}
+
+```
+
+![](/src/assets/images/CPE263/CPE263-week-5\[up].png)
+
+***
+
+### Project 3
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp4
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnRun_Click(object sender, EventArgs e)
+        {
+            int num;
+            num = Convert.ToInt16(txtNum.Text);
+            string strOut = "";
+
+            for (int i = 1; i <= 12; i++)
+            {
+                int res = i * num;
+                strOut += num.ToString() + "\tX\t" + i.ToString() + "\t=\t" + res.ToString() + "\r\n";
+            }
+            txtOut.Text = strOut;
+        }
+    }
+}
+
+```
+
+![](/src/assets/images/CPE263/CPE263-week-5\[Multiplication_table].png)
+
+***
+
+### Project 4
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp6
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int i, sum = 0, num = 1;
+
+            for (i = 1; i <= 10; i++)
+            {
+               
+                sum = sum + num;
+                num += 3;
+            }
+            MessageBox.Show(sum.ToString());
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            int i, sum = 0, num = 2;
+
+            for (i = 1; i <= 8; i++)
+            {
+
+                sum = sum + num;
+                num *= 3;
+            }
+            MessageBox.Show(sum.ToString());
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            int i, sum = 0, num = 0;
+
+            for (i = 1; i <= 10; i++)
+            {
+
+                sum = sum + num;
+                num += i * 2;
+            }
+            MessageBox.Show(sum.ToString());
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            int i, sum = 0, num = -1;
+            int sum2 = 0, num2 = 2;
+            int sum3 = 0;
+
+            for (i = 1; i <= 5; i++)
+            {
+
+                sum = sum + num;
+                num -= 2 ;
+            }
+
+            for (i = 1; i <= 5; i ++)
+            {
+
+                sum2 = sum2 + num2;
+                num2 += 2;
+            }
+
+            sum3 = sum2 + sum;
+
+            MessageBox.Show(sum3.ToString());
+        }
+    }
+}
+
+```
+
+![](/src/assets/images/CPE263/CPE263-week-5\[choice].png)
