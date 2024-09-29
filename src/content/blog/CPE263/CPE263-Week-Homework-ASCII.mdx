@@ -1,0 +1,151 @@
+---
+heroImage: '/src/assets/images/CPE263/CPE263-week-6[homework-cover].png'
+category: CPE263
+description: >-
+  ASCII (American Standard Code for Information Interchange) is a character encoding standard that represents text in computers and communication equipment.
+pubDate: 2024-09-26T17:00:00.000Z
+tags:
+  - csharp
+  - c
+title: CPE263 Week Homework ASCII
+---
+
+## Week 6 Homework ASCII
+
+ASCII (American Standard Code for Information Interchange) is a character encoding standard that represents text in computers and communication equipment.
+
+## Key Features of ASCII:
+
+    ### Character Set:
+    -	ASCII defines a set of 128 characters, including:
+    -	Uppercase letters (A-Z)
+    -	Lowercase letters (a-z)
+    -	Digits (0-9)
+    -	Special characters (e.g., punctuation marks like .,;!?, symbols like @#$%^&*)
+    -	Control characters (e.g., newline, carriage return, tab)
+
+---
+
+## Code
+
+### Encoder
+
+```csharp
+private void runEn_Click(object sender, EventArgs e)
+{
+    string input = txtInEn.Text.ToUpper();
+    int key = Convert.ToInt32(txtKeyEn.Text);
+    string result = "";
+    foreach (char data in input)
+    {
+        int asc = (int)data;
+        int ans = asc + key;
+        char res;
+        if (ans > 90)
+        {
+            ans = (ans - 26);
+        }
+        res = (char)ans;
+        result += res;
+    }
+    txtOutEn.Text = result;
+}
+
+```
+
+---
+
+### Decoder
+
+```csharp
+private void btnDe_Click(object sender, EventArgs e)
+{
+    string input = txtInDe.Text.ToUpper();
+    int key = Convert.ToInt32(txtKeyDe.Text);
+    string result = "";
+    foreach (char data in input)
+    {
+        int asc = (int)data;
+        int ans = asc - key;
+        char res;
+        if (ans < 65)
+        {
+            ans = (ans + 26);
+        }
+        res = (char)ans;
+        result += res;
+    }
+    txtOutDe.Text = result;
+}
+```
+
+---
+
+### All
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp5
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void runEn_Click(object sender, EventArgs e)
+        {
+            string input = txtInEn.Text.ToUpper();
+            int key = Convert.ToInt32(txtKeyEn.Text);
+            string result = "";
+
+            foreach (char data in input)
+            {
+                int asc = (int)data;
+                int ans = asc + key;
+                char res;
+                if (ans > 90)
+                {
+                    ans = (ans - 26);
+                }
+                res = (char)ans;
+                result += res;
+            }
+            txtOutEn.Text = result;
+        }
+
+        private void btnDe_Click(object sender, EventArgs e)
+        {
+            string input = txtInDe.Text.ToUpper();
+            int key = Convert.ToInt32(txtKeyDe.Text);
+            string result = "";
+            foreach (char data in input)
+            {
+                int asc = (int)data;
+                int ans = asc - key;
+                char res;
+                if (ans < 65)
+                {
+                    ans = (ans + 26);
+                }
+                res = (char)ans;
+                result += res;
+            }
+            txtOutDe.Text = result;
+        }
+    }
+}
+
+```
+
+## [Dowload here!](https://drive.google.com/drive/folders/1wSclNticxwsjjmcxPSu-zv2b_VDuKnHr?usp=sharing)

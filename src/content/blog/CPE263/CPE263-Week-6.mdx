@@ -1,0 +1,167 @@
+---
+heroImage: '/src/assets/images/CPE263/CPE263-week-6[cover].png'
+category: CPE263
+description: >-
+  In C#, an array is a collection of items stored at contiguous memory
+  locations. It can hold multiple values of the same type.
+pubDate: 2024-09-26T17:00:00.000Z
+tags:
+  - csharp
+  - c
+title: CPE263 Week 6
+---
+
+## Week 6
+
+In C#, an array is a collection of items stored at contiguous memory locations. It can hold multiple values of the same type.
+
+---
+
+## Array
+
+An array in programming is a data structure that stores a fixed-size sequence of elements of the same type.
+
+### Project 1
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            int odd = 0, even = 0;
+            // Creating an array with initial values
+            int[] arr = { 1, 2, 5, 7, 8, 11, 13, 25, 28, 99, 22, 33, 75 };
+            foreach (int i in arr)
+            {
+                if (i % 2 == 0)
+                    even++;
+                else
+                    odd++;
+            }
+            string str = "จำนวนคู่ = " + even + Environment.NewLine +
+                          "จำนวนคี่ = " + odd;
+            MessageBox.Show(str);
+        }
+    }
+}
+
+
+```
+
+---
+
+### Project 2
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp2
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        private void btn5_3_Click(object sender, EventArgs e)
+        {
+            string strIn = "";
+            string strOut = "";
+            int idx = 0;
+            strIn = txtIn.Text;  // Removed the '+' sign
+            strOut = "ข้อความ String = " + strIn + "\n";
+
+            foreach (char sTemp in strIn)
+            {
+                strOut += "strIn[" + idx + "] = " + sTemp + "\n";
+                idx++;
+            }
+            MessageBox.Show(strOut, "อาร์เรย์ strIn");
+        }
+        private void runAEIOU_Click(object sender, EventArgs e)
+        {
+            string strIn = "";
+            int A = 0, E = 0, I = 0, O = 0, U = 0;
+            strIn = txtIn.Text.ToUpper(); // Convert to uppercase for easier comparison
+
+            foreach (char sTemp in strIn)
+            {
+                switch (sTemp)
+                {
+                    case 'A': A++; break;
+                    case 'E': E++; break;
+                    case 'I': I++; break;
+                    case 'O': O++; break;
+                    case 'U': U++; break;
+                }
+            }
+            string result = $"A: {A}, E: {E}, I: {I}, O: {O}, U: {U}";
+            MessageBox.Show(result, "Vowel Count");
+        }
+    }
+}
+```
+
+---
+
+### Project 3
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp4
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        private void btnASCII_Click(object sender, EventArgs e)
+        {
+            int data = Convert.ToInt16(txtIN.Text);
+            char asc = (char) data;
+            MessageBox.Show(asc.ToString());
+
+        }
+        private void btnTEXT_Click(object sender, EventArgs e)
+        {
+            char data = Convert.ToChar(txtIN.Text);
+            int asc = (int)data;
+            MessageBox.Show(asc.ToString());
+        }
+    }
+}
+```
