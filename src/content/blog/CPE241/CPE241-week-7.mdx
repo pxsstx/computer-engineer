@@ -1,0 +1,177 @@
+---
+heroImage: /src/assets/images/CPE241/CPE241-week-5[cover].jpg
+category: CPE241
+description: >-
+  The ESP8266 is a versatile and popular Wi-Fi module used in many Internet of Things (IoT) applications. It allows microcontrollers to connect to Wi-Fi networks and perform network-based tasks.
+pubDate: 2024-09-24T17:00:00.000Z
+tags:
+  - Arduino
+  - cpp
+  - C
+title: CPE241 Week 6
+---
+
+## IOT Platform
+
+An IoT (Internet of Things) platform is a comprehensive suite of tools and services designed to facilitate the development, deployment, and management of IoT devices and applications.
+
+1.  **Device Management**: Provisioning, monitoring, and firmware updates for connected devices.
+2.  **Connectivity**: Support for various communication protocols and network management.
+3.  **Data Management**: Collecting, storing, and processing data from devices.
+4.  **Analytics**: Real-time insights and historical data analysis, often enhanced by machine learning.
+5.  **User Interface**: Customizable dashboards and mobile/web apps for user interaction.
+6.  **Security**: Data encryption, authentication, and compliance with regulations.
+7.  **Integration**: APIs for connecting with third-party services and other devices.
+
+### Use Cases:
+
+-   **Smart Home**: Control of appliances and security systems.
+-   **Industrial IoT**: Machinery monitoring and predictive maintenance.
+-   **Healthcare**: Patient data tracking and device monitoring.
+-   **Agriculture**: Soil and crop health monitoring.
+
+### Popular Platforms:
+
+-   **AWS IoT Core**
+-   **Google Cloud IoT**
+-   **Microsoft Azure IoT Hub**
+-   **Blynk**
+
+## Code
+
+### LED
+
+```c
+#define BLYNK_PRINT Serial
+#define BLYNK_TEMPLATE_ID "template ID"  // Replace with your Template ID
+#define BLYNK_TEMPLATE_NAME "Template v1"  // Replace with your Template Name
+#define BLYNK_AUTH_TOKEN "Auth Token"  // Replace with your Auth Token
+
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+
+char auth[] = BLYNK_AUTH_TOKEN;
+char ssid[] = "YourNetworkName";  // Replace with your Wi-Fi SSID
+char pass[] = "YourPassword";  // Replace with your Wi-Fi Password
+
+void setup() {
+  Serial.begin(115200);
+  Blynk.begin(auth, ssid, pass);
+}
+
+void loop() {
+  Blynk.run();
+}
+```
+---
+
+### Slider
+```c
+#define BLYNK_PRINT Serial
+#define BLYNK_TEMPLATE_ID "template ID"  // Replace with your Template ID
+#define BLYNK_TEMPLATE_NAME "Template v1"  // Replace with your Template Name
+#define BLYNK_AUTH_TOKEN "Auth Token"  // Replace with your Auth Token
+
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+
+char auth[] = BLYNK_AUTH_TOKEN;
+char ssid[] = "YourNetworkName";  // Replace with your Wi-Fi SSID
+char pass[] = "YourPassword";      // Replace with your Wi-Fi Password
+#define LEDPIN D4  // Define the LED pin
+
+BLYNK_WRITE(V1) {
+  int pinValue = param.asInt();
+  Serial.print("V1 Slider value is: ");
+  Serial.println(pinValue);
+  analogWrite(LEDPIN, pinValue);  // Adjust LED brightness
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(LEDPIN, OUTPUT);
+  Blynk.begin(auth, ssid, pass);
+}
+
+void loop() {
+  Blynk.run();
+}
+```
+
+---
+
+### DHT
+```c
+#define BLYNK_PRINT Serial
+#define BLYNK_TEMPLATE_ID "template ID"  // Replace with your Template ID
+#define BLYNK_TEMPLATE_NAME "Template v1"  // Replace with your Template Name
+#define BLYNK_AUTH_TOKEN "Auth Token"  // Replace with your Auth Token
+
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+#include <DHT.h>
+
+char auth[] = BLYNK_AUTH_TOKEN;
+char ssid[] = "YourNetworkName";  // Replace with your Wi-Fi SSID
+char pass[] = "YourPassword";      // Replace with your Wi-Fi Password
+
+#define DHTTYPE DHT22
+#define DHTPIN D5
+#define LEDPIN D4
+
+DHT dht(DHTPIN, DHTTYPE);
+float h;
+float t;
+BlynkTimer timer;
+
+// Function to send DHT data to Blynk
+void sendDHTdata() {
+  h = dht.readHumidity();
+  t = dht.readTemperature();
+
+  // Check if readings are valid
+  if (isnan(h) || isnan(t)) {
+    Serial.println("Failed to read from DHT sensor!");
+    return;
+  }
+
+  Serial.print("Humidity: ");
+  Serial.print(h);
+  Serial.print("% | ");
+  Serial.print("Temperature: ");
+  Serial.print(t);
+  Serial.println("C");
+
+  // Send data to Blynk
+  Blynk.virtualWrite(V2, h);
+  Blynk.virtualWrite(V3, t);
+}
+
+// Blynk write function for slider
+BLYNK_WRITE(V1) {
+  int pinValue = param.asInt();
+  Serial.print("V1 Slider value is: ");
+  Serial.println(pinValue);
+  analogWrite(LEDPIN, pinValue);  // Adjust LED brightness
+}
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+  pinMode(LEDPIN, OUTPUT);
+  Blynk.begin(auth, ssid, pass);
+  timer.setInterval(5000, sendDHTdata);  // Send data every 5 seconds
+}
+
+void loop() {
+  Blynk.run();
+  timer.run();
+}
+```
+
+---
+
+### Classwork
+```c
+
+```
