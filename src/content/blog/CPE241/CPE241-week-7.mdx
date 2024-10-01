@@ -3,7 +3,7 @@ heroImage: /src/assets/images/CPE241/CPE241-week-5[cover].jpg
 category: CPE241
 description: >-
   An IoT (Internet of Things) platform is a comprehensive suite of tools and services designed to facilitate the development, deployment, and management of IoT devices and applications.
-pubDate: 2024-10-1T17:00:00.000Z
+pubDate: 2024-09-24T17:00:00.000Z
 tags:
   - Arduino
   - cpp
@@ -102,6 +102,7 @@ void loop() {
 
 ### DHT
 ```c
+
 #define BLYNK_PRINT Serial
 #define BLYNK_TEMPLATE_ID "template ID"  // Replace with your Template ID
 #define BLYNK_TEMPLATE_NAME "Template v1"  // Replace with your Template Name
@@ -173,5 +174,92 @@ void loop() {
 
 ### Classwork
 ```c
+#define BLYNK_PRINT Serial
+#define BLYNK_TEMPLATE_ID "template ID"  // Replace with your Template ID
+#define BLYNK_TEMPLATE_NAME "Template v1"  // Replace with your Template Name
+#define BLYNK_AUTH_TOKEN "Auth Token"  // Replace with your Auth Token
 
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+#include <DHT.h>
+#include <Wire.h>
+#include <BH1750.h>
+
+char auth[] = BLYNK_AUTH_TOKEN;
+char ssid[] = "YourNetworkName";  // Replace with your Wi-Fi SSID
+char pass[] = "YourPassword";      // Replace with your Wi-Fi Password
+
+#define DHTTYPE DHT22
+#define DHTPIN D5
+#define LEDPIN D4  // Choose one LED pin
+//#define LEDPIN D6  // Uncomment if using D6 instead
+
+#define SDA D2
+#define SCL D1
+
+DHT dht(DHTPIN, DHTTYPE);
+BlynkTimer timer;
+BH1750 lightMeter;
+
+float h;
+float t;
+
+// Function to send DHT data to Blynk
+void sendDHTdata() {
+  h = dht.readHumidity();
+  t = dht.readTemperature();
+
+  // Check if readings are valid
+  if (isnan(h) || isnan(t)) {
+    Serial.println("Failed to read from DHT sensor!");
+    return;
+  }
+
+  Serial.print("Humidity: ");
+  Serial.print(h);
+  Serial.print("% | ");
+  Serial.print("Temperature: ");
+  Serial.print(t);
+  Serial.println("C");
+
+  // Send data to Blynk
+  Blynk.virtualWrite(V2, h);
+  Blynk.virtualWrite(V3, t);
+}
+
+// Function to send light data to Serial and Blynk
+void sendLightData() {
+  float lux = lightMeter.readLightLevel();
+  Serial.print("Light: ");
+  Serial.print(lux);
+  Serial.println(" lx");
+
+  Blynk.virtualWrite(V4, lux);  // Send light level to Blynk
+  analogWrite(LEDPIN, lux);  // Adjust LED brightness
+}
+
+// Blynk write function for slider
+BLYNK_WRITE(V1) {
+  int pinValue = param.asInt();
+  Serial.print("V1 Slider value is: ");
+  Serial.println(pinValue);
+  analogWrite(LEDPIN, pinValue);  // Adjust LED brightness
+}
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+  pinMode(LEDPIN, OUTPUT);
+  Blynk.begin(auth, ssid, pass);
+  Wire.begin(SDA, SCL);  // Initialize I2C
+  lightMeter.begin();
+
+  timer.setInterval(5000, sendDHTdata);   // Send DHT data every 5 seconds
+  timer.setInterval(1000, sendLightData); // Send light data every second
+}
+
+void loop() {
+  Blynk.run();
+  timer.run();
+}
 ```
