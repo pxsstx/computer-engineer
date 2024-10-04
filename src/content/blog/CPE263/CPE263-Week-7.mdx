@@ -1,0 +1,246 @@
+---
+heroImage: '/src/assets/images/CPE263/CPE263-week-6[cover].png'
+category: CPE263
+description: >-
+  In C#, a method is a block of code that performs a specific task and can be called upon when needed. Methods help organize code and avoid redundancy.
+pubDate: 2024-09-26T17:00:00.000Z
+tags:
+  - csharp
+  - c
+  - .Net
+title: CPE263 Week 7
+---
+
+## Week 7
+
+## In C#, a method is a block of code that performs a specific task and can be called upon when needed. Methods help organize code and avoid redundancy.
+
+## Method
+
+Key Components of a C# Method: 1. Access Modifier: Defines visibility (public, private, etc.). 2. Return Type: Data type returned by the method (void if none). 3. Method Name: Identifier for the method (PascalCase). 4. Parameters: Optional inputs for the method.
+
+### Project 1
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        void SayHello()
+        {
+            MessageBox.Show("Hello");
+        }
+
+        void ShowMessage(string message)
+        {
+            MessageBox.Show(message);
+        }
+
+        double CalculateTotal(int quantity, double price)
+        {
+
+            double total = quantity * price;
+            return total;
+
+        }
+
+        string OddEven(int num)
+        {
+
+            if (num % 2 == 0)
+                return "Even";
+            else
+                return "Odd" ;
+
+        }
+
+        int Max(int num1, int num2)
+        {
+
+            if (num1 > num2)
+                return num1;
+            else
+                return num2;
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //SayHello();
+            //ShowMessage("Hello100");
+
+            //double y = CalculateTotal(2, 5);
+            //MessageBox.Show(y.ToString());
+
+            //string y = OddEven(2);
+            //MessageBox.Show(y);
+
+            int y = Max(2, 5);
+            MessageBox.Show(y.ToString());
+        }
+    }
+}
+
+```
+
+---
+
+### Project 2
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp2
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        string Number(int x)
+        {
+            if (x > 0)
+            {
+                return "จำนวนเต็มบวก";
+            }
+            else if (x < 0)
+            {
+                return "จำนวนเต็มลบ";
+            }
+            else
+            {
+                return "จำนวนเต็มศูนย์";
+            }
+        }
+
+        double Vat(int x)
+        {
+            return  x * 0.07;
+        }
+
+        private void btn1_Click(object sender, EventArgs e)
+        {
+            int num = Convert.ToInt32(txtNumber.Text);
+            string y = Number(num);
+            MessageBox.Show(y);
+        }
+
+        private void btn2_Click(object sender, EventArgs e)
+        {
+            int price = Convert.ToInt32(txtPrice.Text);
+            double vat = Vat(price);
+
+            MessageBox.Show("Price : " +  price.ToString() +
+                            "\r\nVat 7 % : "+  vat.ToString());
+        }
+    }
+}
+
+```
+
+---
+
+### Project 3
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp3
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void setDate()
+        {
+            string day = updDate.Value.ToString();
+            string month = updMonth.Value.ToString();
+            string year = updYear.Value.ToString();
+            string dateStr = month + "/" + day + "/" + year;
+
+            DateTime dt;
+
+            if(DateTime.TryParse(dateStr,out dt))
+            {
+                monthCalendar1.SetDate(dt);
+            }
+            else
+            {
+                MessageBox.Show("รูปแบบวันเดือนปีไม่ถูกต้อง");
+            }
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+                updYear.Value = DateTime.Today.Year;
+                updDate.Value = DateTime.Today.Day;
+                updMonth.Value = DateTime.Today.Month;
+        }
+
+        private void updDate_ValueChanged(object sender, EventArgs e)
+        {
+            setDate();
+        }
+
+        private void updMonth_ValueChanged(object sender, EventArgs e)
+        {
+            setDate();
+        }
+
+        private void updYear_ValueChanged(object sender, EventArgs e)
+        {
+            setDate();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedItem.ToString() == "จันทร์")
+            {
+                monthCalendar1.FirstDayOfWeek = Day.Monday;
+            }else
+            {
+                monthCalendar1.FirstDayOfWeek = Day.Sunday;
+            }
+        }
+    }
+}
+
+```
