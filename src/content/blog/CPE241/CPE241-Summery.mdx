@@ -202,35 +202,26 @@ void loop() {
 - **Install**: `yarn add adafruit/Adafruit_NeoPixel`
 - **Code**:
 
-  ```c
-  #include <Adafruit_NeoPixel.h>
+```c
+#include <Adafruit_NeoPixel.h>
 
-  #define PIN        6  // Pin connected to the NeoPixel data in
-  #define NUMPIXELS  8  // Number of pixels in the strip
+#define NUMSLEDs 2
+#define PINSLEDs 10
 
-  Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel SLEDs = Adafruit_NeoPixel(NUMSLEDs, PINSLEDs, NEO_GRB + NEO_KHZ800);
 
-  void setup() {
-    strip.begin();
-    strip.show();  // Initialize all pixels to 'off'
-  }
+void setup() {
+  SLEDs.begin();
+  SLEDs.show();
+  SLEDs.setBrightness(255);
+}
 
-  void loop() {
-    for (int i = 0; i < strip.numPixels(); i++) {
-      strip.setPixelColor(i, strip.Color(255, 0, 0));  // Set pixel color to red
-      strip.show();  // Update strip
-      delay(500);
-
-      strip.setPixelColor(i, strip.Color(0, 255, 0));  // Set pixel color to green
-      strip.show();
-      delay(500);
-
-      strip.setPixelColor(i, strip.Color(0, 0, 255));  // Set pixel color to blue
-      strip.show();
-      delay(500);
-    }
-  }
-  ```
+void loop() {
+  SLEDs.setPixelColor(0, SLEDs.Color(0 , 0 , 0));
+  SLEDs.setPixelColor(1, SLEDs.Color(0, 0, 0));
+  SLEDs.show();
+}
+```
 
 ## 7. Servo Motor
 
