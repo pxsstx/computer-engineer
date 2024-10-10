@@ -52,7 +52,8 @@ title: CPE241 Summery
 - **Library**: `NewPing`
 - **Install**: `yarn add NewPing`
 - **Code**:
-
+	
+	### with library
   ```c
   #include <NewPing.h>
 
@@ -74,6 +75,36 @@ title: CPE241 Summery
     delay(500);
   }
   ```
+
+### no library
+```c
+	#define trigPin D4
+#define echoPin D3
+
+long duration;
+long distance;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  Serial.begin(115200);
+}
+
+void loop() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = duration / 58;
+
+  Serial.print("Distance : ");
+  Serial.println(distance);
+  delay(2000);
+}
+```
 
 ## 3. LDR Analog
 
