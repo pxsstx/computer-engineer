@@ -21,7 +21,7 @@ title: CPE241 Summery
 - **Install**: `yarn add adafruit/DHT-sensor-library`
 - **Code**:
 
-  ```cpp
+  ```c
   #include <DHT.h>
 
   #define DHTPIN 2
@@ -53,7 +53,7 @@ title: CPE241 Summery
 - **Install**: `yarn add NewPing`
 - **Code**:
 
-  ```cpp
+  ```c
   #include <NewPing.h>
 
   #define TRIG_PIN 9
@@ -82,7 +82,7 @@ title: CPE241 Summery
 - **Library**: None (uses basic analog read)
 - **Code**:
 
-  ```cpp
+  ```c
   #define LDR_PIN A0
 
   void setup() {
@@ -105,25 +105,28 @@ title: CPE241 Summery
 - **Install**: `yarn add BH1750`
 - **Code**:
 
-  ```cpp
+  ```c
   #include <Wire.h>
-  #include <BH1750.h>
+	#include <BH1750.h>
 
-  BH1750 lightMeter;
+	BH1750 lightMeter;
 
-  void setup() {
-    Wire.begin();
-    lightMeter.begin();
-    Serial.begin(9600);
-  }
+	#define SDA D2
+	#define SCL D1
 
-  void loop() {
-    float lux = lightMeter.readLightLevel();
-    Serial.print("Light: ");
-    Serial.print(lux);
-    Serial.println(" lx");
-    delay(1000);
-  }
+	void setup() {
+	  Serial.begin(115200);
+	  Wire.begin(SDA, SCL);
+	  lightMeter.begin();
+	}
+
+	void loop() {
+	  float lux = lightMeter.readLightLevel();
+	  Serial.print("Light: ");
+	  Serial.print(lux);
+	  Serial.println(" lx");
+	  delay(1000);
+	}
   ```
 
 ## 5. OLED
@@ -134,7 +137,7 @@ title: CPE241 Summery
 - **Install**: `yarn add adafruit/Adafruit_SSD1306`
 - **Code**:
 
-  ```cpp
+  ```c
   #include <Adafruit_GFX.h>
   #include <Adafruit_SSD1306.h>
 
@@ -168,7 +171,7 @@ title: CPE241 Summery
 - **Install**: `yarn add adafruit/Adafruit_NeoPixel`
 - **Code**:
 
-  ```cpp
+  ```c
   #include <Adafruit_NeoPixel.h>
 
   #define PIN        6  // Pin connected to the NeoPixel data in
@@ -204,7 +207,7 @@ title: CPE241 Summery
 - **Install**: Built-in Arduino library
 - **Code**:
 
-  ```cpp
+  ```c
   #include <Servo.h>
 
   Servo myServo;
@@ -229,7 +232,7 @@ title: CPE241 Summery
 - **Install**: Built-in Arduino library
 - **Code**:
 
-  ```cpp
+  ```c
   #include <Stepper.h>
 
   const int stepsPerRevolution = 200;
@@ -255,7 +258,7 @@ title: CPE241 Summery
 - **Install**: `yarn add ESP8266WiFi`
 - **Code**:
 
-  ```cpp
+  ```c
     #include <ESP8266WiFi.h>
 
     const char* ssid = "ESP8266-AP";
@@ -277,7 +280,7 @@ title: CPE241 Summery
 - **Install**: `yarn add ESP8266WebServer`
 - **Code**:
 
-```cpp
+```c
     #include <ESP8266WiFi.h>
     #include <ESP8266WebServer.h>
 
@@ -309,7 +312,7 @@ title: CPE241 Summery
 - **Install**: `yarn add blynk-library`
 - **Code**:
 
-  ```cpp
+  ```c
   #define BLYNK_TEMPLATE_ID "YourTemplateID"
   #define BLYNK_DEVICE_NAME "YourDeviceName"
   #define BLYNK_AUTH_TOKEN "YourAuthToken"
