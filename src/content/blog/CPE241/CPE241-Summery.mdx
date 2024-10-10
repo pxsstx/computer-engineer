@@ -170,31 +170,29 @@ void loop() {
 - **Install**: `yarn add adafruit/Adafruit_SSD1306`
 - **Code**:
 
-  ```c
-  #include <Adafruit_GFX.h>
-  #include <Adafruit_SSD1306.h>
+```c
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 
-  #define SCREEN_WIDTH 128
-  #define SCREEN_HEIGHT 64
-  #define OLED_RESET    -1
-  Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+Adafruit_SSD1306 OLED(-1);
 
-  void setup() {
-    if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-      Serial.println("SSD1306 allocation failed");
-      for(;;);
-    }
-    display.clearDisplay();
-    display.setTextSize(1);
-    display.setTextColor(SSD1306_WHITE);
-    display.setCursor(0, 10);
-    display.println("Hello, World!");
-    display.display();
-  }
+void setup() {
+  OLED.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+}
 
-  void loop() {
-  }
-  ```
+void loop() {
+  OLED.clearDisplay();
+  OLED.setTextColor(WHITE);
+  OLED.setCursor(0, 0);
+  OLED.setTextSize(1);
+  OLED.println("CPE241");
+  OLED.setCursor(0, 10);
+  OLED.setTextSize(2);
+  OLED.println("I O T");
+  OLED.display(); //
+}
+```
 
 ## 6. Adafruit NeoPixel
 
