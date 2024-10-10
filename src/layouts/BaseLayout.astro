@@ -11,12 +11,7 @@ const { title, description, image, articleDate } = Astro.props
 
 <html lang='en' class='scroll-smooth'>
 	<head>
-		<meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' />
-		{/* Apple Touch Icon */}
-		<link rel='apple-touch-icon' href='/favicon.png' />
-		{/* Enable fullscreen mode */}
-		<meta name='apple-mobile-web-app-capable' content='yes' />
-		<meta name='apple-mobile-web-app-status-bar-style' content='default' />
+		<BaseHead title={title} description={description} ogImage={image} articleDate={articleDate} />
 		<ProviderTheme />
 		<ProviderAnimations />
 	</head>
