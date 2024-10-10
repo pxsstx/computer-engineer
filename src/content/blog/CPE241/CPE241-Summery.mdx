@@ -1,0 +1,331 @@
+---
+heroImage: /src/assets/images/CPE241/CPE241-week-5[cover].jpg
+category: CPE241
+description: >-
+  IoT Devices and Basic Libraries with Example Code
+pubDate: 2024-10-10T17:00:00.000Z
+tags:
+  - Arduino
+  - cpp
+  - C
+title: CPE241 Summery
+---
+
+# IoT Devices and Basic Libraries with Example Code
+
+## 1. DHT22
+
+**(Temperature and Humidity Sensor)**
+
+- **Library**: `DHT sensor library by Adafruit`
+- **Install**: `yarn add adafruit/DHT-sensor-library`
+- **Code**:
+
+  ```cpp
+  #include <DHT.h>
+
+  #define DHTPIN 2
+  #define DHTTYPE DHT22
+
+  DHT dht(DHTPIN, DHTTYPE);
+
+  void setup() {
+    Serial.begin(9600);
+    dht.begin();
+  }
+
+  void loop() {
+    float temperature = dht.readTemperature();
+    float humidity = dht.readHumidity();
+    Serial.print("Temp: ");
+    Serial.print(temperature);
+    Serial.print(" Humidity: ");
+    Serial.println(humidity);
+    delay(2000);
+  }
+  ```
+
+## 2. HC-SR04
+
+**(Ultrasonic Distance Sensor)**
+
+- **Library**: `NewPing`
+- **Install**: `yarn add NewPing`
+- **Code**:
+
+  ```cpp
+  #include <NewPing.h>
+
+  #define TRIG_PIN 9
+  #define ECHO_PIN 10
+  #define MAX_DISTANCE 200
+
+  NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
+
+  void setup() {
+    Serial.begin(9600);
+  }
+
+  void loop() {
+    int distance = sonar.ping_cm();
+    Serial.print("Distance: ");
+    Serial.print(distance);
+    Serial.println(" cm");
+    delay(500);
+  }
+  ```
+
+## 3. LDR Analog
+
+**(Light Dependent Resistor)**
+
+- **Library**: None (uses basic analog read)
+- **Code**:
+
+  ```cpp
+  #define LDR_PIN A0
+
+  void setup() {
+    Serial.begin(9600);
+  }
+
+  void loop() {
+    int lightValue = analogRead(LDR_PIN);
+    Serial.print("Light Value: ");
+    Serial.println(lightValue);
+    delay(1000);
+  }
+  ```
+
+## 4. BH1750
+
+**(Digital Light Sensor)**
+
+- **Library**: `BH1750`
+- **Install**: `yarn add BH1750`
+- **Code**:
+
+  ```cpp
+  #include <Wire.h>
+  #include <BH1750.h>
+
+  BH1750 lightMeter;
+
+  void setup() {
+    Wire.begin();
+    lightMeter.begin();
+    Serial.begin(9600);
+  }
+
+  void loop() {
+    float lux = lightMeter.readLightLevel();
+    Serial.print("Light: ");
+    Serial.print(lux);
+    Serial.println(" lx");
+    delay(1000);
+  }
+  ```
+
+## 5. OLED
+
+**(Display)**
+
+- **Library**: `Adafruit SSD1306`
+- **Install**: `yarn add adafruit/Adafruit_SSD1306`
+- **Code**:
+
+  ```cpp
+  #include <Adafruit_GFX.h>
+  #include <Adafruit_SSD1306.h>
+
+  #define SCREEN_WIDTH 128
+  #define SCREEN_HEIGHT 64
+  #define OLED_RESET    -1
+  Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+  void setup() {
+    if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+      Serial.println("SSD1306 allocation failed");
+      for(;;);
+    }
+    display.clearDisplay();
+    display.setTextSize(1);
+    display.setTextColor(SSD1306_WHITE);
+    display.setCursor(0, 10);
+    display.println("Hello, World!");
+    display.display();
+  }
+
+  void loop() {
+  }
+  ```
+
+## 6. Adafruit NeoPixel
+
+**(RGB LED)**
+
+- **Library**: `Adafruit NeoPixel`
+- **Install**: `yarn add adafruit/Adafruit_NeoPixel`
+- **Code**:
+
+  ```cpp
+  #include <Adafruit_NeoPixel.h>
+
+  #define PIN        6  // Pin connected to the NeoPixel data in
+  #define NUMPIXELS  8  // Number of pixels in the strip
+
+  Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+  void setup() {
+    strip.begin();
+    strip.show();  // Initialize all pixels to 'off'
+  }
+
+  void loop() {
+    for (int i = 0; i < strip.numPixels(); i++) {
+      strip.setPixelColor(i, strip.Color(255, 0, 0));  // Set pixel color to red
+      strip.show();  // Update strip
+      delay(500);
+
+      strip.setPixelColor(i, strip.Color(0, 255, 0));  // Set pixel color to green
+      strip.show();
+      delay(500);
+
+      strip.setPixelColor(i, strip.Color(0, 0, 255));  // Set pixel color to blue
+      strip.show();
+      delay(500);
+    }
+  }
+  ```
+
+## 7. Servo Motor
+
+- **Library**: `Servo`
+- **Install**: Built-in Arduino library
+- **Code**:
+
+  ```cpp
+  #include <Servo.h>
+
+  Servo myServo;
+
+  void setup() {
+    myServo.attach(9);
+  }
+
+  void loop() {
+    myServo.write(0);
+    delay(1000);
+    myServo.write(90);
+    delay(1000);
+    myServo.write(180);
+    delay(1000);
+  }
+  ```
+
+## 8. Stepper Motor
+
+- **Library**: `Stepper`
+- **Install**: Built-in Arduino library
+- **Code**:
+
+  ```cpp
+  #include <Stepper.h>
+
+  const int stepsPerRevolution = 200;
+  Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);
+
+  void setup() {
+    myStepper.setSpeed(60);
+  }
+
+  void loop() {
+    myStepper.step(stepsPerRevolution);
+    delay(1000);
+    myStepper.step(-stepsPerRevolution);
+    delay(1000);
+  }
+  ```
+
+## 9. AP
+
+**(Access Point)**
+
+- **Library**: `ESP8266WiFi` or `WiFi` for ESP32
+- **Install**: `yarn add ESP8266WiFi`
+- **Code**:
+
+  ```cpp
+    #include <ESP8266WiFi.h>
+
+    const char* ssid = "ESP8266-AP";
+    const char* password = "12345678";
+
+    void setup() {
+        WiFi.softAP(ssid, password);
+        Serial.begin(115200);
+        Serial.println("AP Started");
+    }
+
+    void loop() {
+    }
+  ```
+
+## 10. Web Server
+
+- **Library**: `ESP8266WebServer` or `WebServer` for ESP32
+- **Install**: `yarn add ESP8266WebServer`
+- **Code**:
+
+```cpp
+    #include <ESP8266WiFi.h>
+    #include <ESP8266WebServer.h>
+
+    ESP8266WebServer server(80);
+
+    void setup() {
+    WiFi.softAP("ESP8266-AP", "12345678");
+
+    server.on("/", []() {
+    String html = "<html><body><h1>Hello, World!</h1><p>This is an ESP8266 web server.</p></body></html>";
+    server.send(200, "text/html", html);
+    });
+
+    server.begin();
+    Serial.begin(115200);
+    Serial.println("Server started.");
+    }
+
+    void loop() {
+    server.handleClient();
+    }
+```
+
+## 11. IoT Platform
+
+**(e.g., Blynk)**
+
+- **Library**: `BlynkSimpleEsp8266`
+- **Install**: `yarn add blynk-library`
+- **Code**:
+
+  ```cpp
+  #define BLYNK_TEMPLATE_ID "YourTemplateID"
+  #define BLYNK_DEVICE_NAME "YourDeviceName"
+  #define BLYNK_AUTH_TOKEN "YourAuthToken"
+
+  #include <ESP8266WiFi.h>
+  #include <BlynkSimpleEsp8266.h>
+
+  char auth[] = BLYNK_AUTH_TOKEN;
+  char ssid[] = "YourNetworkName";
+  char pass[] = "YourPassword";
+
+  void setup() {
+    Blynk.begin(auth, ssid, pass);
+  }
+
+  void loop() {
+    Blynk.run();
+  }
+  ```
