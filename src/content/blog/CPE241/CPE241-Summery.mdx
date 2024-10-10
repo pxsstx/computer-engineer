@@ -52,31 +52,33 @@ title: CPE241 Summery
 - **Library**: `NewPing`
 - **Install**: `yarn add NewPing`
 - **Code**:
-	
-	### with library
-  ```c
-  #include <NewPing.h>
 
-  #define TRIG_PIN 9
-  #define ECHO_PIN 10
-  #define MAX_DISTANCE 200
+### with library
 
-  NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
+```c
+#include <NewPing.h>
 
-  void setup() {
-    Serial.begin(9600);
+#define TRIG_PIN 9
+#define ECHO_PIN 10
+#define MAX_DISTANCE 200
+
+NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  int distance = sonar.ping_cm();
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+	delay(500);
   }
-
-  void loop() {
-    int distance = sonar.ping_cm();
-    Serial.print("Distance: ");
-    Serial.print(distance);
-    Serial.println(" cm");
-    delay(500);
-  }
-  ```
+```
 
 ### no library
+
 ```c
 #define trigPin D4
 #define echoPin D3
