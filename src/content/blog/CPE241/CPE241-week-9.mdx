@@ -1,0 +1,229 @@
+---
+heroImage: /src/assets/images/CPE241/CPE241-week-5[cover].jpg
+category: CPE241
+description: >-
+  HTTP (Hypertext Transfer Protocol) is an application layer protocol used primarily for transmitting hypertext (web pages) over the internet.
+pubDate: 2024-10-01T17:00:00.000Z
+tags:
+  - Arduino
+  - cpp
+  - C
+title: CPE241 Week 9
+---
+
+## HTTP
+
+HTTP (Hypertext Transfer Protocol) is an application layer protocol used primarily for transmitting hypertext (web pages) over the internet.
+
+### **Request and Response**:
+
+-   **Request**: A client (usually a web browser) sends an HTTP request to a server. This request includes:
+
+-   **Method**: The type of request (e.g., GET, POST, PUT, DELETE).
+-   **URL**: The resource being requested.
+-   **Headers**: Metadata about the request (e.g., content type, user agent).
+-   **Body**: Data sent to the server (mostly used with POST and PUT methods).
+-   **Response**: The server processes the request and sends back an HTTP response, which includes:
+
+-   **Status Code**: Indicates the result of the request (e.g., 200 OK, 404 Not Found).
+-   **Headers**: Metadata about the response (e.g., content type, server information).
+-   **Body**: The actual content requested (e.g., HTML, JSON).
+### **Methods**:
+
+-   **GET**: Retrieves data from a server. Used for requesting resources without modifying them.
+-   **POST**: Sends data to a server to create or update a resource.
+-   **PUT**: Updates a resource with the provided data.
+-   **DELETE**: Removes a resource from the server.
+-   **HEAD**: Similar to GET, but retrieves only the headers without the body.
+### **Status Codes**:
+
+-   **1xx**: Informational responses (e.g., 100 Continue).
+-   **2xx**: Successful responses (e.g., 200 OK, 201 Created).
+-   **3xx**: Redirection (e.g., 301 Moved Permanently).
+-   **4xx**: Client errors (e.g., 404 Not Found, 403 Forbidden).
+-   **5xx**: Server errors (e.g., 500 Internal Server Error).
+### **Headers**:
+
+-   **Request Headers**: Provide additional information about the request (e.g., `User-Agent`, `Accept`).
+-   **Response Headers**: Provide information about the response (e.g., `Content-Type`, `Content-Length`).
+
+### **Stateless Protocol**:
+
+-   HTTP is stateless, meaning each request from a client to a server is treated as an independent transaction. The server does not retain information about previous requests.
+
+
+## Code
+
+## Client + Server + Http
+```c
+#include <ESP8266WiFi.h>
+
+const char* ssid = "SSID";          // Your Wi-Fi SSID
+const char* password = "Password";  // Your Wi-Fi password
+const char* host = "www.example.com"; // Host to connect to
+const char* path = "/"; // Host server path
+const int port = PORT; // Host server port 
+
+void setup() {
+    Serial.begin(115200);
+    Serial.println();
+    Serial.printf("Connecting to %s ", ssid);
+    
+    // Connect to Wi-Fi
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println(" connected");
+}
+
+void loop() {
+    WiFiClient client; // Create a client object
+    Serial.printf("\n[Connecting to %s ... ", host);
+    
+    // Attempt to connect to the server
+    if (client.connect(host, port)) {
+        Serial.println("connected]");
+        Serial.println("[Sending a request]");
+        
+        // Send the HTTP GET request
+        client.print(String("GET / HTTP/1.1\r\n") +
+                     "Host: " + host + "\r\n" +
+                     "Connection: close\r\n\r\n");
+        
+        Serial.println("[Response:]");
+        
+        // Read the response from the server
+        while (client.connected() || client.available()) {
+            if (client.available()) {
+                String line = client.readStringUntil('\n');
+                Serial.println(line); // Print each line of response
+            }
+        }
+        
+        client.stop(); // Close the connection
+        Serial.println("\n[Disconnected]");
+    } else {
+        Serial.println("connection failed!]");
+        client.stop();
+    }
+    
+    delay(5000); // Wait before the next loop
+}
+
+```
+---
+
+## Client + Server + Http + Node.js
+
+
+```JavaScript
+const http = require('http'); // Import the http module
+
+// Create the server and define the request handling function
+const server = http.createServer(function(req, res) {
+    res.statusCode = 200; // Set the HTTP status code to 200 (OK)
+    res.setHeader('Content-Type', 'text/plain'); // Set the content type to plain text
+    res.write("hello World!!! "); // Send the response body
+    res.end(); // End the response
+});
+
+// Make the server listen on port 8080
+server.listen(8080, () => {
+    console.log('Server running at http://localhost:8080/'); // Log to the console when the server is running
+});
+```
+
+---
+
+## Client + Server + Http + Express.js 
+
+### ESP Code
+```c
+#include <ESP8266WiFi.h>
+
+const char* ssid = "SSID";          // Your Wi-Fi SSID
+const char* password = "Password";  // Your Wi-Fi password
+const char* host = "www.example.com"; // Host to connect to
+const char* path = "/"; // Host server path
+const int port = PORT; // Host server port 
+
+void setup() {
+    Serial.begin(115200);
+    Serial.println();
+    Serial.printf("Connecting to %s ", ssid);
+    
+    // Connect to Wi-Fi
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println(" connected");
+}
+
+void loop() {
+    WiFiClient client; // Create a client object
+    Serial.printf("\n[Connecting to %s ... ", host);
+    
+    // Attempt to connect to the server
+    if (client.connect(host, port)) {
+        Serial.println("connected]");
+        Serial.println("[Sending a request]");
+        
+        // Send the HTTP GET request
+        client.print(String("GET "+ String(path) +" HTTP/1.1\r\n") +
+                     "Host: " + host + "\r\n" +
+                     "Connection: close\r\n\r\n");
+        
+        Serial.println("[Response:]");
+        
+        // Read the response from the server
+        while (client.connected() || client.available()) {
+            if (client.available()) {
+                String line = client.readStringUntil('\n');
+                Serial.println(line); // Print each line of response
+            }
+        }
+        
+        client.stop(); // Close the connection
+        Serial.println("\n[Disconnected]");
+    } else {
+        Serial.println("connection failed!]");
+        client.stop();
+    }
+    
+    delay(5000); // Wait before the next loop
+}
+```
+
+### Server code
+```JavaScript
+const express = require('express'); // Import the express module
+const url = require('url');
+
+const app = express(); // Create an Express application
+
+app.get('/getupdate', (req, res) => { // Handle GET requests to /getupdate
+    console.log(req.url); // Log the URL requested by the client
+
+    const parsedUrl = url.parse(req.url, true); // Parse the URL
+    console.log(parsedUrl); // Log the parsed URL structure
+
+    const qy = parsedUrl.query; // Extract query parameters
+    console.log(`temp = ${qy.temp} , humid = ${qy.humid}`); // Log temp and humid values
+    res.end("temp = "+ qy.temp +" , humid = " +  qy.humid);
+});
+
+app.listen(8080, () => { // Listen for requests on port 8080
+    console.log('Server running on http://localhost:8080'); // Log server status
+});
+```
+
+---
+
+### Classwork
+```c
+
+```
