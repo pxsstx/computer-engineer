@@ -137,17 +137,16 @@ server.listen(8080, () => {
 
 ---
 
-## Client + Server + Http + Express.js 
+## Express.js (GET)
 
 ### ESP Code
 ```c
 #include <ESP8266WiFi.h>
-
 const char* ssid = "SSID";          // Your Wi-Fi SSID
 const char* password = "Password";  // Your Wi-Fi password
-const char* host = "www.example.com"; // Host to connect to
-const char* path = "/"; // Host server path
-const int port = PORT; // Host server port 
+const char* host = "IP Address of Server"; // Server IP address
+const char* path = "/getupdate";    // Path for the GET request
+const int port = 8080;               // Port number
 
 void setup() {
     Serial.begin(115200);
@@ -165,7 +164,9 @@ void setup() {
 
 void loop() {
     WiFiClient client; // Create a client object
-    Serial.printf("\n[Connecting to %s ... ", host);
+    float t = random(0, 100); // Generate random temperature
+    float h = random(0, 100); // Generate random humidity
+    Serial.printf("\n[Connecting to %s:%d ... ", host, port);
     
     // Attempt to connect to the server
     if (client.connect(host, port)) {
@@ -173,27 +174,25 @@ void loop() {
         Serial.println("[Sending a request]");
         
         // Send the HTTP GET request
-        client.print(String("GET "+ String(path) +" HTTP/1.1\r\n") +
+        client.print(String("GET ") + path + "?temp=" + t + "&humid=" + h + " HTTP/1.1\r\n" +
                      "Host: " + host + "\r\n" +
                      "Connection: close\r\n\r\n");
-        
         Serial.println("[Response:]");
         
         // Read the response from the server
         while (client.connected() || client.available()) {
             if (client.available()) {
                 String line = client.readStringUntil('\n');
-                Serial.println(line); // Print each line of response
+                Serial.println(line); // Print each line of the response
             }
         }
         
         client.stop(); // Close the connection
         Serial.println("\n[Disconnected]");
     } else {
-        Serial.println("connection failed!]");
+        Serial.println("connection failed!"); // Improved error message
         client.stop();
     }
-    
     delay(5000); // Wait before the next loop
 }
 ```
@@ -223,7 +222,97 @@ app.listen(8080, () => { // Listen for requests on port 8080
 
 ---
 
-### Classwork
-```c
+## Express.js (POST)
 
+### ESP Code
+```c
+#include <ESP8266WiFi.h>
+
+const char* ssid = "SSID";              // Your Wi-Fi SSID
+const char* password = "Password";      // Your Wi-Fi password
+const char* host = "IP Address of Server"; // Server IP address
+const char* path = "/postupdate";       // Path for the POST request
+const int port = 8080;                   // Port number
+
+void setup() {
+    Serial.begin(115200);
+    Serial.println();
+    Serial.printf("Connecting to %s ", ssid);
+    
+    // Connect to Wi-Fi
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println(" connected");
+}
+
+void loop() {
+    WiFiClient client; // Create a client object
+    float t = random(0, 100); // Generate random temperature
+    float h = random(0, 100); // Generate random humidity
+
+    // Create the POST data
+    String postData = "temp=" + String(t) + "&humid=" + String(h);
+    int contentLength = postData.length(); // Calculate content length
+
+    Serial.printf("\n[Connecting to %s:%d ... ", host, port);
+    
+    // Attempt to connect to the server
+    if (client.connect(host, port)) {
+        Serial.println("connected]");
+        Serial.println("[Sending a request]");
+        
+        // Send the HTTP POST request
+        client.print(String("POST ") + path + " HTTP/1.1\r\n" +
+                     "Host: " + host + "\r\n" +
+                     "Content-Type: application/x-www-form-urlencoded\r\n" +
+                     "Content-Length: " + String(contentLength) + "\r\n" +
+                     "Connection: close\r\n" +
+                     "\r\n" +
+                     postData
+        );
+
+        Serial.println("[Response:]");
+        
+        // Read the response from the server
+        while (client.connected() || client.available()) {
+            if (client.available()) {
+                String line = client.readStringUntil('\n');
+                Serial.println(line); // Print each line of the response
+            }
+        }
+        
+        client.stop(); // Close the connection
+        Serial.println("\n[Disconnected]");
+    } else {
+        Serial.println("connection failed!"); // Improved error message
+        client.stop();
+    }
+
+    delay(5000); // Wait before the next loop
+}
+```
+
+### Server code
+```JavaScript
+const express = require('express'); // Import the express module
+const bodyParser = require('body-parser'); // Import the body-parser module to handle POST request body
+
+const app = express(); // Create an Express app
+
+app.use(bodyParser.urlencoded({ extended: true })); // Use body-parser to handle URL-encoded data in POST requests
+
+app.post('/postupdate', function (req, res) {
+    console.log(req.url); // Show the URL structure that the client requested
+    console.log(req.body); // Log the entire body of the request
+    console.log("temp= %s humid= %s", req.body.temp, req.body.humid); // Access temp and humid directly from req.body
+    res.end("temp=" + req.body.temp + " humid=" + req.body.humid); // Send the response back to the client
+});
+
+// Start the server on a specified port
+app.listen(8080, () => {
+    console.log('Server running at http://localhost:8080/'); // Log when the server is running
+});
 ```
