@@ -316,3 +316,121 @@ app.listen(8080, () => {
     console.log('Server running at http://localhost:8080/'); // Log when the server is running
 });
 ```
+---
+
+## HTTPClient (GET)
+
+```c
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h> // Include the HTTPClient library
+
+const char* ssid = "SSID"; // Your Wi-Fi SSID
+const char* password = "Password"; // Your Wi-Fi password
+const char* host = "IP Address of Server"; // Server's IP address
+
+void setup() {
+    Serial.begin(115200); // Start the Serial communication at 115200 baud rate
+    Serial.println();
+    Serial.printf("Connecting to %s ", ssid);
+    
+    // Connect to Wi-Fi
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print("."); // Print dots while connecting
+    }
+    Serial.println(" connected"); // Connection successful message
+}
+
+void loop() {
+    WiFiClient client; // Create a WiFi client object
+    HTTPClient http; // Create an HTTP client object
+    float t = random(0, 100); // Generate a random temperature
+    float h = random(0, 100); // Generate a random humidity
+    String getData = "temp=" + String(t) + "&humid=" + String(h); // Prepare the data
+    String link = "http://" + String(host) + ":8080/getupdate?" + getData; // Construct the URL
+    
+    Serial.printf("\n[Connecting to %s ... ", host);
+    if (client.connect(host, 8080)) { // Attempt to connect to the server
+        Serial.println("connected]");
+        Serial.println("[Sending a request]");
+        
+        http.begin(link); // Begin the connection to the specified URI using GET method
+        http.GET(); // Send the GET request
+        
+        // Request message example:
+        // http://<ip address>:8080/getupdate?temp=??&humid=??
+        
+        Serial.println("[Response:]");
+        String payload = http.getString(); // Receive the response and store it in payload
+        Serial.println(payload); // Print the response data to the Serial Monitor
+        
+        http.end(); // Close the connection
+    } else {
+        Serial.println("connection failed!]"); // Connection failure message
+        client.stop(); // Stop the client
+    }
+    
+    delay(5000); // Wait before the next loop
+}
+```
+---
+## HTTPClient (POST)
+
+```c
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+
+const char* ssid = "SSID"; // Replace with your SSID
+const char* password = "Password"; // Replace with your Password
+const char* host = "IP Address ของ Server"; // Replace with your server's IP address
+
+void setup() {
+    Serial.begin(115200);
+    Serial.println();
+    Serial.printf("Connecting to %s ", ssid);
+    WiFi.begin(ssid, password);
+    
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println(" connected");
+}
+
+void loop() {
+    WiFiClient client;
+    HTTPClient http;
+    
+    float t = random(0, 100); // Simulated temperature
+    float h = random(0, 100); // Simulated humidity
+    String postData = "temp=" + String(t) + "&humid=" + String(h);
+    String link = "http://" + String(host) + ":8080/postupdate";
+    
+    Serial.printf("\n[Connecting to %s ... ", host);
+    
+    if (client.connect(host, 8080)) {
+        Serial.println("connected]");
+        Serial.println("[Sending a request]");
+        
+        http.begin(link); // Create connection to the server
+        http.addHeader("Content-Type", "application/x-www-form-urlencoded"); // Add header
+        
+        int httpResponseCode = http.POST(postData); // Send POST request
+        
+        Serial.println("[Response:]");
+        if (httpResponseCode > 0) {
+            String payload = http.getString(); // Get response payload
+            Serial.println(payload); // Print the response
+        } else {
+            Serial.printf("Error on sending POST: %s\n", http.errorToString(httpResponseCode).c_str());
+        }
+        
+        http.end(); // Close connection
+    } else {
+        Serial.println("connection failed!");
+    }
+    
+    delay(5000); // Wait for 5 seconds before next loop
+}
+```
