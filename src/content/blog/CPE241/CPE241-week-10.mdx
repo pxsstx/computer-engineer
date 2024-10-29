@@ -535,19 +535,21 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 // Function to reconnect to MQTT
 void reconnect() {
-    while (!client.connected()) {
-        Serial.print("Attempting MQTT connection...");
-        if (client.connect("ESP8266Client")) {
-            Serial.println("connected");
-            client.subscribe("Dht22/temp");
-            client.subscribe("Dht22/humid");
-        } else {
-            Serial.print("failed, rc=");
-            Serial.print(client.state());
-            Serial.println(" try again in 5 seconds");
-            delay(5000);
-        }
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    String clientId = "ESP8266Client-";
+    clientId += String(random(0xffff), HEX);
+    if (client.connect(clientId.c_str())) {
+      Serial.println("connected");
+      client.subscribe("ryuface-Dht22/temp");
+      client.subscribe("ryuface-Dht22/humid");
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      delay(5000);
     }
+  }
 }
 
 // Setup function
