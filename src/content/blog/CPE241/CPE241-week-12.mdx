@@ -262,3 +262,114 @@ void loop()
 {
 }
 ```
+---
+
+### setJson
+
+```c
+//FirebaseESP8266.h must be included before ESP8266WiFi.h
+#include "FirebaseESP8266.h"
+#include <ESP8266WiFi.h>
+
+#define FIREBASE_HOST "https://iot-supachai-default-rtdb.firebaseio.com/"
+#define FIREBASE_AUTH "TBJM78RN4Sy5UzFJQ33I4UvWm6jVhGQgIzIhe4dj"
+#define WIFI_SSID "eiei"
+#define WIFI_PASSWORD "12345678"
+
+//Define FirebaseESP8266 data object
+FirebaseData firebaseData;
+
+FirebaseJson json;
+
+String path = "sensor/DHT";
+
+void setup()
+{
+  Serial.begin(115200);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print(".");
+    delay(300);
+  }
+  Serial.println();
+  Serial.print("Connected with IP: ");
+  Serial.println(WiFi.localIP());
+  Serial.println();
+
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+  Firebase.reconnectWiFi(true);
+  Firebase.setReadTimeout(firebaseData, 1000 * 60);
+  Firebase.setwriteSizeLimit(firebaseData, "tiny");
+  //ESP8266
+}
+
+void loop()
+{
+  double h = random(0, 100);
+  double t = random(0, 100);
+  json.add("temp", t);
+  json.add("humid", h);
+
+  Firebase.setJSON(firebaseData, path, json);
+  delay(1000);
+}
+```
+
+---
+
+### pushJson
+
+```c
+//FirebaseESP8266.h must be included before ESP8266WiFi.h
+#include "FirebaseESP8266.h"
+#include <ESP8266WiFi.h>
+
+#define FIREBASE_HOST "https://iot-supachai-default-rtdb.firebaseio.com/"
+#define FIREBASE_AUTH "TBJM78RN4Sy5UzFJQ33I4UvWm6jVhGQgIzIhe4dj"
+#define WIFI_SSID "eiei"
+#define WIFI_PASSWORD "12345678"
+
+//Define FirebaseESP8266 data object
+FirebaseData firebaseData;
+
+FirebaseJson json;
+
+String path = "push/DHT";
+
+void setup()
+{
+  Serial.begin(115200);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print(".");
+    delay(300);
+  }
+  Serial.println();
+  Serial.print("Connected with IP: ");
+  Serial.println(WiFi.localIP());
+  Serial.println();
+
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+  Firebase.reconnectWiFi(true);
+  Firebase.setReadTimeout(firebaseData, 1000 * 60);
+  Firebase.setwriteSizeLimit(firebaseData, "tiny");
+  //ESP8266
+}
+
+void loop()
+{
+  double h = random(0, 100);
+  double t = random(0, 100);
+  json.add("temp", t);
+  json.add("humid", h);
+
+  Firebase.pushJSON(firebaseData, path, json);
+  delay(1000);
+}
+```
