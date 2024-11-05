@@ -12,7 +12,8 @@ title: CPE241 Week 12
 ---
 
 ## Database
-### A **database description** provides an overview of a database's structure, content, and organization. Key components typically include:
+
+A **database description** provides an overview of a database's structure, content, and organization. Key components typically include:
 
 1. **Schema Overview**: A blueprint that outlines tables, views, indexes, and relationships.
 2. **Tables & Fields**: Descriptions of each table and its columns, including data types and constraints.
@@ -22,8 +23,6 @@ title: CPE241 Week 12
 6. **Stored Procedures & Triggers**: Predefined queries and automatic actions triggered by specific events.
 7. **Security & Access**: Information on user roles, permissions, and data encryption.
 8. **DBMS**: The software system managing the database, such as MySQL or PostgreSQL.
-
-A database description serves as a comprehensive guide for understanding the design, relationships, and constraints within the database, helping developers, administrators, and analysts manage and use the system efficiently.
 ---
 
 ### LOOP LED 
@@ -135,7 +134,7 @@ void loop()
 ```
 ---
 
-### Json obj
+### Create Jsonobj
 ```c
 //FirebaseESP8266.h must be included before ESP8266WiFi.h
 #include "FirebaseESP8266.h"
@@ -145,9 +144,6 @@ void loop()
 #define FIREBASE_AUTH "YOUR_FIREBASE_AUTH"
 #define WIFI_SSID "YOUR_WIFI_SSID"
 #define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"
-
-#define SW D4
-#define LED D5
 
 //Define FirebaseESP8266 data object
 FirebaseData firebaseData;
@@ -188,6 +184,78 @@ void setup()
   json.set("data/[1]", 2.302038);
 
   Firebase.set(firebaseData, path, json);
+}
+
+void loop()
+{
+}
+```
+
+---
+
+### Read JsonObj
+
+- String JSON
+- Prettified JSON `(true)`
+- Minified JSON  `(false)`
+```c
+//FirebaseESP8266.h must be included before ESP8266WiFi.h
+#include "FirebaseESP8266.h"
+#include <ESP8266WiFi.h>
+
+#define FIREBASE_HOST "YOUR_FIREBASE_HOST"
+#define FIREBASE_AUTH "YOUR_FIREBASE_AUTH"
+#define WIFI_SSID "YOUR_WIFI_SSID"
+#define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"
+
+//Define FirebaseESP8266 data object
+FirebaseData firebaseData;
+
+FirebaseJson json;
+
+String path = "JsonObj";
+String jsonStr = "";
+
+void setup()
+{
+  Serial.begin(115200);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print(".");
+    delay(300);
+  }
+  Serial.println();
+  Serial.print("Connected with IP: ");
+  Serial.println(WiFi.localIP());
+  Serial.println();
+
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+  Firebase.reconnectWiFi(true);
+
+  //Set database read timeout to 1 minute (max 15 minutes)
+  Firebase.setReadTimeout(firebaseData, 1000 * 60);
+  //tiny, small, medium, large and unlimited.
+  //Size and its write timeout e.g. tiny (1s), small (10s), medium (30s) and large (60s).
+  Firebase.setwriteSizeLimit(firebaseData, "tiny");
+  //ESP8266
+  //Read json obj
+
+  Firebase.get(firebaseData, path);
+
+  Serial.println("-------- the String JSON ---------");
+  jsonStr = firebaseData.jsonString();
+  Serial.println(jsonStr);
+
+  Serial.println("-------- the prettified JSON ---------");
+  firebaseData.jsonObject().toString(jsonStr, true);
+  Serial.println(jsonStr);
+
+  Serial.println("-------- the minified JSON ---------");
+  firebaseData.jsonObject().toString(jsonStr, false);
+  Serial.println(jsonStr);
 }
 
 void loop()
