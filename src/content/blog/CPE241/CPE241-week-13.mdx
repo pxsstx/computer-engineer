@@ -1,0 +1,189 @@
+---
+heroImage: /src/assets/images/CPE241/CPE241-week-5[cover].jpg
+category: CPE241
+description: >-
+  Modbus IIOT
+pubDate: 2024-11-12T17:00:00.000Z
+tags:
+  - Arduino
+  - cpp
+  - C
+title: CPE241 Week 13
+---
+
+## Modbus 
+
+**Modbus Communication Overview:**
+
+ModbusMaster Library: Used for implementing Modbus RTU communication in Arduino.
+SoftwareSerial: Configures UART communication (pins 14 and 12) for Modbus RTU via a MAX485 transceiver.
+MAX485 Transceiver: Used for converting TTL (UART) signals to RS485 for Modbus communication.
+RE (Receiver Enable) and DE (Driver Enable) pins control data flow direction (receive/send).
+
+### RS485 + XY-MD02
+
+```c
+#include <SoftwareSerial.h>
+#include <ModbusMaster.h>
+
+SoftwareSerial md02Serial(14, 12); // RX, TX
+
+#define MAX485_DE 4
+#define MAX485_RE_NEG 5
+
+ModbusMaster node;
+
+void preTransmission()
+{
+  digitalWrite(MAX485_RE_NEG, 1);
+  digitalWrite(MAX485_DE, 1);
+}
+
+void postTransmission()
+{
+  digitalWrite(MAX485_RE_NEG, 0);
+  digitalWrite(MAX485_DE, 0);
+}
+
+void setup()
+{
+  Serial.begin(115200);
+  md02Serial.begin(9600);
+
+  pinMode(MAX485_RE_NEG, OUTPUT);
+  pinMode(MAX485_DE, OUTPUT);
+
+  digitalWrite(MAX485_RE_NEG, 0);
+  digitalWrite(MAX485_DE, 0);
+
+  node.begin(1, md02Serial);
+  node.preTransmission(preTransmission);
+  node.postTransmission(postTransmission);
+}
+
+void loop()
+{
+  uint8_t result;
+  double t;
+  double h;
+
+  Serial.println("XY-MD02 data");
+
+  result = node.readInputRegisters(1, 2);
+
+  if (result == node.ku8MBSuccess)
+  {
+    t = node.getResponseBuffer(0) / 10.0f;
+    h = node.getResponseBuffer(1) / 10.0f;
+
+    Serial.print("Temp: ");
+    Serial.println(t);
+    Serial.print("Humid: ");
+    Serial.println(h);
+    Serial.println();
+  }
+
+  delay(1000);
+}
+
+```
+---
+
+### ADD data To firebase
+
+```c
+#include "FirebaseESP8266.h"
+#include <ESP8266WiFi.h>
+
+#include <SoftwareSerial.h>
+#include <ModbusMaster.h>
+
+#define FIREBASE_HOST "YOUR_FIREBASE_PROJECT.firebaseio.com"
+#define FIREBASE_AUTH "YOUR_FIREBASE_DATABASE_SECRET"
+#define WIFI_SSID "YOUR_WIFI_AP"
+#define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"
+
+SoftwareSerial md02Serial(14, 12); // RX, TX
+
+#define MAX485_DE 5
+#define MAX485_RE_NEG 4
+
+ModbusMaster node;
+FirebaseData firebaseData;
+FirebaseJson json;
+String path = "MD02";
+
+void preTransmission()
+{
+  digitalWrite(MAX485_RE_NEG, 1);
+  digitalWrite(MAX485_DE, 1);
+}
+
+void postTransmission()
+{
+  digitalWrite(MAX485_RE_NEG, 0);
+  digitalWrite(MAX485_DE, 0);
+}
+
+void setup()
+{
+  Serial.begin(115200);
+  md02Serial.begin(9600);
+  pinMode(MAX485_RE_NEG, OUTPUT);
+  pinMode(MAX485_DE, OUTPUT);
+
+  digitalWrite(MAX485_RE_NEG, 0);
+  digitalWrite(MAX485_DE, 0);
+
+  node.begin(1, md02Serial);
+  node.preTransmission(preTransmission);
+  node.postTransmission(postTransmission);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print(".");
+    delay(300);
+  }
+  Serial.println();
+  Serial.print("Connected with IP: ");
+  Serial.println(WiFi.localIP());
+
+  Serial.println();
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+  Firebase.reconnectWiFi(true);
+  Firebase.setReadTimeout(firebaseData, 1000 * 60);
+  Firebase.setWriteSizeLimit(firebaseData, "tiny");
+}
+
+void loop()
+{
+  uint8_t result;
+  double t;
+  double h;
+
+  Serial.println("XY-MD02 data");
+  result = node.readInputRegisters(1, 2);
+
+  if (result == node.ku8MBSuccess)
+  {
+    t = node.getResponseBuffer(0) / 10.0f;
+    h = node.getResponseBuffer(1) / 10.0f;
+
+    Serial.print("Temp: ");
+    Serial.println(t);
+    Serial.print("Humid: ");
+    Serial.println(h);
+    Serial.println();
+  }
+
+  json.add("temp", t);
+  json.add("humid", h);
+  Firebase.set(firebaseData, path, json);
+
+  delay(1000);
+}
+
+```
+---
