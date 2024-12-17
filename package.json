@@ -16,9 +16,6 @@
 		"astro-blog",
 		"astro-b"
 	],
-	"bugs": {
-		"url": "https://github.com/danielcgilibert/blog-template/issues"
-	},
 	"scripts": {
 		"dev": "npx tinacms dev -c \"astro dev\"",
 		"start": "astro dev",
@@ -66,7 +63,13 @@
 	},
 	"lint-staged": {
 		"*.{astro,js,jsx,ts,tsx,md,mdx,json}": [
-			"prettier --write --plugin-search-dir=."
+			"prettier --write --plugin-search-dir=.",
+			"git add"
 		]
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged --allow-empty"
+		}
 	}
 }
