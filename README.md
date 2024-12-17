@@ -4,9 +4,9 @@
 
 <hr/>
 </div>
-<h3>
+<p>
  Computer Engineering covers both fundamental and specialized courses such as programming, digital circuits, operating systems, and computer networks. The program emphasizes both theoretical and practical learning to prepare students for careers in the technology industry.
-</h3>
+</p>
 
 
 
@@ -43,7 +43,7 @@ To get started with this project, follow these steps:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/blog-template
+   git clone https://github.com/pxsstx/computer-engineer.git
    cd blog-template
    ```
 
