@@ -63,13 +63,7 @@
 	},
 	"lint-staged": {
 		"*.{astro,js,jsx,ts,tsx,md,mdx,json}": [
-			"prettier --write --plugin-search-dir=.",
-			"git add"
+			"prettier --write --plugin-search-dir=."
 		]
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "lint-staged --allow-empty"
-		}
 	}
 }
