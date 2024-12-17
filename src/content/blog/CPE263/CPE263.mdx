@@ -1,0 +1,282 @@
+---
+heroImage: '/src/assets/images/CPE263/CPE263-week-13[cover].png'
+category: CPE263
+description: Summary
+pubDate: 2024-12-16T17:00:00.000Z
+tags:
+  - csharp
+  - c
+  - .Net
+title: CPE263 Final
+---
+
+## CPE263 (Final)
+
+### Control
+
+**1. อธิบายการสร้าง Control ระหว่างรัน (Runtime Control Creation)**
+
+การสร้าง Control ในระหว่างรันไทม์ (Runtime) หมายถึงการสร้าง UI Control เช่น ปุ่ม (Button), กล่องข้อความ (TextBox) หรือรูปภาพ (PictureBox) โดยเขียนคำสั่งในโค้ดโปรแกรม ไม่ต้องลากวางผ่าน Designer Tools ใน Visual Studio
+
+```csharp
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace AddControl
+{
+    public partial class Form1 : Form
+    {
+        // ประกาศ TextBox ไว้เป็นตัวแปร Global เพื่อให้สามารถเข้าถึงได้ในทุกเมธอด
+        private TextBox _tbx;
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        // Event Handler: เมื่อข้อความใน TextBox เปลี่ยนแปลง
+        private void textBox_TextChanged(object sender, EventArgs e)
+        {
+            // อัปเดตข้อความใน Label ให้ตรงกับ TextBox
+            label1.Text = _tbx.Text;
+        }
+
+        // Event Handler: เมื่อกดปุ่ม Add
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            // สร้าง TextBox ใหม่
+            _tbx = new TextBox();
+
+            // กำหนดตำแหน่งของ TextBox
+            _tbx.Location = new Point(20, 20);
+
+            // กำหนดขนาดของ TextBox
+            _tbx.Size = new Size(250, 30);
+
+            // เพิ่ม TextBox ลงใน Form
+            this.Controls.Add(_tbx);
+
+            // เชื่อม Event Handler ให้กับ Event TextChanged ของ TextBox
+            _tbx.TextChanged += new EventHandler(textBox_TextChanged);
+        }
+
+        // Event Handler: เมื่อกดปุ่ม Remove
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            // ตรวจสอบว่า _tbx มีค่าและทำการลบออกจาก Form
+            _tbx?.Dispose();
+        }
+    }
+}
+```
+
+---
+
+### Graphic
+
+**2. เขียนคำสั่ง, โปรแกรม Graphic**
+
+C# ใช้ GDI+ สำหรับการวาดกราฟิก เช่น เส้น, รูปสี่เหลี่ยม, และข้อความ
+
+```csharp
+g.DrawRectangle(myPen, 20, 20, 100, 100);
+```
+
+ค่าในวงเล็บของเมธอด DrawRectangle ประกอบไปด้วย 4 พารามิเตอร์ ดังนี้: 1. myPen (ชนิด Pen) - เป็นอ็อบเจกต์ที่ใช้ระบุสี, ความหนา และสไตล์ของเส้นที่ใช้วาดสี่เหลี่ยม 2. 20 (x-coordinate) - ค่าตำแหน่งแนวนอน (แกน X) ของมุมซ้ายบนของสี่เหลี่ยม 3. 20 (y-coordinate) - ค่าตำแหน่งแนวตั้ง (แกน Y) ของมุมซ้ายบนของสี่เหลี่ยม 4. 100 (width) - ความกว้างของสี่เหลี่ยม 5. 100 (height) - ความสูงของสี่เหลี่ยม
+
+```csharp
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp3
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+
+            // การวาดเส้นตรงหนึ่งเส้น
+            Pen bluePen = new Pen(Color.Blue, 2);
+            Point p1 = new Point(0, 0);
+            Point p2 = new Point(500, 200);
+            g.DrawLine(bluePen, p1, p2);
+
+            // การวาดเส้นตรงหลายเส้น
+            Pen redPen = new Pen(Color.Red, 3);
+            Point[] myPoints = new Point[]
+            {
+                new Point(10, 100),
+                new Point(10, 10),
+                new Point(100, 100),
+                new Point(190, 10),
+                new Point(190, 100)
+            };
+            g.DrawLines(redPen, myPoints);
+
+            // การวาดเส้นโค้ง
+            Pen purplePen = new Pen(Color.Purple, 3);
+            g.DrawCurve(purplePen, myPoints);
+
+            // การวาดรูปสี่เหลี่ยม
+            Pen rectanglePen = new Pen(Color.Purple, 3);
+            g.DrawRectangle(rectanglePen, 20, 20, 100, 100);
+            SolidBrush blueBrush = new SolidBrush(Color.Blue);
+            g.FillRectangle(blueBrush, 130, 20, 100, 100);
+
+            // การวาดวงกลมและวงรี
+            Pen greenPen = new Pen(Color.Green, 3);
+            g.DrawEllipse(greenPen, 20, 200, 300, 100); // วาดวงรี
+            g.FillEllipse(blueBrush, 120, 200, 100, 100); // เติมวงกลมสีฟ้า
+        }
+    }
+}
+```
+
+---
+
+### Timer
+
+**3. เขียนโปรแกรมใช้งาน Timer**
+
+```csharp
+using System;
+using System.Windows.Forms;
+
+public class TimerExample : Form
+{
+    private Timer timer;
+    private int count = 0;
+
+    public TimerExample()
+    {
+        timer = new Timer();
+        timer.Interval = 1000; // 1 วินาที
+        timer.Tick += new EventHandler(Timer_Tick);
+        timer.Start();
+    }
+
+    private void Timer_Tick(object sender, EventArgs e)
+    {
+        count++;
+        Console.WriteLine($"Timer Tick: {count}");
+    }
+
+    static void Main()
+    {
+        Application.Run(new TimerExample());
+    }
+}
+```
+
+---
+
+### Debug
+
+**4. อธิบายประเภทของความผิดพลาด (Errors), Step Into, Step Over**
+
+    1.	ประเภทของความผิดพลาด (Errors):
+    -	Syntax Errors: ผิดไวยากรณ์ เช่น ลืมเครื่องหมาย ;
+    -	Runtime Errors: เกิดตอนรันโปรแกรม เช่น แบ่งด้วยศูนย์
+    -	Logical Errors: ผิดตรรกะ เช่น คำตอบผิดแต่ไม่มี Error
+    2.	Step Into (F11):ใช้เพื่อเข้าไปดูโค้ดใน Method ที่เรียก
+    3.	Step Over (F10):ใช้เพื่อข้าม Method โดยไม่เข้าไปในโค้ดภายใน
+
+---
+
+### Try…Catch…Finally
+
+**5. เขียนโปรแกรม try…catch…finally**
+
+```csharp
+using System;
+
+public class TryCatchExample
+{
+    public static void Main()
+    {
+        try
+        {
+            int[] numbers = { 1, 2, 3 };
+            Console.WriteLine(numbers[5]); // จะเกิด IndexOutOfRangeException
+        }
+        catch (IndexOutOfRangeException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        finally
+        {
+            Console.WriteLine("โปรแกรมทำงานเสร็จสิ้น");
+        }
+    }
+}
+```
+
+---
+
+### Create Class
+
+**6. เขียนโปรแกรมสร้างคลาส ดูเฉพาะ (Car, Bus)**
+
+```csharp
+public class Vehicle
+{
+    public string Name { get; set; }
+    public int Speed { get; set; }
+
+    public Vehicle(string name, int speed)
+    {
+        Name = name;
+        Speed = speed;
+    }
+
+    public void ShowDetails()
+    {
+        // แสดงข้อความใน MessageBox
+        MessageBox.Show($"Name: {Name}, Speed: {Speed} km/h", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+}
+
+public class Car : Vehicle
+{
+    public Car() : base("Car", 120) { }
+}
+
+public class Bus : Vehicle
+{
+    public Bus() : base("Bus", 80) { }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        Car myCar = new Car();
+        myCar.ShowDetails();
+
+        Bus myBus = new Bus();
+        myBus.ShowDetails();
+    }
+}
+```
+
+---
+
+### Class
+
+**7. อธิบายการทำงานของคำสั่ง เรื่องคลาส ดูเฉพาะ (Car, Bus)**
+
+คลาส Car และ Bus สืบทอดจากคลาส Vehicle โดย: 1. Base Class (Vehicle):
+มี Properties และ Method ที่ใช้ร่วมกัน เช่น Name และ Speed 2. Derived Class (Car และ Bus): - ใช้ Constructor ของ Base Class (base) - มีการกำหนดค่าเฉพาะ เช่น Car วิ่งได้ 120 km/h และ Bus วิ่งได้ 80 km/h
+
+การทำงาน:
+
+    -	Polymorphism: สามารถเรียก Method ShowDetails() จากคลาส Car และ Bus ได้
+    -	Inheritance: ลดความซ้ำซ้อนในการเขียนโค้ดโดยใช้ Base Class
