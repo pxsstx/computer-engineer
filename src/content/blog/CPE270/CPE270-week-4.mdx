@@ -33,11 +33,11 @@ title: Logistic
 ### **2.2 Odds และ Odds Ratio**
 
 - **Odds** คืออัตราส่วนระหว่างโอกาสที่จะเกิดเหตุการณ์หนึ่งกับโอกาสที่จะไม่เกิด
-  Odds=1−PP
-  Odds=P1−POdds = |P1 - P|
+  Odds=1-PP
+  Odds=P1-POdds = |P1 - P|
 - **Odds Ratio (OR)** ใช้เปรียบเทียบค่า Odds ของสองเงื่อนไข
-  OR=Odds ของกลุ่ม BOdds ของกลุ่ม A
-  OR=Odds ของกลุ่ม AOdds ของกลุ่ม BOR = |Odds ของกลุ่ม A/ Odds ของกลุ่ม B|
+  OR=Odds ของกลุ่ม BOdds ของกลุ่ม A
+  OR=Odds ของกลุ่ม AOdds ของกลุ่ม BOR = |Odds ของกลุ่ม A/ Odds ของกลุ่ม B|
 - ตัวอย่าง **การทอยลูกเต๋าออก 6 แต้ม**Odds=5/61/6=1/5=0.2
   Odds=1/65/6=1/5=0.2Odds = \frac{1/6}{5/6} = 1/5 = 0.2
 
@@ -47,8 +47,8 @@ title: Logistic
 
 ### **3.1 Logit Function**
 
-- ใช้แปลง **Odds** ไปเป็นช่วงค่าระหว่าง (−∞,∞)(-∞ , ∞)(−∞,∞)logit(P)=ln(1−PP)
-  logit(P)=ln⁡(P1−P)logit(P) = |P1 - P |
+- ใช้แปลง **Odds** ไปเป็นช่วงค่าระหว่าง (-∞,∞)(-∞ , ∞)(-∞,∞)logit(P)=ln(1-PP)
+  logit(P)=ln⁡(P1-P)logit(P) = |P1 - P |
 - ใช้ **Logit Curve** สำหรับแสดงค่า
 
   ```python
@@ -64,8 +64,8 @@ title: Logistic
 
 ### **3.2 Sigmoid Function**
 
-- ใช้แปลงค่า Logit ให้เป็นช่วง **(0,1)**σ(L)=1+e−L1
-  σ(L)=11+e−L\sigma (L) = |1 + e^-L|
+- ใช้แปลงค่า Logit ให้เป็นช่วง **(0,1)**(L)=1+e-L1
+  (L)=11+e-L\sigma (L) = |1 + e^-L|
 - ใช้ในการพยากรณ์ค่าความน่าจะเป็นใน Logistic Regression
   ```python
   x = np.linspace(-6,6,121)
@@ -150,10 +150,10 @@ print(cf_matrix)  # [[TN, FP], [FN, TP]]
 
 - **Accuracy**: ความแม่นยำของโมเดล
   Accuracy=TotalTN+TP
-  Accuracy=TN+TPTotalAccuracy = \frac{TN + TP}{Total}
+  Accuracy=TN+TPTotalAccuracy = |TN + TP/Total|
 - **Error Rate**: อัตราความผิดพลาดของโมเดล
-  Error Rate=TotalFN+FP
-  Error Rate=FN+FPTotalError\ Rate = \frac{FN + FP}{Total}
+  Error Rate=TotalFN+FP
+  Error Rate=FN+FPTotalError\ Rate = |FN + FP/Total|
 - ตัวอย่างคำนวณ
   - **Accuracy** = (4+3)/10 = 70%
   - **Error Rate** = (2+1)/10 = 30%
