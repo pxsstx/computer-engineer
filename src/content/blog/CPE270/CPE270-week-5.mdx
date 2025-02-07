@@ -1,0 +1,213 @@
+---
+heroImage: '/src/assets/images/CPE270/CPE270.webp'
+category: CPE270
+description: Support Vector Machine
+pubDate: 2025-02-07T00:09:00.000Z
+tags:
+  - Python
+title: Support Vector Machine
+---
+
+## Support Vector Machine (SVM)
+
+ความหมายของ Support Vector Machine (SVM)
+
+- SVM เป็น Machine Learning Model ที่ใช้สำหรับ Classification และ Regression
+- ใช้แนวคิด Hyperplane ในการแบ่งกลุ่มข้อมูลออกเป็น Classes โดยพยายามสร้างเส้นแบ่งที่ให้ Margin สูงสุด
+- มี Kernel Trick สำหรับจัดการกับข้อมูลที่ไม่สามารถแบ่งด้วยเส้นตรงได้ เช่น Linear, Radial, Polynomial
+
+---
+
+## ข้อดีและข้อเสียของ SVM
+
+✅ ข้อดี
+
+- มีความแม่นยำสูง
+- มี Kernel Functions ให้เลือกหลายแบบ
+- มีความเสถียรสูง แม้ข้อมูลมี Noise
+
+❌ ข้อเสีย
+
+- ใช้เวลาในการประมวลผลนาน
+- ใช้หน่วยความจำมาก
+- การเลือก Kernel ที่เหมาะสมอาจเป็นเรื่องยาก
+
+---
+
+## หลักการทำงานของ SVM
+
+- หาสมการเส้นแบ่งกลุ่มข้อมูล (Hyperplane) โดยใช้ค่า Weight (w) และ Bias (b)
+- ใช้ Kernel Function แปลงข้อมูลไปยังมิติที่สูงขึ้นเพื่อให้แบ่งกลุ่มข้อมูลได้ดีขึ้น
+- ข้อมูลที่อยู่ใกล้เส้นแบ่งมากที่สุด เรียกว่า Support Vectors
+
+สมการของเส้นแบ่งข้อมูล (Hyperplane)
+
+b+w1x1+w2x2=0b + w_1x_1 + w_2x_2 = 0
+
+- w1, w2 → ค่าสัมประสิทธิ์ (Coefficients)
+- b → จุดตัดแกน
+
+---
+
+## Discriminant Function
+
+- ใช้แยกข้อมูลออกเป็นกลุ่ม
+- คำนวณจากค่าเฉลี่ยของแต่ละกลุ่ม
+- ตัวอย่างสมการ:
+  d1(x)=xTm1−12m1Tm1d_1 (x) = x^T m_1 - \frac{1}{2} m_1^T m_1
+  d2(x)=xTm2−12m2Tm2d_2 (x) = x^T m_2 - \frac{1}{2} m_2^T m_2
+  d12(x)=d1(x)−d2(x)d\_{12} (x) = d_1 (x) - d_2 (x)
+- ถ้า → อยู่ในกลุ่ม W1
+  ถ้า → อยู่ในกลุ่ม W2
+      d12> 0d_{12} > 0
+
+      d12< 0d_{12} < 0
+
+---
+
+## Discriminant Function
+
+### กำหนดข้อมูล 2 กลุ่ม
+
+### W1
+
+(4.5,1.1), (4.0,1.2), (4.1,1.5), (4.3,1.4), (4.6,1.3)
+
+### W2
+
+(1.3,0.2), (1.6,0.3), (1.4,0.3), (1.5,0.1), (1.7,0.3)
+
+### คำนวณค่าเฉลี่ย
+
+คำนวณค่าเฉลี่ย (Mean) ของแต่ละกลุ่ม
+
+m1=(4.5+4.0+4.1+4.3+4.65,1.1+1.2+1.5+1.4+1.35)=(4.3,1.3)
+
+m2=(1.3+1.6+1.4+1.5+1.75,0.2+0.3+0.3+0.1+0.35)=(1.5,0.24)
+
+### คำนวณ
+
+คำนวณ Discriminant Function
+
+d12(x)=2.8x1+1.06x2−8.93d\_{12} (x) = 2.8x_1 + 1.06x_2 - 8.93
+
+- ถ้า d12(x) > 0 → อยู่ใน W1
+- ถ้า d12(x) < 0 → อยู่ใน W2
+
+---
+
+## การใช้ SVM ใน Python
+
+### การสร้างโมเดล SVM
+
+```python
+from sklearn.svm import SVC
+
+# กำหนดข้อมูล
+x = [[-1, -1], [-2, -1], [1, 1], [2, 1]]
+y = [1, 1, 2, 2]
+
+# สร้างโมเดล SVM
+model = SVC(kernel='linear')
+model.fit(x, y)
+
+# ทำนายผล
+prediction = model.predict([[0, 6]])
+print(prediction)  # ผลลัพธ์อยู่ในกลุ่มที่ 2
+
+```
+
+### ตรวจสอบค่าต่างๆ
+
+ตรวจสอบค่าต่างๆ ของโมเดล
+
+```python
+print("ค่าความชัน (Weight):", model.coef_)
+print("ค่า Bias (Intercept):", model.intercept_)
+print("จำนวน Support Vectors:", model.n_support_)
+print("ตำแหน่งของ Support Vectors:", model.support_)
+print("ค่า Support Vectors:\n", model.support_vectors_)
+
+```
+
+---
+
+## การวาดกราฟเส้นแบ่งข้อมูล
+
+การวาดกราฟเส้นแบ่งข้อมูล (Hyperplane)
+
+### วาดกราฟของข้อมูล
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.svm import SVC
+
+# ข้อมูลตัวอย่าง
+x = [[0, 0], [1, 1], [2, 3], [2, 0], [3, 4]]
+y = ['A', 'A', 'B', 'A', 'B']
+
+# แสดงข้อมูลบนกราฟ
+for i, p in enumerate(x):
+    color = 'w' if y[i] == 'A' else 'r'
+    plt.scatter(p[0], p[1], color=color, edgecolors='r', s=80)
+
+plt.show()
+
+```
+
+### วาดเส้น Hyperplane
+
+```python
+from sklearn.preprocessing import LabelEncoder
+import pandas as pd
+
+# โหลดข้อมูลจาก CSV
+df = pd.read_csv("svm_hyperplane.csv")
+x = df[['size', 'price']]
+y = LabelEncoder().fit_transform(df['sold'])
+
+# สร้างโมเดล SVM
+model = SVC(kernel='linear')
+model.fit(x, y)
+
+# วาดกราฟเส้นแบ่ง
+b = model.intercept_[0]
+w1 = model.coef_[0, 0]
+w2 = model.coef_[0, 1]
+x1 = df['size']
+x2 = (-b - w1 * x1) / w2
+
+plt.plot(x1, x2, 'b-')
+plt.scatter(df['size'], df['price'], c=y, cmap='coolwarm')
+plt.show()
+
+```
+
+---
+
+## การประเมินผล SVM
+
+- Support Vectors → ข้อมูลที่อยู่ใกล้เส้นแบ่งมากที่สุด
+- Margin → ระยะห่างระหว่างเส้นแบ่งข้อมูล
+- Confusion Matrix → ใช้ตรวจสอบความถูกต้องของโมเดล
+
+```python
+from sklearn.metrics import confusion_matrix
+
+y_true = [1, 0, 1, 1, 0, 1, 0, 0, 1, 1]
+y_pred = [1, 0, 1, 0, 0, 1, 0, 1, 1, 1]
+
+cf_matrix = confusion_matrix(y_true, y_pred)
+print(cf_matrix)  # [[TN, FP], [FN, TP]]
+
+```
+
+---
+
+## สรุป
+
+- SVM ใช้แบ่งกลุ่มข้อมูลโดยสร้าง Hyperplane
+- มี Kernel Trick เพื่อจัดการกับข้อมูลที่ซับซ้อน
+- ใช้ Python (Scikit-Learn, Matplotlib, Numpy, Pandas) สร้างและวิเคราะห์โมเดล
+- สามารถประเมินผลได้โดยใช้ Confusion Matrix และ Support Vectors

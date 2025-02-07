@@ -1,0 +1,208 @@
+---
+heroImage: 'src/assets/images/CPE338/Microprocessor-and-Microcontroller-Systems.webp'
+category: CPE338
+description: GPIO & UART in ATmega328P
+pubDate: 2025-01-28T00:09:00.000Z
+tags:
+  - Microcontroller
+  - Microprocessor
+  - c
+title: GPIO & UART
+---
+
+General Purpose Input/Output (GPIO) และ UART (Universal Asynchronous Receiver/Transmitter) บน ATmega328P ที่ใช้ใน Arduino UNO R3 โดยสรุปได้ดังนี้:
+
+---
+
+## GPIO
+
+(General Purpose Input/Output)
+
+### พื้นฐาน GPIO
+
+- GPIO ใช้ควบคุม Input/Output (I/O) บนไมโครคอนโทรลเลอร์
+- มี Digital I/O Pins 14 และ Analog Input Pins 6
+- สนับสนุนการทำงาน PWM (Pulse Width Modulation) 6 ช่อง
+- มี Pull-up Resistors ภายในที่ช่วยลดอุปกรณ์ภายนอก
+
+### การใช้งาน GPIO
+
+- ใช้ Register DDRx กำหนดทิศทางของพิน (Input หรือ Output)
+  - `DDRx = 0xFF;` → กำหนดเป็น Output
+  - `DDRx = 0x00;` → กำหนดเป็น Input
+- ใช้ Register PORTx ควบคุมสถานะ Output
+  - `PORTx = 0xFF;` → กำหนดให้ทุกพินเป็น HIGH (1)
+  - `PORTx = 0x00;` → กำหนดให้ทุกพินเป็น LOW (0)
+- ใช้ Register PINx อ่านค่าจากพิน Input
+  - `value = PINB;` → อ่านค่าจาก PORTB
+
+### ตัวอย่างการใช้งาน GPIO
+
+#### ตัวอย่างที่ 1
+
+ไฟกระพริบ 8 ดวง (Blink LED)
+
+    ```cpp
+    void setup() {
+      DDRD = 0xFF;  // ตั้ง PORT D เป็น Output
+    }
+
+    void loop() {
+      PORTD = 0x0F;  // LED ครึ่งหนึ่งติด
+      delay(1000);
+      PORTD = 0xF0;  // LED อีกครึ่งหนึ่งติด
+      delay(1000);
+    }
+
+    ```
+
+#### ตัวอย่างที่ 2
+
+อ่านค่าปุ่มกดแล้วแสดงผลผ่าน Serial Monitor
+
+    ```cpp
+    const int buttonPin = 9;
+    int buttonState = 0;
+
+    void setup() {
+      Serial.begin(9600);
+      pinMode(buttonPin, INPUT);
+    }
+
+    void loop() {
+      buttonState = digitalRead(buttonPin);
+      Serial.println(buttonState);
+    }
+
+    ```
+
+#### ตัวอย่างที่ 3
+
+อ่านค่าปุ่มกดแล้วแสดงผลที่ LED
+
+    ```cpp
+    const int buttonPin = 9;
+    const int ledPin = 1;
+
+    void setup() {
+      pinMode(ledPin, OUTPUT);
+      pinMode(buttonPin, INPUT);
+    }
+
+    void loop() {
+      int buttonState = digitalRead(buttonPin);
+      digitalWrite(ledPin, buttonState);
+    }
+
+    ```
+
+---
+
+## UART
+
+(Universal Asynchronous Receiver/Transmitter)
+
+### พื้นฐาน UART
+
+- ใช้สื่อสารข้อมูลแบบ อนุกรม (Serial Communication)
+- ใช้ 2 เส้นสัญญาณ คือ Tx (Transmit) และ Rx (Receive)
+- ไม่ต้องใช้ Clock Signal ในการสื่อสาร
+- มีระบบ Parity Bit เพื่อตรวจสอบข้อผิดพลาด
+
+### ข้อดีและข้อเสียของ UART
+
+✅ ข้อดี
+
+- ใช้สายเพียง 2 เส้น (Tx, Rx)
+- ตรวจสอบข้อผิดพลาดด้วย Parity Bit
+- เป็นมาตรฐานที่ใช้กันอย่างแพร่หลาย
+
+❌ ข้อเสีย
+
+- จำกัดขนาดข้อมูลที่ส่งได้ 9 บิต
+- ไม่รองรับ การสื่อสารแบบหลายอุปกรณ์ (Multi-Master/Slave)
+- อัตราการส่งข้อมูล (Baud Rate) ของผู้รับและผู้ส่งต้องไม่แตกต่างกันเกิน 10%
+
+### รูปแบบ UART
+
+รูปแบบแพ็กเก็ตข้อมูลของ UART
+
+- Start Bit (1 บิต) → บอกจุดเริ่มต้นของข้อมูล (ค่า 0)
+- Data Bits (5-9 บิต) → ข้อมูลที่ส่ง
+- Parity Bit (1 บิต, ไม่บังคับ) → ตรวจสอบข้อผิดพลาด
+- Stop Bit (1-2 บิต) → บอกจุดสิ้นสุดของข้อมูล (ค่า 1)
+- Idle State → ไม่มีการส่งข้อมูล (ค่า 1)
+
+### การใช้งาน UART
+
+การใช้งาน UART บน Arduino
+
+#### ตัวอย่างที่ 4
+
+การส่งข้อมูลผ่าน UART
+
+    ```cpp
+
+    void setup() {
+      Serial.begin(9600);
+    }
+
+    void loop() {
+      Serial.print("Message 1");
+      Serial.println("Message 2");
+      delay(1000);
+    }
+
+    ```
+
+#### ตัวอย่างที่ 5
+
+การรับข้อมูลผ่าน UART
+
+    ```cpp
+    void setup() {
+      Serial.begin(9600);
+    }
+
+    void loop() {
+      if (Serial.available() > 0) {
+        receivedString = Serial.readString();
+        Serial.print("Incoming message: ");
+        Serial.println(receivedString);
+      }
+      delay(100);
+    }
+
+    ```
+
+### การใช้ SoftwareSerial
+
+การใช้ SoftwareSerial จำลอง UART บนพินอื่น
+
+- เนื่องจาก Arduino Uno มี 1 พอร์ต UART (Hardware UART) จึงสามารถใช้ SoftwareSerial เพิ่มพอร์ตอนุกรมเสมือนได้
+
+#### ตัวอย่าง SoftwareSerial
+
+    ```cpp
+    #include <SoftwareSerial.h>SoftwareSerial UART0(2, 3); // RX, TX
+
+    void setup() {
+      UART0.begin(9600);
+      Serial.begin(9600);
+    }
+
+    void loop() {
+      UART0.print("Hello via SoftwareSerial");
+      Serial.println("Message Sent");
+      delay(1000);
+    }
+
+    ```
+
+---
+
+### สรุป
+
+- GPIO ใช้ควบคุม Input/Output ของไมโครคอนโทรลเลอร์ มี Register DDRx, PORTx, และ PINx สำหรับกำหนดสถานะของพิน
+- UART ใช้สำหรับการสื่อสารข้อมูลแบบอนุกรมผ่าน Tx/Rx รองรับ Hardware UART และ SoftwareSerial
+- สามารถใช้ SoftwareSerial จำลอง UART บนพินอื่นได้ ในกรณีที่ต้องการใช้งานหลายพอร์ต

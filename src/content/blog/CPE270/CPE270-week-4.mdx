@@ -1,0 +1,176 @@
+---
+heroImage: '/src/assets/images/CPE270/CPE270.webp'
+category: CPE270
+description: Logistic
+pubDate: 2025-01-31T00:09:00.000Z
+tags:
+  - Python
+title: Logistic
+---
+
+## **1. ความหมายของ Logistic Regression**
+
+- เป็น **Supervised Learning** สำหรับ **Classification**
+- ใช้พยากรณ์ผลลัพธ์ที่เป็น **กลุ่ม (Class)** เช่น **Yes/No, Pass/Fail, High/Low**
+- แม้จะชื่อว่า **Regression** แต่ไม่ได้ใช้ในการพยากรณ์ค่าเชิงเส้นเหมือน Linear Regression
+
+---
+
+## **2. พื้นฐานคณิตศาสตร์ที่เกี่ยวข้อง**
+
+### **2.1 Logarithm และ Natural Logarithm (ln)**
+
+- **Logarithm** คือฟังก์ชันผกผันของเลขชี้กำลัง
+- **Natural Logarithm (ln)** ใช้ฐาน **e (2.718)** ซึ่งเป็นเลข **Euler’s Number**
+- ใช้ **numpy** สำหรับคำนวณ
+  ```python
+  import numpy as np
+  np.log(x)  # Natural Logarithm (ฐาน e)
+  np.log10(x)  # Logarithm ฐาน 10
+  np.exp(x)  # e^x
+  ```
+
+### **2.2 Odds และ Odds Ratio**
+
+- **Odds** คืออัตราส่วนระหว่างโอกาสที่จะเกิดเหตุการณ์หนึ่งกับโอกาสที่จะไม่เกิด
+  Odds=1−PP
+      Odds=P1−POdds = |P1 - P|
+- **Odds Ratio (OR)** ใช้เปรียบเทียบค่า Odds ของสองเงื่อนไข
+  OR=Odds ของกลุ่ม BOdds ของกลุ่ม A
+      OR=Odds ของกลุ่ม AOdds ของกลุ่ม BOR = |Odds ของกลุ่ม A/ Odds ของกลุ่ม B|
+- ตัวอย่าง **การทอยลูกเต๋าออก 6 แต้ม**Odds=5/61/6=1/5=0.2
+  Odds=1/65/6=1/5=0.2Odds = \frac{1/6}{5/6} = 1/5 = 0.2
+
+---
+
+## **3. Logit Function และ Sigmoid Function**
+
+### **3.1 Logit Function**
+
+- ใช้แปลง **Odds** ไปเป็นช่วงค่าระหว่าง (−∞,∞)(-∞ , ∞)(−∞,∞)logit(P)=ln(1−PP)
+  logit(P)=ln⁡(P1−P)logit(P) = |P1 - P |
+- ใช้ **Logit Curve** สำหรับแสดงค่า
+  ```python
+  	import numpy as np
+  import matplotlib.pyplot as plt
+
+  x = np.linspace(0.001, 0.999, num=100)
+  y = np.log(x / (1 - x))
+  plt.plot(x, y)
+  plt.grid()
+  plt.show()
+  ```
+
+### **3.2 Sigmoid Function**
+
+- ใช้แปลงค่า Logit ให้เป็นช่วง **(0,1)**σ(L)=1+e−L1
+  σ(L)=11+e−L\sigma (L) = |1 + e^-L|
+- ใช้ในการพยากรณ์ค่าความน่าจะเป็นใน Logistic Regression
+  ```python
+  x = np.linspace(-6,6,121)
+  y = 1 / (1 + np.exp(-x))
+  plt.plot(x, y)
+  plt.grid()
+  plt.show()
+  ```
+
+---
+
+## **4. หลักการทำงานของ Logistic Regression**
+
+- คำนวณโดยใช้สมการแบบ **Linear Regression**y=β0+β1x1+β2x2+...+βkxk
+  y=β0+β1x1+β2x2+...+βkxky = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_k x_k
+- แปลงค่า y ให้เป็นค่าความน่าจะเป็นโดยใช้ **Sigmoid Function**
+  yy
+- ถ้า P(x)< 0.5 → **Class 0**ถ้า P(x)≥0.5 → **Class 1**
+  P(x)< 0.5P(x) < 0.5
+  P(x)≥ 0.5P(x) \geq 0.5
+
+---
+
+## **5. การใช้งาน Logistic Regression ใน Python**
+
+### **5.1 โมดูลที่ใช้**
+
+```python
+python
+CopyEdit
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import LabelEncoder
+
+```
+
+### **5.2 ตัวอย่างการพยากรณ์**
+
+```python
+python
+CopyEdit
+x = [[8,6],[3,5],[4,9],[5,8],[9,9]]
+y = ['yes','no','no','yes','yes']
+
+model = LogisticRegression()
+model.fit(x, y)
+
+x_predict = [[4,4],[5,5]]
+y_predict = model.predict(x_predict)
+
+print(y_predict)  # ['no', 'yes']
+print(model.predict_proba(x_predict))  # ค่าความน่าจะเป็น
+
+```
+
+---
+
+## **6. การประเมินโมเดล (Model Evaluation)**
+
+### **6.1 Confusion Matrix**
+
+- ใช้เปรียบเทียบค่าผลลัพธ์จริงกับค่าที่โมเดลทำนาย
+- ค่าที่ใช้ใน **Confusion Matrix**
+  - **TN (True Negative):** ทำนายว่า "ไม่ใช่" และเป็น "ไม่ใช่" จริง
+  - **FP (False Positive):** ทำนายว่า "ใช่" แต่จริงๆ แล้ว "ไม่ใช่"
+  - **FN (False Negative):** ทำนายว่า "ไม่ใช่" แต่จริงๆ แล้ว "ใช่"
+  - **TP (True Positive):** ทำนายว่า "ใช่" และเป็น "ใช่" จริง
+
+```python
+python
+CopyEdit
+from sklearn.metrics import confusion_matrix
+
+y_true = [1, 0, 1, 1, 0, 1, 0, 0, 1, 1]
+y_pred = [1, 0, 1, 0, 0, 1, 0, 1, 1, 1]
+
+cf_matrix = confusion_matrix(y_true, y_pred)
+print(cf_matrix)  # [[TN, FP], [FN, TP]]
+
+```
+
+### **6.2 Accuracy และ Error Rate**
+
+- **Accuracy**: ความแม่นยำของโมเดล
+  Accuracy=TotalTN+TP
+      Accuracy=TN+TPTotalAccuracy = \frac{TN + TP}{Total}
+- **Error Rate**: อัตราความผิดพลาดของโมเดล
+  Error Rate=TotalFN+FP
+      Error Rate=FN+FPTotalError\ Rate = \frac{FN + FP}{Total}
+- ตัวอย่างคำนวณ
+  - **Accuracy** = (4+3)/10 = 70%
+  - **Error Rate** = (2+1)/10 = 30%
+
+---
+
+## **7. แบบฝึกหัด**
+
+1. คำนวณ **Odds ของการทอยเหรียญ 2 ครั้ง** แล้วออกหัวทั้งคู่ (**Ans = 1/3**)
+2. คำนวณ **Odds Ratio** จากตารางข้อมูล
+3. วิเคราะห์ผลกระทบของการสูบบุหรี่ต่อมะเร็งปอด (**Ans = 20.28**)
+4. สร้างโมเดล Logistic Regression และใช้ **Confusion Matrix** คำนวณ Accuracy และ Error Rate
+
+---
+
+## **สรุป**
+
+- **Logistic Regression** เป็นโมเดลที่ใช้สำหรับ **Classification**
+- ใช้ **Logit Function** และ **Sigmoid Function** ในการแปลงค่า
+- ใช้ **Python (Scikit-Learn, Numpy, Matplotlib)** ในการสร้างและประเมินโมเดล
+- การวัดประสิทธิภาพของโมเดลใช้ **Confusion Matrix, Accuracy, Error Rate**
