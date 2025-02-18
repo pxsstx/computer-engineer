@@ -1,0 +1,208 @@
+---
+heroImage: '/src/assets/images/CPE270/CPE270.webp'
+category: CPE360
+description: Support Vector Machine
+pubDate: 2025-02-19T00:09:00.000Z
+tags:
+  - Python
+title: Support Vector Machine
+---
+
+### ADT Single Link-List
+
+#### Code
+
+```python
+class Node:
+    def __init__(self, data):
+        self.data = data  # ข้อมูลในโหนด
+        self.next = None  # อ้างอิงไปยังโหนดถัดไป
+
+class SLinkList:
+    def __init__(self):
+        self.head = None  # อ้างอิงไปยังโหนดแรก
+        self.tail = None  # อ้างอิงไปยังโหนดสุดท้าย
+        self.size = 0     # จำนวนโหนดในลิงค์ลิสต์
+
+    def __len__(self):
+        return self.size  # ส่งค่ากลับจำนวนโหนด
+
+    def add_first(self, item):
+        new_node = Node(item)  # สร้างโหนดใหม่
+        if self.head is None:  # ถ้าลิงค์ลิสต์ว่างเปล่า
+            self.head = self.tail = new_node
+        else:
+            new_node.next = self.head  # เชื่อมโหนดใหม่ไปยังโหนดแรก
+            self.head = new_node      # อัพเดท head เป็นโหนดใหม่
+        self.size += 1  # เพิ่มขนาดลิงค์ลิสต์
+
+    def add_last(self, item):
+        new_node = Node(item)  # สร้างโหนดใหม่
+        if self.tail is None:  # ถ้าลิงค์ลิสต์ว่างเปล่า
+            self.head = self.tail = new_node
+        else:
+            self.tail.next = new_node  # เชื่อมโหนดสุดท้ายไปยังโหนดใหม่
+            self.tail = new_node      # อัพเดท tail เป็นโหนดใหม่
+        self.size += 1  # เพิ่มขนาดลิงค์ลิสต์
+
+    def remove_first(self):
+        if self.head is None:  # ถ้าลิงค์ลิสต์ว่างเปล่า
+            raise IndexError("ลิงค์ลิสต์ว่างเปล่า")
+        data = self.head.data  # เก็บข้อมูลของโหนดแรก
+        self.head = self.head.next  # อัพเดท head เป็นโหนดถัดไป
+        if self.head is None:  # ถ้าไม่มีโหนดเหลือ
+            self.tail = None
+        self.size -= 1  # ลดขนาดลิงค์ลิสต์
+        return data  # ส่งค่าข้อมูลของโหนดที่ลบ
+
+    def remove_last(self):
+        if self.tail is None:  # ถ้าลิงค์ลิสต์ว่างเปล่า
+            raise IndexError("ลิงค์ลิสต์ว่างเปล่า")
+        data = self.tail.data  # เก็บข้อมูลของโหนดสุดท้าย
+        if self.head == self.tail:  # ถ้ามีโหนดเดียว
+            self.head = self.tail = None
+        else:
+            current = self.head
+            while current.next != self.tail:  # หาโหนดก่อนโหนดสุดท้าย
+                current = current.next
+            current.next = None  # ตัดการเชื่อมโหนดสุดท้าย
+            self.tail = current  # อัพเดท tail เป็นโหนดก่อนสุดท้าย
+        self.size -= 1  # ลดขนาดลิงค์ลิสต์
+        return data  # ส่งค่าข้อมูลของโหนดที่ลบ
+
+    def remove_node(self, item):
+        if self.head is None:  # ถ้าลิงค์ลิสต์ว่างเปล่า
+            raise ValueError("ลิงค์ลิสต์ว่างเปล่า")
+        if self.head.data == item:  # ถ้าโหนดแรกมีข้อมูลเท่ากับ item
+            return self.remove_first()
+        current = self.head
+        while current.next is not None and current.next.data != item:  # หาโหนดก่อนโหนดที่ต้องการลบ
+            current = current.next
+        if current.next is None:  # ถ้าไม่พบโหนดที่มีข้อมูลเท่ากับ item
+            raise ValueError(f"ไม่พบโหนดที่มีข้อมูล {item}")
+        data = current.next.data  # เก็บข้อมูลของโหนดที่ต้องการลบ
+        current.next = current.next.next  # ตัดการเชื่อมโหนดที่ต้องการลบ
+        if current.next is None:  # ถ้าโหนดที่ลบเป็นโหนดสุดท้าย
+            self.tail = current
+        self.size -= 1  # ลดขนาดลิงค์ลิสต์
+        return data  # ส่งค่าข้อมูลของโหนดที่ลบ
+
+    def __repr__(self):
+        nodes = []
+        current = self.head
+        while current is not None:  # วนลูปเพื่อเก็บข้อมูลทุกโหนด
+            nodes.append(str(current.data))
+            current = current.next
+        return " -> ".join(nodes)  # ส่งค่ากลับเป็นสตริง
+
+    def __iter__(self):
+        current = self.head
+        while current is not None:  # วนลูปเพื่อส่งค่าข้อมูลทุกโหนด
+            yield current.data
+            current = current.next
+
+    def __contains__(self, item):
+        current = self.head
+        while current is not None:  # วนลูปเพื่อค้นหาข้อมูล
+            if current.data == item:
+                return True
+            current = current.next
+        return False  # ถ้าไม่พบข้อมูล
+```
+
+---
+
+### การทำงาน
+
+ผลแสดงการทำงานของแต่ละเมธอด
+
+#### ตัวอย่างข้อมูล:
+
+```python
+sll = SLinkList()
+```
+
+#### `add_first`
+
+1. เพิ่มโหนดที่ด้านหน้า (`add_first`):
+
+```python
+sll.add_first(10)
+sll.add_first(20)
+sll.add_first(30)
+print(sll)  # ผลลัพธ์: 30 -> 20 -> 10
+```
+
+#### `add_last`
+
+2. เพิ่มโหนดที่ด้านท้าย (`add_last`):
+
+```python
+sll.add_last(40)
+sll.add_last(50)
+print(sll)  # ผลลัพธ์: 30 -> 20 -> 10 -> 40 -> 50
+```
+
+#### `remove_first`
+
+3. ลบโหนดแรก (`remove_first`):
+
+```python
+removed_data = sll.remove_first()
+print(f"ลบโหนดแรก: {removed_data}")  # ผลลัพธ์: ลบโหนดแรก: 30
+print(sll)  # ผลลัพธ์: 20 -> 10 -> 40 -> 50
+```
+
+#### `remove_last`
+
+4. ลบโหนดสุดท้าย (`remove_last`):
+
+```python
+removed_data = sll.remove_last()
+print(f"ลบโหนดสุดท้าย: {removed_data}")  # ผลลัพธ์: ลบโหนดสุดท้าย: 50
+print(sll)  # ผลลัพธ์: 20 -> 10 -> 40
+```
+
+#### `remove_node`
+
+5. ลบโหนดที่มีข้อมูลเฉพาะ (`remove_node`):
+
+```python
+removed_data = sll.remove_node(10)
+print(f"ลบโหนดที่มีข้อมูล 10: {removed_data}")  # ผลลัพธ์: ลบโหนดที่มีข้อมูล 10: 10
+print(sll)  # ผลลัพธ์: 20 -> 40
+```
+
+#### `__contains__`
+
+6. ตรวจสอบว่ามีข้อมูลในลิงค์ลิสต์หรือไม่ (`__contains__`):
+
+```python
+print(20 in sll)  # ผลลัพธ์: True
+print(100 in sll)  # ผลลัพธ์: False
+```
+
+#### `__repr__`
+
+7. แสดงข้อมูลทั้งหมดในลิงค์ลิสต์ (`__repr__`):
+
+```python
+print(sll)  # ผลลัพธ์: 20 -> 40
+```
+
+#### `__iter__`
+
+8. วนลูปเพื่อเข้าถึงข้อมูลทุกโหนด (`__iter__`):
+
+```python
+for data in sll:
+    print(data, end=" ")  # ผลลัพธ์: 20 40
+```
+
+---
+
+## สรุป
+
+- โค้ดนี้เป็นตัวอย่างการใช้งาน Single Link-List ใน Python
+- แต่ละเมธอดทำงานตามที่อธิบายไว้ในโจทย์
+- สามารถทดสอบการทำงานด้วยข้อมูลอื่นๆ ได้ตามต้องการ
