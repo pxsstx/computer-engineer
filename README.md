@@ -67,9 +67,6 @@ Styles: Tailwind CSS is used for styling. You can adjust the design by editing t
 Contributing
 - Contributions are welcome! If you have ideas to improve this template or want to report a bug, feel free to open an issue or submit a pull request.
 
-## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
-
 ## Acknowledgements
 **Daniel C.** Gilibert for the original Blog Template.
 The React and Tailwind CSS communities for their awesome tools and resources.
