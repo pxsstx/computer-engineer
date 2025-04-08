@@ -72,4 +72,4 @@ Contributing
 
 ## Acknowledgements
 **Daniel C.** Gilibert for the original Blog Template.
-The React and Tailwind CSS communities for their awesome tools and resources. 
+The React and Tailwind CSS communities for their awesome tools and resources.
