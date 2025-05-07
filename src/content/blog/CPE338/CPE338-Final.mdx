@@ -1,0 +1,423 @@
+---
+heroImage: 'src/assets/images/CPE338/Microprocessor-and-Microcontroller-Systems.webp'
+category: CPE338
+description: Final
+pubDate: 2025-05-11T00:09:00.000Z
+tags:
+  - Microcontroller
+  - Microprocessor
+  - c
+title: Final
+---
+
+> ควบคุม มอเตอร์ 2 ตัว ด้วย Joystick KY-023 โดยใช้ Arduino Uno + L298N และสามารถ "เพิ่ม/ลดความเร็วทีละ 10%" แยกกันได้ตามทิศทางจอยสติ๊ก
+
+---
+
+##  1.1 เขียนแบบวงจร (5 คะแนน)
+
+![Untitled Sketch 6_bb.png](src/assets/images/CPE338/final.png)
+
+###  รายการอุปกรณ์:
+
+- Arduino UNO
+- จอยสติ๊ก KY-023
+- L298N Motor Driver
+- DC Motor 2 ตัว
+- Jumper wires
+- แหล่งจ่ายไฟ (เช่น 9V-12V สำหรับมอเตอร์)
+
+###  ผังการเชื่อมต่อ:
+
+### 🎮 Joystick KY-023
+
+| ขา KY-023 | ไปยัง Arduino UNO |
+| --- | --- |
+| VCC | 5V |
+| GND | GND |
+| VRx | A0 |
+| VRy | A1 |
+
+### 🔌 L298N
+
+| ขา L298N | ไปยัง Arduino UNO |
+| --- | --- |
+| IN1 | D13 |
+| IN2 | D12 |
+| ENA | D11 (PWM) |
+| IN3 | D9 |
+| IN4 | D8 |
+| ENB | D10 (PWM) |
+| GND | GND (ร่วมกับ Arduino) |
+| VCC (มอเตอร์) | ต่อไฟ 9-12V |
+| 5V | ต่อกับ 5V Arduino (ถ้า jumper EN 5V) |
+
+### 🌀 มอเตอร์
+
+- Motor A ต่อ OUT1 และ OUT2
+- Motor B ต่อ OUT3 และ OUT4
+
+---
+
+###  ค่าช่วงแรงดันโดยประมาณ (กรณีใช้ 5V):
+
+| ทิศทาง | x_volt | y_volt |
+| --- | --- | --- |
+| Center | 2.5V | 2.5V |
+| Right | ~4.9V | 2.5V |
+| Left | ~0.0V | 2.5V |
+| Up | 2.5V | ~4.9V |
+| Down | 2.5V | ~0.0V |
+| Up-Right | ~4.9V | ~4.9V |
+| Up-Left | ~0.0V | ~4.9V |
+| Down-Right | ~4.9V | ~0.0V |
+| Down-Left | ~0.0V | ~0.0V |
+
+### การใช้งานในโปรแกรมจริง
+
+- คุณสามารถใช้โค้ดนี้ร่วมกับระบบควบคุมความเร็วแบบ “เพิ่ม/ลด ทีละ 10%” ได้
+- เหมาะมากหากคุณไม่อยากใช้ค่า `analogRead()` แบบต่อเนื่อง (map เป็น -255~255)
+
+##  1.2 ภาพประกอบวงจรจริง (5 คะแนน)
+
+> 🧷 ในงานส่งจริง คุณควร ถ่ายภาพตอนต่อวงจรจริง บนบอร์ด breadboard หรือใช้ โปรแกรมจำลองอย่าง Tinkercad หรือ Fritzing แล้วแนบภาพประกอบ
+> 
+
+> ถ้าคุณต้องการ ผมสามารถวาดภาพจำลองให้ได้ด้วยครับ บอกได้เลย
+> 
+
+---
+
+##  1.3 โปรแกรมควบคุม (20 คะแนน)
+
+```cpp
+// === Motor Pins ===
+#define IN1 13
+#define IN2 12
+#define ENA 11 // PWM
+#define IN3 9
+#define IN4 8
+#define ENB 10 // PWM
+
+// === Joystick Pins ===
+#define JOY_X A0
+#define JOY_Y A1
+
+int speedA = 0;
+int speedB = 0;
+const int step = 26; // เพิ่ม/ลด ทีละ 10% ของ 255
+unsigned long lastMove = 0;
+const unsigned long debounceDelay = 300; // ms
+
+void setup() {
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  float x_volt = analogRead(JOY_X) * (5.0 / 1023.0);
+  float y_volt = analogRead(JOY_Y) * (5.0 / 1023.0);
+  unsigned long now = millis();
+
+  // Dead zone
+  bool center = (x_volt >= 2.0 && x_volt <= 3.0) && (y_volt >= 2.0 && y_volt <= 3.0);
+
+  if (!center && now - lastMove > debounceDelay) {
+    // ขวา -> เพิ่มความเร็ว Motor A
+    if (x_volt >= 4.0 && y_volt >= 2.0 && y_volt <= 3.0) {
+      speedA = min(speedA + step, 255);
+    }
+
+    // ซ้าย -> ลดความเร็ว Motor A
+    else if (x_volt <= 1.0 && y_volt >= 2.0 && y_volt <= 3.0) {
+      speedA = max(speedA - step, 0);
+    }
+
+    // ขึ้น -> เพิ่มความเร็ว Motor B
+    else if (y_volt >= 4.0 && x_volt >= 2.0 && x_volt <= 3.0) {
+      speedB = min(speedB + step, 255);
+    }
+
+    // ลง -> ลดความเร็ว Motor B
+    else if (y_volt <= 1.0 && x_volt >= 2.0 && x_volt <= 3.0) {
+      speedB = max(speedB - step, 0);
+    }
+
+    lastMove = now;
+  }
+
+  // ควบคุมมอเตอร์ A
+  analogWrite(ENA, speedA);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+
+  // ควบคุมมอเตอร์ B
+  analogWrite(ENB, speedB);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+
+  // Debug
+  Serial.print("Speed A: "); Serial.print(speedA);
+  Serial.print(" | Speed B: "); Serial.println(speedB);
+
+  delay(50);
+}
+```
+
+---
+
+##  สรุป:
+
+| ข้อ | รายละเอียด | คะแนนเต็ม |
+| --- | --- | --- |
+| 1.1 | วงจรและการเชื่อมต่อ Joystick → Arduino → L298N |  5 |
+| 1.2 | ประกอบวงจรจริงหรือภาพจำลอง |  5 |
+| 1.3 | โค้ดพร้อมใช้งาน แยกควบคุมมอเตอร์ A และ B ตามทิศจอยสติ๊ก |  20 |
+
+หากต้องการให้ผมวาดภาพวงจรจำลอง (เช่นด้วย Fritzing-style) หรือใส่ปุ่ม Reset, เพิ่มการหยุดมอเตอร์ — บอกได้เลยครับ!
+
+---
+
+## More :
+
+**เพิ่มการใช้ปุ่มกด (SW) บนจอยสติ๊ก KY-023** เพื่อควบคุม **เปิด/ปิดการจ่ายพลังงานให้มอเตอร์ทั้งสองตัว** โดยใช้ขา `SW` เชื่อมต่อกับ Arduino
+
+---
+
+##  การเชื่อมต่อเพิ่ม:
+
+| KY-023 Pin | Arduino UNO |
+| --- | --- |
+| SW | D7 |
+- อย่าลืมใช้ **pull-up resistor** (หรือตั้งในโค้ด) เพราะปุ่มนี้จะต่อ GND เมื่อกด
+
+---
+
+##  เพิ่มในโค้ด (เวอร์ชันรวม + สวิตช์)
+
+```cpp
+// === Motor Pins ===
+#define IN1 13
+#define IN2 12
+#define ENA 11 // PWM
+#define IN3 9
+#define IN4 8
+#define ENB 10 // PWM
+
+// === Joystick Pins ===
+#define JOY_X A0
+#define JOY_Y A1
+#define JOY_SW 7
+
+int speedA = 0;
+int speedB = 0;
+const int step = 26; // 10% ของ 255
+bool motorPower = true; // เปิดมอเตอร์เริ่มต้น
+unsigned long lastMove = 0;
+const unsigned long debounceDelay = 300;
+unsigned long lastSwitch = 0;
+
+void setup() {
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(ENB, OUTPUT);
+
+  pinMode(JOY_SW, INPUT_PULLUP); // ใช้ internal pull-up
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  float x_volt = analogRead(JOY_X) * (5.0 / 1023.0);
+  float y_volt = analogRead(JOY_Y) * (5.0 / 1023.0);
+  unsigned long now = millis();
+
+  // เช็คปุ่มกด SW (เมื่อถูกกด จะต่อ GND => LOW)
+  if (digitalRead(JOY_SW) == LOW && now - lastSwitch > 500) {
+    motorPower = !motorPower;
+    Serial.print("Motor Power Toggled: ");
+    Serial.println(motorPower ? "ON" : "OFF");
+    lastSwitch = now;
+  }
+
+  // Dead zone
+  bool center = (x_volt >= 2.0 && x_volt <= 3.0) && (y_volt >= 2.0 && y_volt <= 3.0);
+
+  if (!center && now - lastMove > debounceDelay) {
+    if (x_volt >= 4.0 && y_volt >= 2.0 && y_volt <= 3.0) {
+      speedA = min(speedA + step, 255);
+    } else if (x_volt <= 1.0 && y_volt >= 2.0 && y_volt <= 3.0) {
+      speedA = max(speedA - step, 0);
+    } else if (y_volt >= 4.0 && x_volt >= 2.0 && x_volt <= 3.0) {
+      speedB = min(speedB + step, 255);
+    } else if (y_volt <= 1.0 && x_volt >= 2.0 && x_volt <= 3.0) {
+      speedB = max(speedB - step, 0);
+    }
+
+    lastMove = now;
+  }
+
+  if (motorPower) {
+    analogWrite(ENA, speedA);
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+
+    analogWrite(ENB, speedB);
+    digitalWrite(IN3, HIGH);
+    digitalWrite(IN4, LOW);
+  } else {
+    analogWrite(ENA, 0);
+    analogWrite(ENB, 0);
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, LOW);
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, LOW);
+  }
+
+  Serial.print("Speed A: "); Serial.print(speedA);
+  Serial.print(" | Speed B: "); Serial.print(speedB);
+  Serial.print(" | Motor: "); Serial.println(motorPower ? "ON" : "OFF");
+
+  delay(50);
+}
+```
+
+---
+
+### ผลลัพธ์:
+
+- กดปุ่มบน Joystick (SW) → สลับเปิด/ปิดมอเตอร์ (ON/OFF)
+- LED ที่ L298N จะติด/ดับตามสถานะจ่ายไฟ
+- มอเตอร์ไม่หมุนถ้า OFF (แม้ค่า speed ยังอยู่)
+
+---
+## SW
+
+### ความสามารถของปุ่ม SW:
+
+- **Single Click** → เพิ่มความเร็วมอเตอร์ A & B +10%
+- **Double Click** → ลดความเร็ว A & B -10%
+- **Hold (กดค้าง > 1.2 วินาที)** → รีเซ็ตความเร็วเป็น 0
+
+---
+
+### ✅ โค้ด Arduino ที่สมบูรณ์
+
+```cpp
+
+// === Motor Pins ===
+#define IN1 13
+#define IN2 12
+#define ENA 11 // PWM
+#define IN3 9
+#define IN4 8
+#define ENB 10 // PWM
+
+// === Joystick Pins ===
+#define JOY_X A0
+#define JOY_Y A1
+#define JOY_SW 7
+
+int speedA = 0;
+int speedB = 0;
+const int step = 26; // ~10% of 255
+const int maxSpeed = 255;
+
+unsigned long lastMove = 0;
+unsigned long lastClickTime = 0;
+unsigned long pressStart = 0;
+
+bool lastSWState = HIGH;
+bool waitingForSecondClick = false;
+bool swHeld = false;
+
+void setup() {
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  pinMode(JOY_SW, INPUT_PULLUP);
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  unsigned long now = millis();
+  bool swState = digitalRead(JOY_SW);
+
+  // === ปุ่มถูกกดลง ===
+  if (lastSWState == HIGH && swState == LOW) {
+    pressStart = now;
+    swHeld = false;
+  }
+
+  // === ปุ่มถูกปล่อย ===
+  if (lastSWState == LOW && swState == HIGH) {
+    unsigned long pressDuration = now - pressStart;
+
+    if (pressDuration >= 1200) {
+      // HOLD => Reset speed
+      speedA = 0;
+      speedB = 0;
+      Serial.println("Hold: Reset speed to 0");
+    } else {
+      if (waitingForSecondClick) {
+        // DOUBLE CLICK => -10%
+        speedA = max(speedA - step, 0);
+        speedB = max(speedB - step, 0);
+        Serial.println("Double Click: -10%");
+        waitingForSecondClick = false;
+      } else {
+        waitingForSecondClick = true;
+        lastClickTime = now;
+      }
+    }
+  }
+
+  // เช็ค single click หลัง timeout
+  if (waitingForSecondClick && (now - lastClickTime > 300)) {
+    // SINGLE CLICK => +10%
+    speedA = min(speedA + step, maxSpeed);
+    speedB = min(speedB + step, maxSpeed);
+    Serial.println("Single Click: +10%");
+    waitingForSecondClick = false;
+  }
+
+  lastSWState = swState;
+
+  // === ควบคุมมอเตอร์หมุนทิศเดียวด้วยความเร็วที่ตั้ง ===
+  analogWrite(ENA, speedA);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+
+  analogWrite(ENB, speedB);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+
+  // Debug
+  Serial.print("Speed A: "); Serial.print(speedA);
+  Serial.print(" | Speed B: "); Serial.println(speedB);
+
+  delay(10);
+}
+```
+
+---
+
+### ✅ สรุปพฤติกรรม:
+
+| การกดปุ่ม SW | ผลลัพธ์ |
+| --- | --- |
+| Single Click | เพิ่มความเร็ว A และ B ทีละ 10% |
+| Double Click | ลดความเร็ว A และ B ทีละ 10% |
+| Hold > 1.2s | รีเซ็ตความเร็วทั้งสองมอเตอร์เป็น 0 |
