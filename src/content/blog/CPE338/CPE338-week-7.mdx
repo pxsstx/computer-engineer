@@ -1,0 +1,146 @@
+---
+heroImage: 'src/assets/images/CPE338/Microprocessor-and-Microcontroller-Systems.webp'
+category: CPE338
+description: Analog to Digital Converter (ADC)
+pubDate: 2025-02-06T00:09:00.000Z
+tags:
+  - Microcontroller
+  - Microprocessor
+  - c
+title: Analog to Digital Converter (ADC)
+---
+
+## Analog to Digital Converter (ADC)
+
+### 1. ความหมายของ ADC
+
+ADC คือวงจรแปลงสัญญาณแอนะล็อกให้เป็นดิจิทัล เพื่อให้ไมโครคอนโทรลเลอร์ประมวลผลได้
+
+---
+
+### 2. คุณสมบัติของ ADC ใน ATmega328P
+
+- ความละเอียด: 10-bit
+- ความแม่นยำ: ±2 LSB
+- เวลาการแปลง: 13 - 260 µs
+- รองรับ 6 ช่อง Analog
+- รองรับ Internal Temp Sensor
+- มี Internal Reference 1.1V
+- มี ADC Interrupt
+
+---
+
+### 3. สูตรคำนวณค่าดิจิทัล
+
+**ADC Output = (Vin × 2ⁿ) / Vref**
+
+ตัวอย่าง:
+
+3-bit, Vref = 1V
+
+- Vin = 0.5V → Output = (0.5 × 8) / 1 = 4
+
+---
+
+### 4. การทำงานของ Successive Approximation ADC
+
+- เปรียบเทียบสัญญาณ input กับ output จาก DAC ทีละบิต
+- ใช้ comparator เพื่อปรับค่าให้แม่นยำขึ้นในแต่ละรอบ
+- ทำจนได้ค่าดิจิทัลครบทุกบิต
+
+---
+
+### 5. การใช้งาน ADC กับ Arduino
+
+### EX1: อ่านค่า Potentiometer
+
+```cpp
+int sensorPin = A3;
+void setup() {
+  Serial.begin(9600);
+}
+void loop() {
+  int digitalValue = analogRead(sensorPin);
+  Serial.println(digitalValue);
+  delay(1000);
+}
+```
+
+---
+
+### EX2 (อัปเดตเป็น EX3): แสดงตำแหน่งของ Joystick KY-023 ผ่าน LED
+
+```cpp
+const int joystick_x_pin = A0;
+const int joystick_y_pin = A1;
+const int C_LED = 2;
+const int N_LED = 3;
+const int W_LED = 5;
+const int S_LED = 7;
+const int E_LED = 9;
+
+int x_adc_val, y_adc_val;
+float x_volt, y_volt;
+
+void setup() {
+  pinMode(N_LED, OUTPUT);
+  pinMode(W_LED, OUTPUT);
+  pinMode(S_LED, OUTPUT);
+  pinMode(E_LED, OUTPUT);
+  pinMode(C_LED, OUTPUT);
+}
+
+void loop() {
+  x_adc_val = analogRead(joystick_x_pin);
+  y_adc_val = analogRead(joystick_y_pin);
+
+  x_volt = (x_adc_val * 5.0) / 1023;
+  y_volt = (y_adc_val * 5.0) / 1023;
+
+  if ((x_volt >= 2.40 && x_volt <= 2.60) && (y_volt >= 2.40 && y_volt <= 2.60)) {
+    digitalWrite(C_LED, HIGH);
+  } else {
+    digitalWrite(C_LED, LOW);
+  }
+
+  if ((x_volt >= 4.90 && x_volt <= 5.00) && (y_volt >= 2.40 && y_volt <= 2.60)) {
+    digitalWrite(N_LED, HIGH);
+  } else {
+    digitalWrite(N_LED, LOW);
+  }
+
+  if ((x_volt >= 2.40 && x_volt <= 2.60) && (y_volt >= 0.00 && y_volt <= 0.10)) {
+    digitalWrite(W_LED, HIGH);
+  } else {
+    digitalWrite(W_LED, LOW);
+  }
+
+  if ((x_volt >= 0.00 && x_volt <= 0.10) && (y_volt >= 2.40 && y_volt <= 2.60)) {
+    digitalWrite(S_LED, HIGH);
+  } else {
+    digitalWrite(S_LED, LOW);
+  }
+
+  if ((x_volt >= 2.40 && x_volt <= 2.60) && (y_volt >= 4.90 && y_volt <= 5.00)) {
+    digitalWrite(E_LED, HIGH);
+  } else {
+    digitalWrite(E_LED, LOW);
+  }
+
+  delay(100);
+}
+```
+
+---
+
+### 6. สรุปการใช้งาน
+
+ADC ช่วยให้ไมโครคอนโทรลเลอร์รับรู้สัญญาณจากโลกภายนอก เช่น ความต้านทานจากปุ่มหมุน (potentiometer) หรือค่าทิศทางจาก joystick และนำไปใช้ควบคุมอุปกรณ์หรือระบบต่าง ๆ ได้อย่างมีประสิทธิภาพ
+
+---
+
+### 7. การเลือกแรงดันอ้างอิง (AREF)
+
+- AREF ภายนอก (ผ่านพิน AREF)
+- VCC (5V)
+- Internal Reference (1.1V)

@@ -1,0 +1,144 @@
+---
+heroImage: 'src/assets/images/CPE338/Microprocessor-and-Microcontroller-Systems.webp'
+category: CPE338
+description: Clock & Timer in ATmega328P
+pubDate: 2025-02-05T00:09:00.000Z
+tags:
+  - Microcontroller
+  - Microprocessor
+  - c
+title: Clock & Timer
+---
+
+## **Clock & Timer (สำหรับ ATmega328P / Arduino UNO)**
+
+---
+
+### 1. พื้นฐานของ Arduino UNO R3 และ ATmega328P
+
+- **Microcontroller**: ATmega328P
+- **ความเร็วสัญญาณนาฬิกา**: 16 MHz
+- **หน่วยความจำ**:
+  - 32KB Flash
+  - 2KB SRAM
+  - 1KB EEPROM
+- **พอร์ตอินพุต/เอาต์พุต**:
+  - 14 Digital I/O
+  - 6 Analog input
+  - 6 PWM
+
+---
+
+### 2. ระบบสัญญาณนาฬิกา (Clock Systems)
+
+แบ่งออกเป็นหลายประเภท โดยแต่ละตัวมีบทบาทต่างกัน เช่น:
+
+| Clock ชนิด | หน้าที่                                   |
+| ---------- | ----------------------------------------- |
+| clkCPU     | สัญญาณนาฬิกาหลักของ CPU                   |
+| clkI/O     | สำหรับ I/O modules เช่น Timer, SPI, USART |
+| clkFLASH   | ควบคุม Flash Memory                       |
+| clkASY     | ใช้กับ Asynchronous Timer เช่น RTC        |
+| clkADC     | ใช้ใน ADC โดยเฉพาะ เพื่อความแม่นยำสูง     |
+
+> โมดูลที่ไม่ใช้งานสามารถปิด clock ได้เพื่อประหยัดพลังงาน
+
+---
+
+### 3. แหล่งที่มาของสัญญาณนาฬิกา (Clock Sources)
+
+- Internal RC Oscillator (8 MHz) – ใช้ง่าย ไม่แม่นยำมาก
+- Low Power Crystal Oscillator – ใช้กับ XTAL1, XTAL2 สำหรับงานทั่วไป
+- Low Frequency Crystal Oscillator (32.768 kHz) – ใช้ใน RTC
+- External Clock – กำหนดความถี่จากภายนอก
+- Prescaler – ตัวหารความถี่ เพื่อควบคุมการใช้พลังงาน
+
+ตัวเลือก Clock ถูกกำหนดผ่านบิต `CKSEL[3:0]` เช่น:
+
+- `0000`: External Clock
+- `0010`: Calibrated Internal RC
+- `1111-1000`: Low Power Crystal
+
+---
+
+### 4. Prescaler & Clock Division
+
+ใช้เพื่อแบ่งความถี่ของ clock system เช่น:
+
+| CLKPS[3:0] | Division Factor |
+| ---------- | --------------- |
+| 0000       | 1 (ไม่หาร)      |
+| 0001       | 2               |
+| ...        | ...             |
+| 1000       | 256             |
+
+---
+
+### 5. Timer/Counter (โดยเฉพาะ TC0 – Timer/Counter 0 ขนาด 8-bit)
+
+- ใช้กำหนดช่วงเวลาการทำงาน หรือสร้าง PWM
+- **Registers สำคัญ**:
+  - `TCCR`: ควบคุมการทำงานของ Timer
+  - `TCNT`: ค่า count ปัจจุบัน
+  - `OCR`: ค่าเปรียบเทียบเพื่อ trigger event
+- ทำงานได้ทั้งแบบ Count Up/Down, CTC, Fast PWM
+
+---
+
+### 6. Arduino Functions ที่เกี่ยวข้องกับ Timer
+
+| ฟังก์ชัน                | คำอธิบาย                            |
+| ----------------------- | ----------------------------------- |
+| `delay(ms)`             | หยุดโปรแกรมตามเวลาที่กำหนด (ms)     |
+| `delayMicroseconds(us)` | หน่วย microsecond                   |
+| `millis()`              | เวลาที่ผ่านมาตั้งแต่เริ่มทำงาน (ms) |
+| `micros()`              | เวลาที่ผ่านมาตั้งแต่เริ่มทำงาน (us) |
+
+---
+
+### 7. ตัวอย่างโค้ด Arduino
+
+**แบบใช้ `delay()`**
+
+```cpp
+
+void loop() {
+  Serial.println("MSG1");
+  delay(1000);
+}
+
+```
+
+ข้อเสีย: หยุดโปรแกรมทั้งหมด
+
+**แบบใช้ `millis()`**
+
+```cpp
+
+unsigned long last_time = 0;
+void loop() {
+  if(millis() - last_time > 1000) {
+    last_time = millis();
+    Serial.println("MSG1");
+  }
+}
+
+```
+
+ข้อดี: ทำงานอย่างต่อเนื่องแบบ non-blocking
+
+---
+
+### 8. Timing Diagram
+
+ในเอกสารมีไดอะแกรมประกอบหลายชุด แสดงพฤติกรรมของ Timer ภายใต้เงื่อนไขต่าง ๆ:
+
+- แบบไม่มี prescaler
+- แบบมี prescaler (เช่น /8)
+- แบบใช้ OCR ตั้งค่า TOP
+
+---
+
+## สรุปสุดท้าย
+
+ระบบนาฬิกาและตัวจับเวลาใน ATmega328P มีความยืดหยุ่นสูง ใช้ในการควบคุมเวลา, การสร้างสัญญาณ PWM และการจัดการพลังงาน ผ่านการตั้งค่าต่าง ๆ ของ clock source, prescaler และ timer/counter ได้อย่างละเอียด

@@ -1,0 +1,80 @@
+---
+heroImage: 'src/assets/images/CPE338/Microprocessor-and-Microcontroller-Systems.webp'
+category: CPE338
+description: AVR CPU Core in Microprocessor and Microcontroller Systems
+pubDate: 2025-01-14T00:09:00.000Z
+tags:
+  - Microcontroller
+  - Microprocessor
+title: CPU Core
+---
+
+## ATMaga328P
+
+UNO R3
+
+### Dip Chip
+
+chipพังแล้วสามารถถอดเปลี่ยนได้
+
+[arduino-board-on-black-surface.avif](https://prod-files-secure.s3.us-west-2.amazonaws.com/6476ba40-1a32-4eb8-a202-234086a03f6b/ac50a8d9-2513-43e3-98dc-1c0a50c39130/arduino-board-on-black-surface.avif)
+
+### SMD Chip
+
+[A000067_00front_1000x750.avif](https://prod-files-secure.s3.us-west-2.amazonaws.com/6476ba40-1a32-4eb8-a202-234086a03f6b/1fbd6a23-54a0-4200-b2c4-fd581b5279e0/A000067_00front_1000x750.avif)
+
+## AVR architecture
+
+- Data Memory → ตัวแปร SRAM
+  - SRAM
+    - Cache Memory
+    - ข้อเสีย แพง ราคาสูง
+- Program Memory → code Flash Memory
+  - Flash Memory ไม่ต้องมีไฟเลี้ยง ก็ใช้งานได้
+- EEPROM Memory
+
+## Chip Control Memory
+
+- 1 chip → 1 Block
+  - 1 block → 4 byte
+  - flash ได้พื้นที่เก็บข้อมูลเยอะ
+  - EEPROM พื้นที่เก็บข้อมูลน้อย control one by one
+  - พื้นที่ที่ไม่ได้ใช้ → slag
+
+## SRam
+
+- 2k x 8 = 2kBytes
+  - 2k → ช่องเก็บข้อมูล
+  - 8 → 1 block
+  - Bus
+    - Address bus → ส่งตำแหน่งหน่วยความจำ
+    - Date bus → ส่งข้อมูล
+    - Control bus → control Read / Write
+
+1. **หน้าที่หลักของ CPU Core**
+   - ควบคุมลำดับการทำงานของโปรแกรม
+   - เข้าถึงหน่วยความจำ
+   - ประมวลผลทางคณิตศาสตร์และลอจิก
+   - ควบคุมอุปกรณ์อินพุต/เอาต์พุต (I/O)
+   - จัดการการขัดจังหวะ (Interrupt)
+2. **สถาปัตยกรรมของ AVR CPU**
+   - ใช้ **Harvard Architecture** (แยกหน่วยความจำโปรแกรมและข้อมูล)
+   - มีองค์ประกอบหลัก เช่น ALU, Register File, Status Register, Program Counter, Flash Memory, Data Memory และ Stack Pointer
+3. **ALU (Arithmetic Logic Unit)**
+   - หน่วยประมวลผลทางคณิตศาสตร์และลอจิก เช่น การบวก ลบ คูณ หาร AND OR NOT
+   - ทำงานร่วมกับ **Register File** 32 ตัว สามารถประมวลผลภายใน 1 รอบสัญญาณนาฬิกา
+4. **Register File**
+   - มี **General Purpose Register** ขนาด 8 บิต จำนวน 32 ตัว
+   - มี **X, Y, Z Pointers** ใช้สำหรับเข้าถึงหน่วยความจำ
+5. **Status Register**
+   - ใช้เก็บสถานะของการประมวลผล เช่น Carry Flag (C), Zero Flag (Z), Negative Flag (N), Overflow Flag (V), Sign Flag (S), และ Half Carry Flag (H)
+6. **ชุดคำสั่ง (Instruction Set)**
+   - ตัวอย่างคำสั่งพื้นฐาน:
+     - `ADD Rd, Rr` → บวกค่าของ Register สองตัว
+     - `ADC Rd, Rr` → บวกค่าของ Register พร้อม Carry
+     - `AND Rd, Rr` → คำสั่งลอจิก AND
+     - `NEG Rd` → คำนวณค่าตรงข้าม (Two’s Complement)
+7. **การทำงานของ CPU (Instruction Processing)**
+   - กระบวนการทำงานของคำสั่งมี **Fetch → Decode → Execute → Writeback**
+   - ใช้ **Program Counter (PC)** ในการชี้ตำแหน่งของคำสั่งใน Flash Memory
+   - ใช้ **Stack Pointer** ในการจัดการ Subroutine และ Interrupts

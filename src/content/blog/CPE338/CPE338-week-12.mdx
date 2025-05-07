@@ -1,0 +1,243 @@
+---
+heroImage: 'src/assets/images/CPE338/Microprocessor-and-Microcontroller-Systems.webp'
+category: CPE338
+description: MPU6050
+pubDate: 2025-02-11T00:09:00.000Z
+tags:
+  - Microcontroller
+  - Microprocessor
+  - c
+title: MPU6050
+---
+
+## MPU6050
+
+MPU6050 เป็นเซ็นเซอร์ 6 แกนที่รวม Gyroscope 3 แกนและ Accelerometer 3 แกนไว้ในชิปเดียว
+
+### คุณสมบัติหลัก
+
+**คุณสมบัติหลักของ **MPU6050:
+
+- **Accelerometer**: วัดความเร่งใน 3 แกน (X, Y, Z) และมีช่วงการวัด: ±2g, ±4g, ±8g, ±16g (ปรับได้)
+- **Gyroscope**: วัดความเร็วเชิงมุมใน 3 แกน (X, Y, Z) และมีช่วงการวัด: ±250, ±500, ±1000, ±2000 °/วินาที (ปรับได้)
+- **Interface**: I2C และ SPI (บางรุ่น)
+- **คุณสมบัติเพิ่มเติม: มี **Digital Motion Processor (DMP), สามารถเชื่อมต่อกับเซ็นเซอร์แม่เหล็กภายนอกเพื่อสร้างเซ็นเซอร์ 9 แกน, และมีฟังก์ชัน Sleep Mode
+
+### การต่อ
+
+**การต่อ **MPU6050 กับ Arduino Uno:
+
+- **VCC** ของ MPU6050 ต่อกับ 5V หรือ 3.3V ของ Arduino Uno
+- **GND** ของ MPU6050 ต่อกับ GND ของ Arduino Uno
+- **SCL** ของ MPU6050 ต่อกับขา A5 ของ Arduino Uno
+- **SDA** ของ MPU6050 ต่อกับขา A4 ของ Arduino Uno
+
+Code ตัวอย่างการใช้งาน MPU6050 เพื่ออ่านค่าจากเซ็นเซอร์และคำนวณมุม:
+
+```cpp
+#include <MPU6050_tockn.h>
+#include <Wire.h>
+
+MPU6050 mpu6050(Wire);
+long timer = 0;
+
+void setup() {
+  Serial.begin(9600);
+  Wire.begin();
+  mpu6050.begin();
+  mpu6050.calcGyroOffsets(true); // ปรับเทียบ Gyroscope
+}
+
+void loop() {
+  mpu6050.update();
+
+  if (millis() - timer > 1000) {
+    Serial.println("==========");
+    Serial.print("temp: ");
+    Serial.println(mpu6050.getTemp());
+
+    Serial.print("accX: ");
+    Serial.print(mpu6050.getAccX());
+    Serial.print("\t accY : ");
+    Serial.print(mpu6050.getAccY());
+    Serial.print("\t accZ: ");
+    Serial.println(mpu6050.getAccZ());
+
+    Serial.print("gyroX : ");
+    Serial.print(mpu6050.getGyroX());
+    Serial.print("\t gyroY : ");
+    Serial.print(mpu6050.getGyroY());
+    Serial.print("\t gyroZ : ");
+    Serial.println(mpu6050.getGyroZ());
+
+    Serial.print("accAngleX : ");
+    Serial.print(mpu6050.getAccAngleX()); // คำนวณมุมรอบแกน X จาก Accelerometer
+    Serial.print("\t accAngleY : ");
+    Serial.println(mpu6050.getAccAngleY()); // คำนวณมุมรอบแกน Y จาก Accelerometer
+
+    Serial.print("gyroAngleX : ");
+    Serial.print(mpu6050.getGyroAngleX()); // คำนวณมุมรอบแกน X จาก Gyroscope
+    Serial.print("\t gyroAngleY : ");
+    Serial.print(mpu6050.getGyroAngleY()); // คำนวณมุมรอบแกน Y จาก Gyroscope
+    Serial.print("\t gyroAngleZ: ");
+    Serial.println(mpu6050.getGyroZ()); // คำนวณมุมรอบแกน Z จาก Gyroscope
+
+    Serial.print("angleX : ");
+    Serial.print(mpu6050.getAngleX()); // คำนวณมุมจากการรวมข้อมูล
+    Serial.print("\t angleY : ");
+    Serial.print(mpu6050.getAngleY());
+    Serial.print("\t angleZ : ");
+    Serial.println(mpu6050.getAngleZ());
+
+    Serial.println("==========");
+    timer = millis();
+  }
+}
+```
+
+---
+
+### Self-Balancing Robot
+
+หลักการทำงานของ Self-Balancing Robot คือการรักษามุมของหุ่นยนต์ให้ได้ตามค่าที่กำหนด (Setpoint)
+
+โดยใช้ MPU6050 ในการตรวจจับมุมเอียงของหุ่นยนต์
+
+เมื่อมุมมีการเปลี่ยนแปลง, มอเตอร์จะถูกควบคุมให้หมุนเพื่อชดเชยและรักษาสมดุล
+
+Code ตัวอย่างการควบคุมมอเตอร์เพื่อรักษาสมดุล:
+
+```cpp
+#include <MPU6050_tockn.h>
+#include <Wire.h>
+
+#define IN1 13
+#define IN2 12
+#define ENA 11
+#define ENB 10
+#define IN3 9
+#define IN4 8
+
+MPU6050 mpu6050(Wire);
+
+void setup() {
+  Serial.begin(9600);
+  Wire.begin();
+  mpu6050.begin();
+  mpu6050.calcGyroOffsets(true);
+
+  pinMode(ENA, OUTPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+}
+
+void loop() {
+  mpu6050.update();
+
+  Serial.print("angleX : ");
+  Serial.print(mpu6050.getAngleX());
+  Serial.print("\t angleY : ");
+  Serial.print(mpu6050.getAngleY());
+  Serial.print("\t angleZ : ");
+  Serial.println(mpu6050.getAngleZ());
+
+  if (mpu6050.getAngleX() > 0) {
+    digitalWrite(ENA, HIGH);
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+    digitalWrite(ENB, HIGH);
+    digitalWrite(IN3, HIGH);
+    digitalWrite(IN4, LOW);
+  } else {
+    digitalWrite(ENA, HIGH);
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, HIGH);
+    digitalWrite(ENB, HIGH);
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, HIGH);
+  }
+  delay(10);
+}
+```
+
+---
+
+### PID Control
+
+PID Control ถูกนำมาใช้เพื่อปรับปรุงความแม่นยำและเสถียรภาพในการควบคุมหุ่นยนต์
+
+PID ประกอบด้วย 3 ส่วนหลัก: Proportional (P), Integral (I), และ Derivative (D)
+
+- Proportional (P): ปรับค่าตาม Error ปัจจุบัน
+- Integral (I): ลด Steady-State Error โดยรวม Error ที่สะสม
+- Derivative (D): คาดการณ์ Error ในอนาคตจากอัตราการเปลี่ยนแปลงของ Error
+
+Code ตัวอย่างการใช้ PID Control ในการควบคุมมอเตอร์:
+
+```cpp
+#include <MPU6050_tockn.h>
+#include <Wire.h>
+
+#define IN1 13
+#define IN2 12
+#define ENA 11
+#define ENB 10
+#define IN3 9
+#define IN4 8
+
+MPU6050 mpu6050(Wire);
+
+float kp = 20, ki = 0, kd = 1; // ค่าพารามิเตอร์ PID
+float setpoint = 0; // มุมที่ต้องการ
+float error, lastError, integral, derivative, output; // ตัวแปรสำหรับ PID
+
+void pidControl(float pitch) {
+  error = setpoint - pitch;
+  integral += error;
+  derivative = error - lastError;
+  output = kp * error + ki * integral + kd * derivative;
+  lastError = error;
+  motorcontrol(output);
+}
+
+void motorcontrol(float output) {
+  int motorSpeed = constrain(output, -255, 255);
+  analogWrite(ENA, abs(motorSpeed));
+  digitalWrite(IN1, motorSpeed > 0 ? HIGH : LOW);
+  digitalWrite(IN2, motorSpeed > 0 ? LOW : HIGH);
+  analogWrite(ENB, abs(motorSpeed));
+  digitalWrite(IN3, motorSpeed > 0 ? LOW : HIGH);
+  digitalWrite(IN4, motorSpeed > 0 ? HIGH : LOW);
+}
+
+void setup() {
+  Serial.begin(9600);
+  Wire.begin();
+  mpu6050.begin();
+  mpu6050.calcGyroOffsets(true);
+
+  pinMode(ENA, OUTPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+}
+
+void loop() {
+  mpu6050.update();
+
+  Serial.print("angleX : ");
+  Serial.print(mpu6050.getAngleX());
+  Serial.print("\t angleY : ");
+  Serial.print(mpu6050.getAngleY());
+  Serial.print("\t angleZ : ");
+  Serial.println(mpu6050.getAngleZ());
+
+  pidControl(mpu6050.getAngleX());
+  delay(10);
+}
+```

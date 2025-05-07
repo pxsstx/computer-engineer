@@ -1,0 +1,237 @@
+---
+heroImage: 'src/assets/images/CPE338/Microprocessor-and-Microcontroller-Systems.webp'
+category: CPE338
+description: I2C & SPI in ATmega328P
+pubDate: 2025-02-04T00:09:00.000Z
+tags:
+  - Microcontroller
+  - Microprocessor
+  - c
+title: I2C & SPI
+---
+
+I2C (Inter-Integrated Circuit) และ SPI (Serial Peripheral Interface) ซึ่งเป็นโปรโตคอลการสื่อสารข้อมูลแบบอนุกรมที่ใช้ใน ATmega328P (Arduino Uno R3) โดยสรุปได้ดังนี้:
+
+---
+
+## Inter-Integrated Circuit
+
+I2C (Inter-Integrated Circuit)
+
+I2C เป็นโปรโตคอลการสื่อสารแบบ สองสาย (Two-Wire Interface - TWI) ใช้ SDA (Serial Data) และ SCL (Serial Clock) โดยสามารถเชื่อมต่ออุปกรณ์ได้สูงสุด 128 ตัว
+
+### คุณสมบัติของ I2C
+
+- ใช้สายสัญญาณเพียง 2 เส้น (SDA, SCL)
+- รองรับการทำงานแบบ Master-Slave (หลาย Master และหลาย Slave)
+- Slave แต่ละตัวมี Address 7-bit รองรับ 128 อุปกรณ์
+- รองรับความเร็ว สูงสุด 400 kHz
+- สามารถจัดการสัญญาณรบกวน และ Sleep Mode
+- รองรับมาตรฐาน I2C Protocol
+
+### ข้อดี-ข้อเสียของ I2C
+
+✅ ข้อดี
+
+- ใช้สายสัญญาณน้อยกว่าสื่อสารแบบอื่น
+- รองรับอุปกรณ์หลายตัว (หลาย Master & Slave)
+- มีระบบตรวจสอบความถูกต้องของข้อมูล (ACK/NACK)
+
+❌ ข้อเสีย
+
+- ความเร็วต่ำกว่า SPI
+- จำกัดข้อมูลที่ส่งครั้งละ 8 bits
+- ซับซ้อนกว่า SPI ในบางกรณี
+
+### ขา I2C บน
+
+ขา I2C บน Arduino Uno R3
+
+- Pin A4 → SDA
+- Pin A5 → SCL
+
+### ตัวอย่างโค้ด I2C
+
+#### Master
+
+Master (ส่งข้อมูลไปยัง Slave)
+
+```cpp
+#include <Wire.h>
+int x = 0;
+
+void setup() {
+  Wire.begin(); // กำหนดเป็น Master
+}
+
+void loop() {
+  Wire.beginTransmission(9); // กำหนด Address ของ Slave
+  Wire.write(x);             // ส่งค่าตัวแปร x ไปยัง Slave
+  Wire.endTransmission();    // จบการส่งข้อมูล
+
+  x++;
+  if (x > 6) {
+    x = 0;
+  }
+  delay(200);
+}
+
+```
+
+#### Slave
+
+Slave (รับข้อมูลจาก Master และเปิด LED)
+
+```cpp
+#include <Wire.h>
+int LED = 13;
+int x = 0;
+
+void setup() {
+  pinMode(LED, OUTPUT);
+  Wire.begin(9); // ตั้งค่า Address เป็น 9
+  Wire.onReceive(receiveEvent);
+}
+
+void receiveEvent(int bytes) {
+  x = Wire.read(); // อ่านข้อมูลที่เข้ามา
+}
+
+void loop() {
+  if (x <= 3) {
+    digitalWrite(LED, HIGH);
+  } else {
+    digitalWrite(LED, LOW);
+  }
+}
+
+```
+
+---
+
+## Serial Peripheral Interface
+
+SPI (Serial Peripheral Interface)
+
+SPI เป็นโปรโตคอลสื่อสารแบบ High-Speed Synchronous ใช้สำหรับเชื่อมต่ออุปกรณ์หลายตัวที่ต้องการรับ-ส่งข้อมูลความเร็วสูง
+
+### คุณสมบัติของ SPI
+
+- ใช้สายสัญญาณ 4 เส้น
+  - MOSI (Master Out Slave In) → ส่งข้อมูลจาก Master ไปยัง Slave
+  - MISO (Master In Slave Out) → ส่งข้อมูลจาก Slave ไปยัง Master
+  - SCK (Clock) → ใช้ส่งสัญญาณ Clock
+  - SS/CS (Slave Select/Chip Select) → ใช้เลือก Slave ที่ต้องการสื่อสาร
+- รองรับเฉพาะ 1 Master หลาย Slave
+- ความเร็วสูงกว่าทั้ง UART และ I2C
+- เลือกส่งข้อมูลแบบ MSB หรือ LSB ก่อน ได้
+- มี Interrupt Flag สำหรับตรวจสอบสถานะการรับส่งข้อมูล
+
+### ข้อดี-ข้อเสียของ SPI
+
+✅ ข้อดี
+
+- ไม่มี Start/Stop Bits ทำให้ส่งข้อมูลต่อเนื่องได้เร็ว
+- ไม่ต้องใช้ Slave Addressing เหมือน I2C
+- มี แยกเส้นสัญญาณ MISO/MOSI ทำให้ส่งและรับข้อมูลพร้อมกันได้
+
+❌ ข้อเสีย
+
+- ใช้สายมากกว่า I2C (4 เส้น เทียบกับ I2C ที่ใช้เพียง 2 เส้น)
+- ไม่มีการตรวจสอบความผิดพลาดเหมือน UART (Parity Bit)
+- รองรับ Master ได้เพียงตัวเดียว
+
+### ขา SPI
+
+ขา SPI บน Arduino Uno R3
+
+- Pin 10 → SS (Slave Select)
+- Pin 11 → MOSI (Master Out Slave In)
+- Pin 12 → MISO (Master In Slave Out)
+- Pin 13 → SCK (Clock)
+
+### ตัวอย่างโค้ด SPI
+
+#### Master
+
+Master (ส่งข้อมูลไปยัง Slave)
+
+```cpp
+#include <SPI.h>
+
+void setup() {
+  SPI.begin();
+  SPI.setClockDivider(SPI_CLOCK_DIV8); // ตั้ง Clock Divider
+  pinMode(SS, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(SS, LOW);
+  byte received = SPI.transfer(1); // ส่งค่า "1" และรับค่ากลับจาก Slave
+  digitalWrite(SS, HIGH);
+  delay(1000);
+}
+
+```
+
+#### Slave
+
+Slave (รับข้อมูลจาก Master และเปิด LED)
+
+```cpp
+#include <SPI.h>
+
+volatile byte receivedData;
+
+void setup() {
+  pinMode(MISO, OUTPUT);
+  SPCR |= _BV(SPE); // เปิด SPI (Enable)
+  SPI.attachInterrupt();
+}
+
+ISR (SPI_STC_vect) {
+  receivedData = SPDR; // อ่านค่าจาก SPI Data Register
+}
+
+void loop() {
+  if (receivedData == 1) {
+    digitalWrite(13, HIGH); // เปิด LED
+  } else {
+    digitalWrite(13, LOW); // ปิด LED
+  }
+}
+
+```
+
+---
+
+## สรุป
+
+I2C (Inter-Integrated Circuit)
+
+- จำนวนสาย: 2 เส้น (SDA, SCL)
+- ความเร็ว: 100 kHz - 400 kHz
+- การใช้งาน: ใช้ใน Sensor, EEPROM และอุปกรณ์ที่ต้องการเชื่อมต่อหลายตัว
+- Master/Slave: รองรับ หลาย Master & Slave
+- ข้อดี:
+  - ใช้สายสัญญาณน้อย
+  - รองรับอุปกรณ์หลายตัว
+  - มีระบบตรวจสอบข้อมูล (ACK/NACK)
+- ข้อเสีย:
+  - ความเร็วต่ำกว่าทางเลือกอื่น
+  - ซับซ้อนกว่า SPI
+
+SPI (Serial Peripheral Interface)
+
+- จำนวนสาย: 4 เส้น (MOSI, MISO, SCK, SS)
+- ความเร็ว: สูงกว่า I2C (MHz ระดับสูง)
+- การใช้งาน: ใช้ใน SD Card, Display และอุปกรณ์ที่ต้องการส่งข้อมูลเร็ว
+- Master/Slave: รองรับ 1 Master, หลาย Slave
+- ข้อดี:
+  - ความเร็วสูงมาก
+  - รับ-ส่งข้อมูลได้พร้อมกัน (Full-Duplex)
+  - ไม่มี Overhead จาก Start/Stop Bit
+- ข้อเสีย:
+  - ใช้สายมากกว่า I2C
+  - ไม่มีระบบตรวจสอบข้อผิดพลาด (เช่น Parity Bit)
+  - รองรับ Master ได้เพียงตัวเดียว

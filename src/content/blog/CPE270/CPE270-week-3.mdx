@@ -1,0 +1,85 @@
+---
+heroImage: '/src/assets/images/CPE270/CPE270.webp'
+category: CPE270
+description: Data Frame & Regression
+pubDate: 2025-01-21T00:09:00.000Z
+tags:
+  - Python
+title: Regression
+---
+
+### บทที่ 3: Linear Regression
+
+#### 3.1 ความหมายของ Regression
+
+- การวิเคราะห์ความสัมพันธ์ระหว่างตัวแปรอินพุต (Predictor) และตัวแปรผลลัพธ์ (Response)
+- ใช้สำหรับการพยากรณ์ (Prediction)
+
+#### 3.2 Mathematical Model
+
+- สมการพื้นฐาน: `( Y = F(X) ) เช่น ( Y = 67.45 + 0.214 times X )`
+- ใช้ Gradient Descent ในการหาค่าพารามิเตอร์ \( a, b \)
+
+#### 3.3 การวัดประสิทธิภาพโมเดล (Model Evaluation)
+
+- การใช้ R-Squared เพื่อประเมินความแม่นยำของโมเดล
+  - สูตร: `( R^2 = 1 - frac{text{Sum of Residual Errors}}{text{Total Sum of Squares}} )`
+
+#### 3.4 ตัวอย่างและแบบฝึกหัด
+
+- ใช้ Python คำนวณค่าพารามิเตอร์ `( a, b )` และประเมินโมเดล
+- วาดกราฟความสัมพันธ์ระหว่างตัวแปร
+- การคาดการณ์ผลลัพธ์ เช่น การขายสินค้าเมื่อปริมาณฝนตกแตกต่างกัน
+
+---
+
+### Code
+
+```python
+import numpy as np
+
+a = 1.31
+b = 0.65
+alpha = 0.1
+
+x= np.array([0,1,2,3])
+y= np.array([1,3,5,7])
+h = a*x + b
+
+c = np.power((y - h),2) * 0.5
+
+out1 = -(y-h)
+out2 = -(y-h)*x
+print('h          = ',h)
+print('se         = ',c)
+print('-(y-h)     = ',out1)
+print('-((y-h)*x) = ',out2)
+
+# sum
+Sumout1 = np.sum(out1)
+Sumout2 = np.sum(out2)
+print('sum out1   = ',Sumout1)
+print('sum out2   = ',Sumout2)
+
+# a,b new
+anew = a - alpha * Sumout2
+bnew = b - alpha * Sumout1
+
+print('anew       =   {:.2f}'.format(anew))
+print('bnew       =   {:.2f}'.format(bnew))
+```
+
+#### Output
+
+```
+h          =  [0.65 1.96 3.27 4.58]
+se         =  [0.06125 0.5408  1.49645 2.9282 ]
+-(y-h)     =  [-0.35 -1.04 -1.73 -2.42]
+-((y-h)*x) =  [-0.   -1.04 -3.46 -7.26]
+sum out1   =  -5.54
+sum out2   =  -11.76
+anew       =  2.49
+bnew       =  1.20
+```
+
+---

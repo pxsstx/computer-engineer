@@ -1,0 +1,281 @@
+---
+heroImage: 'src/assets/images/CPE338/Microprocessor-and-Microcontroller-Systems.webp'
+category: CPE338
+description: Infrared & Bluetooth
+pubDate: 2025-02-08T00:09:00.000Z
+tags:
+  - Microcontroller
+  - Microprocessor
+  - c
+title: Infrared & Bluetooth
+---
+
+## Infrared
+
+**Infrared Signal Transmission (การส่งสัญญาณอินฟราเรด)**
+
+- การส่งสัญญาณอินฟราเรด (IR) เป็นเทคโนโลยีที่ใช้แสงอินฟราเรดในการส่งข้อมูลระหว่างอุปกรณ์ในระยะใกล้ [cite: 5]
+- องค์ประกอบหลักในการส่งสัญญาณ IR ประกอบด้วย: [cite: 6]
+  - ตัวส่งสัญญาณ (Transmitter):
+    - IR LED: แอลอีดีที่เปล่งแสงอินฟราเรด
+    - วงจรมอดูเลต (Modulation Circuit): ใช้แปลงข้อมูลดิจิทัลเป็นสัญญาณแสง
+  - ตัวรับสัญญาณ (Receiver):
+    - โฟโตไดโอด/โฟโตทรานซิสเตอร์: ตรวจจับแสง IR และแปลงเป็นสัญญาณไฟฟ้า
+    - วงจรดีมอดูเลต (Demodulation Circuit): แยกสัญญาณข้อมูลจากความถี่พาหะ
+- หลักการทำงาน:
+  - การมอดูเลตสัญญาณ: ผสมข้อมูลดิจิทัลกับคลื่นพาหะ
+  - การส่งสัญญาณ: IR LED จะกระพริบตามรูปแบบสัญญาณที่ถูกมอดูเลต
+- ขั้นตอนการส่งสัญญาณ IR:
+  1. เข้ารหัสข้อมูลเป็นรูปแบบดิจิทัล
+  2. มอดูเลตข้อมูลด้วยความถี่พาหะ
+  3. ปล่อยแสง IR ผ่าน LED
+  4. ตัวรับสัญญาณถอดรหัสและกรองสัญญาณ
+- โปรโตคอล IR ที่สำคัญ: NEC, Sony SIRC, RC5, RC6, Samsung, Raw IR [cite: 9]
+- ตัวอย่างโปรโตคอล NEC:
+  - รูปแบบสัญญาณ: Start Pulse (9 ms) + Space (4.5 ms) + \[Address + Command + Inverted Command]
+  - ตัวอย่างอุปกรณ์: รีโมตคอนโทรลทั่วไป, อุปกรณ์อิเล็กทรอนิกส์
+- อุปกรณ์ที่ใช้ในการส่งสัญญาณ IR:
+  - IR Transmitter
+  - IR Receiver (เช่น VS1838B)
+- ไลบรารี Arduino ที่ใช้: IRremote (สำหรับส่งและรับสัญญาณ)
+- ตัวอย่างการต่อวงจร IR Receiver กับ Arduino
+- ตัวอย่างโปรแกรม Arduino:
+
+  ### โปรแกรมอ่านค่ารหัส Remote แสดงผ่าน Serial Monitor
+
+  ```cpp
+  #include <IRremote.h>
+  #define RECV_PIN 4
+  IRrecv irrecv(RECV_PIN);
+  decode_results results;
+  void setup()
+  {
+  Serial.begin(115200);
+  irrecv.enableIRIn();
+  }
+  void loop() {
+  if (irrecv.decode(&results)) {
+  Serial.println(results.value, HEX);
+  irrecv.resume();
+  }
+  }
+
+  ```
+
+  ### โปรแกรมควบคุมมอเตอร์ผ่าน Remote control
+
+  ```cpp
+  #include <IRremote.h>
+  #define RECV_PIN 4
+  #define IN1 13
+  #define IN2 12
+  #define ENA 11
+  #define ENB 10
+  #define IN3 9
+  #define IN4 8
+  IRrecv irrecv(RECV_PIN);
+  decode_results results;
+  unsigned long lastCode = 0;
+  void setup()
+  {
+  Serial.begin(115200);
+  irrecv.enableIRIn();
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  }
+  void loop() {
+  if (irrecv.decode(&results)) {
+  Serial.println(results.value, HEX);
+  unsigned long code = results.value;
+  if (code == 0xFFFFFFFF) {
+  code = lastCode;
+  } else {
+  lastCode = code;
+  }
+  if (code == 0xFF629D) {
+  Serial.println("Forward");
+  digitalWrite(ENA, HIGH);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(ENB, HIGH);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+  }
+  if (code == 0xFFA857) {
+  Serial.println("Backward");
+  digitalWrite(ENA, HIGH);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  digitalWrite(ENB, HIGH);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+  }
+  if (code == 0xFF22DD) {
+  Serial.println("Stop");
+  digitalWrite(ENA, HIGH);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(ENB, HIGH);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+  }
+  irrecv.resume();
+  }
+  }
+
+  ```
+
+## Bluetooth
+
+- Bluetooth เป็นเทคโนโลยีการสื่อสารไร้สายสำหรับแลกเปลี่ยนข้อมูลระหว่างอุปกรณ์อิเล็กทรอนิกส์ที่อยู่ใกล้กัน โดยใช้คลื่นวิทยุในช่วงความถี่ 2.4 GHz
+- พัฒนาโดยบริษัท Ericsson ในปี 1994 และได้รับมาตรฐาน IEEE 802.15.1
+- การสื่อสารเป็นแบบ Master-Slave
+- วิวัฒนาการของ Bluetooth:
+  - Bluetooth 1.x: รุ่นแรก ๆ ที่มีปัญหาด้านความเข้ากันได้และความเร็ว
+  - Bluetooth 2.x: เพิ่มความเร็วในการส่งข้อมูล (สูงสุด 3 Mbps)
+  - Bluetooth 3.x: ใช้เทคโนโลยี Wi-Fi เพื่อเพิ่มความเร็ว (สูงสุด 24 Mbps)
+  - Bluetooth 4.x: เน้นการประหยัดพลังงานด้วย Bluetooth Low Energy (BLE)
+  - Bluetooth 5.x: เพิ่มความเร็วและระยะทางการสื่อสาร
+- Bluetooth Module ที่นิยมใช้: HC-05 และ HC-06
+  - HC-05:
+    - ทำหน้าที่เป็นได้ทั้ง Master และ Slave
+    - ตั้งค่าได้หลากหลายผ่าน AT commands
+  - HC-06:
+    - ทำหน้าที่เป็น Slave เท่านั้น
+    - ใช้งานง่าย ไม่ต้องตั้งค่าผ่าน AT commands
+- ขั้นตอนการใช้งานโมดูล Bluetooth HC-05:
+  1. เชื่อมต่อกับโมดูล HC-05
+  2. กำหนดโหมดการทำงานของ HC-05
+  3. เชื่อมต่อกับอุปกรณ์อื่นผ่าน Bluetooth
+  4. ทดสอบสื่อสารผ่าน Bluetooth
+- ตัวอย่างการเชื่อมต่อ HC-05 กับ Arduino
+- ตัวอย่างโปรแกรม Arduino:
+
+  ### โปรแกรมกำหนด Baud rate ของ HC-05
+
+  ```cpp
+  #include <SoftwareSerial.h>
+  SoftwareSerial mySerial(2, 3);
+  void setup()
+  {
+  Serial.begin(38400);
+  while (!Serial);
+  mySerial.begin(38400);
+  }
+  void loop()
+  {
+  if (mySerial.available()>0)
+  Serial.write(mySerial.read());
+  if (Serial.available())
+  mySerial.write(Serial.read());
+  }
+
+  ```
+
+  ### โปรแกรมด้าน Slave สำหรับรับข้อมูลผ่าน Bluetooth
+
+  ```cpp
+  #include <SoftwareSerial.h>
+  SoftwareSerial mySerial(2, 3);
+  char data;
+  void setup()
+  {
+  Serial.begin(9600);
+  while (!Serial);
+  mySerial.begin(9600);
+  }
+  void loop()
+  {
+  if (mySerial.available()>0){
+  data = mySerial.read();
+  Serial.println(data);
+  }
+  }
+
+  ```
+
+  ### โปรแกรมด้าน Master สำหรับส่งข้อมูลผ่าน Bluetooth
+
+  ```cpp
+  #include <SoftwareSerial.h>
+  SoftwareSerial mySerial(2, 3);
+  char data;
+  void setup()
+  {
+  Serial.begin(9600);
+  while (!Serial);
+  mySerial.begin(9600);
+  }
+  void loop()
+  {
+  if (Serial.available()>0){
+  mySerial.write(Serial.read());
+  }
+  }
+
+  ```
+
+  ### โปรแกรมควบคุม Motor ผ่าน Bluetooth
+
+  ```cpp
+  #include <SoftwareSerial.h>
+  SoftwareSerial mySerial(2, 3);
+  char data;
+  #define IN1 13
+  #define IN2 12
+  #define ENA 11
+  #define ENB 10
+  #define IN3 9
+  #define IN4 8
+  void setup()
+  {
+  Serial.begin(9600);
+  while (!Serial);
+  mySerial.begin(9600);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  }
+  void loop()
+  {
+  if (mySerial.available()>0){
+  data = mySerial.read();
+  Serial.println(data);
+  }
+  if (data == 'F'){
+  Serial.println("Forward");
+  digitalWrite(ENA, HIGH);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(ENB, HIGH);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+  }
+  if (data == 'B'){
+  Serial.println("Backward");
+  digitalWrite(ENA, HIGH);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  digitalWrite(ENB, HIGH);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+  }
+  if (data == '0'){
+  Serial.println("Stop");
+  digitalWrite(ENA, HIGH);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(ENB, HIGH);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+  }
+  }
+
+  ```

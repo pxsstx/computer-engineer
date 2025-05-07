@@ -1,0 +1,220 @@
+---
+heroImage: 'src/assets/images/CPE338/Microprocessor-and-Microcontroller-Systems.webp'
+category: CPE338
+description: Memory in Microprocessor and Microcontroller Systems
+pubDate: 2025-01-21T00:09:00.000Z
+tags:
+  - Microcontroller
+  - Microprocessor
+title: Memory
+---
+
+**ATmega328P** ที่ใช้ใน **Arduino UNO R3** โดยแบ่งเป็น 3 ประเภทหลัก:
+
+### **SRAM (Static RAM)**
+
+- หน่วยความจำสำหรับเก็บข้อมูลที่ใช้ในขณะโปรแกรมทำงาน เช่น ตัวแปรและค่าต่าง ๆ
+- มีขนาด **2 KB (2K x 8)**
+- ทำงานผ่าน **Address Bus, Data Bus, Control Bus** เพื่ออ่าน/เขียนข้อมูล
+- ข้อมูลจะหายไปเมื่อปิดเครื่อง
+
+### **Flash Memory**
+
+- หน่วยความจำสำหรับเก็บโปรแกรมที่เขียนลงไมโครคอนโทรลเลอร์
+- ขนาด **32 KB (16K x 16)**
+- มี **Boot Loader Section** สำหรับอัปโหลดโปรแกรมผ่าน USB โดยไม่ต้องใช้โปรแกรมเมอร์
+- สามารถเก็บข้อมูลถาวรได้ แม้ไม่มีไฟเลี้ยง
+- ใช้คำสั่ง **PROGMEM** ในการเก็บข้อมูลแบบคงที่ (อ่านค่าได้ แต่เขียนทับไม่ได้ง่าย ๆ)
+
+### **EEPROM**
+
+(Electrically Erasable Programmable Read-Only Memory)
+
+- หน่วยความจำที่ใช้เก็บข้อมูลที่ต้องการให้คงอยู่แม้ปิดเครื่อง
+- ขนาด **1 KB (1K x 8)**
+- อายุการใช้งาน **100,000 write/erase cycles**
+- ใช้ไลบรารี **EEPROM.h** เพื่ออ่าน/เขียนข้อมูล
+  - `EEPROM.read(address)` → อ่านค่า
+  - `EEPROM.write(address, value)` → เขียนค่า
+  - `EEPROM.update(address, value)` → เขียนค่าเฉพาะเมื่อข้อมูลเปลี่ยนแปลง
+  - `EEPROM.get(address, data)` / `EEPROM.put(address, data)` → อ่าน/เขียนข้อมูลชนิดต่าง ๆ
+
+## Code
+
+### avr pgmspace
+
+```c
+#include <avr/pgmspace.h>
+
+const uint16_t charSet[] PROGMEM = { 65000, 32796, 16843, 10, 11234};
+//const char signMessage[] PROGMEM = {"I am SignMessage"};
+int a;
+int b;
+float c;
+
+unsigned int displayInt;
+//char myChar;
+
+void setup() {
+  Serial.begin(115200);
+  while (!Serial);
+
+//  for (byte k = 0; k < 5; k++) {
+    displayInt = pgm_read_word_near(charSet + 0); // Read 2 bytes from Flash memory
+    Serial.println(displayInt);
+//  }
+//  Serial.println();
+
+//  // Loop to read character data (1 byte at a time)
+//  for (byte k = 0; k < strlen_P(signMessage); k++) {
+//    myChar = pgm_read_byte_near(signMessage + k); // Read 1 byte from Flash memory
+//    Serial.print(myChar);
+//  }
+//  Serial.println();
+}
+
+void loop() {
+  a++;
+  Serial.println(a);
+  delay(1000);
+}
+
+```
+
+---
+
+### INT
+
+```c
+#include <avr/pgmspace.h>
+
+// Store 16-bit unsigned integers in Flash memory
+const uint16_t charSet[] PROGMEM = { 65000, 32796, 16843, 10, 11234};
+
+// Store characters in Flash memory
+const char signMessage[] PROGMEM = {"I am SignMessage"};
+
+unsigned int displayInt;
+char myChar;
+
+void setup() {
+  Serial.begin(9600);
+  while (!Serial); // Wait for serial port to connect
+
+  // Loop to read integer data (2 bytes at a time)
+  for (byte k = 0; k < 5; k++) {
+    displayInt = pgm_read_word_near(charSet + k); // Read 2 bytes from Flash memory
+    Serial.println(displayInt);
+  }
+  Serial.println();
+
+  // Loop to read character data (1 byte at a time)
+  for (byte k = 0; k < strlen_P(signMessage); k++) {
+    myChar = pgm_read_byte_near(signMessage + k); // Read 1 byte from Flash memory
+    Serial.print(myChar);
+  }
+  Serial.println();
+}
+
+void loop() {
+  // Main code to run repeatedly
+}
+```
+
+---
+
+### STRING
+
+```c
+#include <avr/pgmspace.h>
+
+// Declare strings stored in program memory (Flash)
+const char string_0[] PROGMEM = "String 0";
+const char string_1[] PROGMEM = "String 1";
+const char string_2[] PROGMEM = "String 2";
+const char string_3[] PROGMEM = "String 3";
+const char string_4[] PROGMEM = "String 4";
+const char string_5[] PROGMEM = "String 5";
+
+// Create an array of pointers to the strings in program memory
+const char *const string_table[] PROGMEM = {string_0, string_1, string_2, string_3, string_4, string_5};
+
+char buffer[30]; // Buffer to store string copied from program memory
+
+void setup() {
+  Serial.begin(9600);
+  while (!Serial);  // Wait for Serial to be ready
+  Serial.println("OK");
+}
+
+void loop() {
+  // Loop through the string array and read strings from program memory
+  for (int i = 0; i < 6; i++) {
+    // Read the pointer from the string table and copy the string to RAM
+    strcpy_P(buffer, (char *)pgm_read_word(&(string_table[i])));
+    Serial.println(buffer); // Print the string
+    delay(500);  // Delay to make output readable
+  }
+}
+```
+
+---
+
+## EEROM
+
+### WRITE
+
+```c
+#include <EEPROM.h>
+
+void setup() {
+  Serial.begin(9600);
+
+  // Write values to EEPROM
+  for (int i = 0; i < 255; i++) {
+    EEPROM.write(i, i);
+  }
+}
+
+void loop() {
+
+}
+```
+
+---
+
+### READ
+
+```c
+#include <EEPROM.h>
+
+int a = 0;        // Start from address 0
+int value;        // Store the value read from EEPROM
+
+void setup() {
+  Serial.begin(9600);  // Initialize serial communication
+}
+
+void loop() {
+  value = EEPROM.read(a);  // Read byte from EEPROM at address 'a'
+  Serial.print(a);          // Print the address
+  Serial.print("\t");       // Print a tab for spacing
+  Serial.print(value);      // Print the value from EEPROM
+  Serial.println();         // Print a new line
+
+  a = a + 1;                // Increment the address
+  if (a == 512)             // Wrap around after address 511
+    a = 0;                   // Reset the address back to 0
+
+  delay(500);               // Wait 500 ms before next iteration
+}
+
+```
+
+---
+
+## **สรุป**
+
+- **SRAM** ใช้เก็บตัวแปรระหว่างการทำงานของโปรแกรม (ข้อมูลชั่วคราว)
+- **Flash Memory** ใช้เก็บโปรแกรมและคำสั่งถาวร (ข้อมูลถาวร)
+- **EEPROM** ใช้เก็บข้อมูลที่ต้องการให้คงอยู่แม้ปิดเครื่อง (ข้อมูลถาวร แต่เขียนทับได้จำกัด)

@@ -1,0 +1,259 @@
+---
+heroImage: 'src/assets/images/CPE338/Microprocessor-and-Microcontroller-Systems.webp'
+category: CPE338
+description: Motor Control & Line Tracking
+pubDate: 2025-02-07T00:09:00.000Z
+tags:
+  - Microcontroller
+  - Microprocessor
+  - c
+title: Motor Control & Line Tracking
+---
+
+## Motor Control & Line Tracking
+
+---
+
+### 1. L298N Motor Driver Module
+
+- เป็น **Double H-Bridge Driver** สำหรับควบคุม **มอเตอร์ 2 ตัว**
+- คุณสมบัติ:
+  - แรงดันขับมอเตอร์: สูงสุด 46V
+  - กระแสสูงสุด: 2A ต่อมอเตอร์
+  - แรงดันควบคุมลอจิก: 5V
+- พอร์ตควบคุม:
+  - **IN1, IN2** ควบคุมทิศทาง Motor A
+  - **IN3, IN4** ควบคุมทิศทาง Motor B
+  - **ENA, ENB** รับสัญญาณ PWM สำหรับควบคุมความเร็ว
+- สถานะของมอเตอร์ (IN1, IN2 หรือ IN3, IN4):
+  - LOW & LOW → หยุด
+  - HIGH & LOW → เดินหน้า
+  - LOW & HIGH → ถอยหลัง
+  - HIGH & HIGH → หยุด
+
+---
+
+### 2. การควบคุมความเร็วด้วย PWM
+
+ใช้ฟังก์ชัน `analogWrite(pin, value)` โดย `value` อยู่ในช่วง 0–255
+
+ตัวอย่าง:
+
+```cpp
+#define IN1 13
+#define IN2 12
+#define ENA 11
+#define ENB 10
+#define IN3 9
+#define IN4 8
+
+void setup(){
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+}
+
+void loop(){
+  // Motor Test - with PWM (speed control)
+  analogWrite(ENA, 255); // Max speed
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+
+  analogWrite(ENB, 255); // Max speed
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+  delay(3000);
+
+  // Motor Test - no PWM (constant power)
+  digitalWrite(ENA, HIGH);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+
+  digitalWrite(ENB, HIGH);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+  delay(3000);
+}
+
+```
+
+---
+
+### 3. การวัดความเร็วรอบมอเตอร์ด้วย Encoder
+
+- ใช้เซนเซอร์แสงเพื่อนับพัลส์
+- เชื่อมเข้าขา interrupt (เช่น D2)
+- คำนวณ RPM: **rpm = (counter / 20.0) \* 60;**
+
+```cpp
+#define IN1 13
+#define IN2 12
+#define ENA 11
+#define ENB 10
+#define IN3 9
+#define IN4 8
+#define GPIO_Pin 2
+
+unsigned int counter = 0;
+int rpm;
+
+void countpulse() {
+  counter++;
+}
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(GPIO_Pin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(GPIO_Pin), countpulse, RISING);
+}
+
+void loop() {
+  analogWrite(ENA, 255);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+
+  analogWrite(ENB, 255);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+
+  static uint32_t previousMillis;
+  if (millis() - previousMillis >= 1000) {
+    rpm = (counter / 20.0) * 60;
+    counter = 0;
+    previousMillis += 1000;
+
+    Serial.print("Speed: ");
+    Serial.print(rpm);
+    Serial.println(" rpm");
+  }
+}
+```
+
+---
+
+### 4. การตรวจจับเส้นด้วยเซนเซอร์ TCRT5000
+
+- มี **5 จุดตรวจจับ** สีดำ/ขาว (Digital Output)
+  - สีดำให้ค่า `0`
+  - สีขาวให้ค่า `1`
+- การอ่านค่า:
+
+```cpp
+#define IN1 13
+#define IN2 12
+#define ENA 11
+#define ENB 10
+#define IN3 9
+#define IN4 8
+#define out5 7
+#define out4 6
+#define out3 5
+#define out2 4
+#define out1 3
+
+void setup(){
+  Serial.begin(9600);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+
+  pinMode(out5, INPUT);
+  pinMode(out4, INPUT);
+  pinMode(out3, INPUT);
+  pinMode(out2, INPUT);
+  pinMode(out1, INPUT);
+}
+
+void loop() {
+  int S1 = digitalRead(out1);
+  int S2 = digitalRead(out2);
+  int S3 = digitalRead(out3);
+  int S4 = digitalRead(out4);
+  int S5 = digitalRead(out5);
+
+  if (S1 == 1 && S2 == 1 && S3 == 0 && S4 == 1 && S5 == 1) {
+    Serial.println("Forward");
+    analogWrite(ENA, 255);
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+    analogWrite(ENB, 255);
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, HIGH);
+
+  } else if (S1 == 1 && S2 == 1 && S3 == 1 && S4 == 0 && S5 == 1) {
+    Serial.println("Turn Right");
+    analogWrite(ENA, 200); // slow left
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+    analogWrite(ENB, 100); // slow right
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, HIGH);
+
+  } else if (S1 == 1 && S2 == 0 && S3 == 1 && S4 == 1 && S5 == 1) {
+    Serial.println("Turn LEFT");
+    analogWrite(ENA, 100); // slow left
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+    analogWrite(ENB, 200); // slow right
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, HIGH);
+  }
+}
+```
+
+---
+
+### 5. ตัวอย่างการตัดสินใจทิศทางจากค่า TCRT5000
+
+| Output Sensor | การเคลื่อนที่          |
+| ------------- | ---------------------- |
+| 1 1 0 1 1     | เดินหน้า (Forward)     |
+| 1 1 1 0 1     | เลี้ยวขวา (Turn Right) |
+| 1 0 1 1 1     | เลี้ยวซ้าย (Turn Left) |
+
+---
+
+### 6. ตัวอย่างการควบคุมมอเตอร์ตามการอ่านเซนเซอร์
+
+โครงสร้างโค้ด (บางส่วน):
+
+```cpp
+if(S1==1 && S2==1 && S3==0 && S4==1 && S5==1) {
+  // เดินหน้า
+  digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW); digitalWrite(IN4, HIGH);
+}
+```
+
+---
+
+### 7. การเชื่อมต่อพินกับ Arduino
+
+| ฟังก์ชัน         | พิน Arduino  |
+| ---------------- | ------------ |
+| IN1–IN4          | 13, 12, 9, 8 |
+| ENA, ENB         | 11, 10       |
+| Sensor out1–out5 | 3 – 7        |
+| Encoder sensor   | 2            |
+
+---
+
+### 8. การประยุกต์ใช้งาน
+
+- ควบคุมรถ 2 ล้อ / 4 ล้อ
+- หุ่นยนต์เดินตามเส้น
+- การควบคุมความเร็วและทิศทางแบบอัตโนมัติ
+
+---

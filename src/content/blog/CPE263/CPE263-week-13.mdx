@@ -1,0 +1,169 @@
+---
+heroImage: '/src/assets/images/CPE263/CPE263-week-13[cover].png'
+category: CPE263
+description: >-
+  Timer is used to execute a method or perform an action at specific intervals, either once or repeatedly.
+pubDate: 2024-11-08T17:00:00.000Z
+tags:
+  - csharp
+  - c
+  - .Net
+title: CPE263 Week 12
+---
+
+## Week 12
+
+### Traffic lights
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Security.Policy;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Timer
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private string trafLamp;
+
+        private void lampOff()
+        {
+            btnRed.BackColor = Color.FromName("white");
+            btnGreen.BackColor = Color.FromName("white");
+            btnYellow.BackColor = Color.FromName("white");
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            lampOff();
+            switch (trafLamp)
+            {
+                case "red":
+                    btnGreen.BackColor = Color.Green;
+                    timer1.Interval = Convert.ToInt16(numGreen.Value) * 1000;
+                    trafLamp = "green";
+                    break;
+                case "green":
+                    btnYellow.BackColor = Color.Yellow;
+                    timer1.Interval = Convert.ToInt16(numYellow.Value) * 1000;
+                    trafLamp = "yellow";
+                    break;
+                case "yellow":
+                    btnRed.BackColor = Color.Red;
+                    timer1.Interval = Convert.ToInt16(numRed.Value) * 1000;
+                    trafLamp = "red";
+                    break;
+            }
+        }
+
+        private void radOn_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radOn.Checked)
+            {
+                trafLamp = "yellow";
+                timer1.Interval = 1;
+                timer1.Start();
+            }
+            else
+            {
+                lampOff();
+                timer1.Stop();
+            }
+        }
+    }
+
+}
+```
+
+---
+
+### Count Down
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Classwork
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private int count = 0;
+
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            if (count > 0)
+            {
+                count--;
+                btnCountDown.Text = count.ToString();
+            }
+            else
+            {
+                timer3.Stop();
+            }
+        }
+
+        private void btnCountDown_Click(object sender, EventArgs e)
+        {
+            count = Convert.ToInt16(txtnum.Text);
+            btnCountDown.Text = count.ToString();
+            timer3.Interval = 1000;
+            timer3.Start();
+        }
+
+
+        private char[] text = null;
+        private int i = 0;
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+                if (i < text.Length)
+                {
+                    lblin.Text += text[i].ToString();
+                    i++;
+                }
+                else
+                {
+                    timer2.Stop();
+                }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            text = lblin.Text.ToCharArray();
+            lblin.Text = "";
+            timer2.Interval = 1000;
+            timer2.Start();
+        }
+
+    }
+}
+
+
+
+```
+
+---
